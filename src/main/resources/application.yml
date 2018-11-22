@@ -1,7 +1,12 @@
 spring:
   thymeleaf:
     encoding: UTF-8
-#    热部署静态文件
     cache: false
-#    使用HTML5标准
-    mode: HTML5
+    mode: HTML
+  datasource:
+    username: root
+    password: 970622
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://119.29.233.28:3306/match
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
