@@ -141,7 +141,7 @@ public class UserController {
      * @param
      * @return
      */
-    @GetMapping(value = "edit/{id}")
+    @GetMapping(value = "/edit/{id}")
     public ModelAndView modifyForm(@PathVariable("id") Long id, Model model) {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
