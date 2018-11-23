@@ -1,37 +1,16 @@
 package com.pan.blog.repository;
 
 import com.pan.blog.entity.User;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
- * Created by FantasticPan on 2018/11/21.
+ * Created by FantasticPan on 2018/11/23.
  */
-public interface UserRepository {
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    /**
-     * 创建或者修改用户
-     * @param user
-     * @return
-     */
-    User saveOrUpdate(User user);
+    Page<User> findByNameLike(String name, Pageable pageable);
 
-    /**
-     * 删除用户
-     * @param id
-     */
-    void deleteUser(Long id);
-
-    /**
-     * 根据id查询用户
-     * @param id
-     * @return
-     */
-    User getUserById(Long id);
-
-    /**
-     * 获取用户列表
-     * @return
-     */
-    List<User> listUsers();
+    User findByUsername(String username);
 }
