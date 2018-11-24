@@ -75,15 +75,13 @@ $(function() {
 			 type: 'POST',
 			 data:$('#userForm').serialize(),
 			 success: function(data){
-				 $('#userForm')[0].reset();  
-				 
+				 $('#userForm')[0].reset();
 				 if (data.success) {
-					 // 从新刷新主界面
+					 // 重新刷新主界面
 					 getUersByName(0, _pageSize);
 				 } else {
 					 toastr.error(data.message);
 				 }
-
 		     },
 		     error : function() {
 		    	 toastr.error("error!");
