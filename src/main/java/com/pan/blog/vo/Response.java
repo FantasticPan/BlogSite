@@ -3,14 +3,15 @@ package com.pan.blog.vo;
 import lombok.Data;
 
 /**
+ * 返回对象
  * Created by FantasticPan on 2018/11/23.
  */
 @Data
 public class Response {
 
-    private boolean success;
-    private String message;
-    private Object body;
+    private boolean success; //处理是否成功
+    private String message; //处理后消息提示
+    private Object body; //返回数据
 
     public Response() {
     }

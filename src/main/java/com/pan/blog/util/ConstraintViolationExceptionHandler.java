@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * ConstraintViolationException 处理器
  * Created by FantasticPan on 2018/11/23.
  */
 public class ConstraintViolationExceptionHandler {

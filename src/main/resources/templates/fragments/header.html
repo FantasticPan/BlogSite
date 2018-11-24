@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
     <!-- CSRF -->
-	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<!--<meta name="_csrf" th:content="${_csrf.token}"/>-->
 	<!-- default header name is X-CSRF-TOKEN -->
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+	<!--<meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
 	
     <!-- Tether core CSS -->
     <link href="../../css/tether.min.css" th:href="@{/css/tether.min.css}" rel="stylesheet">
@@ -50,10 +50,8 @@
                 aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="/" th:href="@{/}">NewStarBlog</a>
-
+        <a class="navbar-brand" href="/" th:href="@{/}">LiPan's Blog</a>
         <div class="collapse navbar-collapse" id="navbarsContainer">
-
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link" href="/blogs?order=new&tag=1">最新 <span class="sr-only">(current)</span></a>
@@ -78,7 +76,6 @@
 					<!--<input class="btn btn-outline-success " type="submit" value="退出">-->
 				<!--</form>-->
             <!--</div>-->
-
             <div sec:authorize="isAnonymous()">
                 <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">登录</a>
                 <a href="/register" class="btn btn-outline-success my-2 my-sm-0" type="submit">注册</a>

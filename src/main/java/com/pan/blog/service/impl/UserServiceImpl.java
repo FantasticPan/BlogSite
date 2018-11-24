@@ -6,19 +6,16 @@ import com.pan.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 /**
  * Created by FantasticPan on 2018/11/23.
  */
 @Service
-public class UserServiceImpl implements UserService,UserDetailsService {
+public class UserServiceImpl implements UserService
+        //, UserDetailsService
+{
 
     @Autowired
     private UserRepository userRepository;
@@ -26,6 +23,13 @@ public class UserServiceImpl implements UserService,UserDetailsService {
     @Transactional
     @Override
     public User saveOrUpdateUser(User user) {
+        System.out.println(user.toString());
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    @Override
+    public User registerUser(User user) {
         return userRepository.save(user);
     }
 
@@ -35,21 +39,21 @@ public class UserServiceImpl implements UserService,UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    @Transactional
-    @Override
-    public void removeUsersInBatch(List<User> users) {
-        userRepository.deleteInBatch(users);
-    }
+    //@Transactional
+    //@Override
+    //public void removeUsersInBatch(List<User> users) {
+    //    userRepository.deleteInBatch(users);
+    //}
 
     @Override
     public User getUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
 
-    @Override
-    public List<User> listUsers() {
-        return userRepository.findAll();
-    }
+    //@Override
+    //public List<User> listUsers() {
+    //    return userRepository.findAll();
+    //}
 
     @Override
     public Page<User> listUsersByNameLike(String name, Pageable pageable) {
@@ -58,8 +62,8 @@ public class UserServiceImpl implements UserService,UserDetailsService {
         return userRepository.findByNameLike(name, pageable);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsername(username);
-    }
+    //@Override
+    //public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    //    return userRepository.findByUsername(username);
+    //}
 }

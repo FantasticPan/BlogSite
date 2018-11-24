@@ -1,23 +1,17 @@
 package com.pan.blog.controller;
 
-import com.pan.blog.entity.Authority;
 import com.pan.blog.entity.User;
-import com.pan.blog.service.AuthorityService;
 import com.pan.blog.service.UserService;
-import com.pan.blog.util.ConstraintViolationExceptionHandler;
 import com.pan.blog.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,14 +20,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/users")
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")  // 指定角色权限才能操作方法
+//@PreAuthorize("hasAuthority('ROLE_ADMIN')")  // 指定角色权限才能操作方法
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private AuthorityService authorityService;
+    //@Autowired
+    //private AuthorityService authorityService;
 
     /**
      * 查询所用用户
@@ -44,78 +38,62 @@ public class UserController {
     public ModelAndView list(@RequestParam(value = "async", required = false) boolean async,
                              @RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-                             @RequestParam(value = "name", required = false, defaultValue = "") String name,
-                             Model model) {
+                             @RequestParam(value = "name", required = false, defaultValue = "") String name, Model model) {
         Pageable pageable = new PageRequest(pageIndex, pageSize);
         Page<User> page = userService.listUsersByNameLike(name, pageable);
         List<User> list = page.getContent();    // 当前所在页面数据列表
-
         model.addAttribute("page", page);
         model.addAttribute("userList", list);
-        return new ModelAndView(async == true ? "users/list :: #mainContainerRepleace" : "users/list", "userModel", model);
+        return new ModelAndView(async ? "users/list :: #mainContainerRepleace" : "users/list", "userModel", model);
     }
 
     @PostMapping
-    public ResponseEntity<Response> saveOrUpdateUser(User user, Long authorityId) {
-        List<Authority> authorities = new ArrayList<>();
-        authorities.add(authorityService.getAuthorityById(authorityId));
-        user.setAuthorities(authorities);
-        try {
-            userService.saveOrUpdateUser(user);
-        } catch (ConstraintViolationException e) {
-            return ResponseEntity.ok().body(new Response(false, ConstraintViolationExceptionHandler.getMessage(e)));
-        }
+    public ResponseEntity<Response> saveOrUpdate(User user) {
+        //List<Authority> authorities = new ArrayList<>();
+        //authorities.add(authorityService.getAuthorityById(authorityId));
+        //user.setAuthorities(authorities);
+        //try {
+        userService.saveOrUpdateUser(user);
+        //} catch (ConstraintViolationException e) {
+        //    return ResponseEntity.ok().body(new Response(false, ConstraintViolationExceptionHandler.getMessage(e)));
+        //}
         return ResponseEntity.ok().body(new Response(true, "处理成功", user));
     }
 
-    /**
-     * 获取 form 表单页面
-     *
-     * @param
-     * @return
-     */
     @GetMapping("/add")
     public ModelAndView createForm(Model model) {
         model.addAttribute("user", new User(null, null, null, null));
         return new ModelAndView("users/add", "userModel", model);
     }
 
-    /**
-     * 新建用户
-     *
-     * @param user
-     * @param
-     * @param
-     * @return
-     */
     //@PostMapping
-    //public ResponseEntity<Response> create(User user, Long authorityId) {
-    //    List<Authority> authorities = new ArrayList<>();
-    //    authorities.add(authorityService.getAuthorityById(authorityId));
-    //    user.setAuthorities(authorities);
+    //public ResponseEntity<Response> create(User user) {
+    //    //List<Authority> authorities = new ArrayList<>();
+    //    //authorities.add(authorityService.getAuthorityById(authorityId));
+    //    //user.setAuthorities(authorities);
     //
-    //    if (user.getId() == null) {
-    //        user.setEncodePassword(user.getPassword()); // 加密密码
-    //    } else {
-    //        // 判断密码是否做了变更
-    //        User originalUser = userService.getUserById(user.getId());
-    //        String rawPassword = originalUser.getPassword();
-    //        PasswordEncoder encoder = new BCryptPasswordEncoder();
-    //        String encodePasswd = encoder.encode(user.getPassword());
-    //        boolean isMatch = encoder.matches(rawPassword, encodePasswd);
-    //        if (!isMatch) {
-    //            user.setEncodePassword(user.getPassword());
-    //        } else {
-    //            user.setPassword(user.getPassword());
-    //        }
-    //    }
+    //    //if (user.getId() == null) {
+    //    //    user.setEncodePassword(user.getPassword()); // 加密密码
+    //    //} else {
+    //    //    // 判断密码是否做了变更
+    //    //    User originalUser = userService.getUserById(user.getId());
+    //    //    String rawPassword = originalUser.getPassword();
+    //    //    PasswordEncoder encoder = new BCryptPasswordEncoder();
+    //    //    String encodePasswd = encoder.encode(user.getPassword());
+    //    //    boolean isMatch = encoder.matches(rawPassword, encodePasswd);
+    //    //    if (!isMatch) {
+    //    //        user.setEncodePassword(user.getPassword());
+    //    //    } else {
+    //    //        user.setPassword(user.getPassword());
+    //    //    }
+    //    //}
     //
-    //    try {
-    //        userService.saveUser(user);
-    //    } catch (ConstraintViolationException e) {
-    //        return ResponseEntity.ok().body(new Response(false, ConstraintViolationExceptionHandler.getMessage(e)));
-    //    }
-    //
+    //    //try {
+    //    //    userService.saveUser(user);
+    //    //} catch (ConstraintViolationException e) {
+    //    //    return ResponseEntity.ok().body(new Response(false, ConstraintViolationExceptionHandler.getMessage(e)));
+    //    //}
+    //    userService.saveOrUpdateUser(user);
     //    return ResponseEntity.ok().body(new Response(true, "处理成功", user));
     //}
 
@@ -125,7 +103,7 @@ public class UserController {
      * @param id
      * @return
      */
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Response> delete(@PathVariable("id") Long id, Model model) {
         try {
             userService.removeUser(id);
