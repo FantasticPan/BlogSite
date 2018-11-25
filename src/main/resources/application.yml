@@ -13,8 +13,8 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: create-drop
-    open-in-view: false
+#    open-in-view: false 设为false不能头像上传
 
-#file:
-#  server:
-#    url: http://localhost:8081/upload
+file:
+  server:
+    url: http://localhost:8081/upload

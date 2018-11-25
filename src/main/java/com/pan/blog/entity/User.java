@@ -47,7 +47,7 @@ public class User implements UserDetails {
     @NotEmpty(message = "密码不能为空")
     @Size(max = 100)
     @Column(length = 100)
-    private String password; // 登录时密码
+    private String password;
 
     @Column(length = 200)
     private String avatar; // 头像图片地址
@@ -83,6 +83,12 @@ public class User implements UserDetails {
         return simpleAuthorities;
     }
 
+    public void setEncodePassword(String password) {
+        PasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodePasswd = encoder.encode(password);
+        this.password = password;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
@@ -101,11 +107,5 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public void setEncodePassword(String password) {
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodePasswd = encoder.encode(password);
-        this.password = password;
     }
 }

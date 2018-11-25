@@ -10,7 +10,6 @@
 // DOM 加载完再执行
 $(function() {
 	var avatarApi;
-	
 	// 获取编辑用户头像的界面
 	$(".blog-content-container").on("click",".blog-edit-avatar", function () { 
 		avatarApi = "/u/"+$(this).attr("userName")+"/avatar";
@@ -27,12 +26,11 @@ $(function() {
 	
 	/**  
 	 * 将以base64的图片url数据转换为Blob  
-	 * @param urlData  
-	 *            用url方式表示的base64图片数据  
+	 * @param urlData 用url方式表示的base64图片数据
 	 */  
 	function convertBase64UrlToBlob(urlData){  
-	      
-	    var bytes=window.atob(urlData.split(',')[1]);        //去掉url的头，并转换为byte  
+
+	    var bytes=window.atob(urlData.split(',')[1]); //去掉url的头，并转换为byte
 	      
 	    //处理异常,将ascii码小于0的转换为大于0  
 	    var ab = new ArrayBuffer(bytes.length);  
@@ -61,6 +59,8 @@ $(function() {
 		    success: function(data){
 		    	
 		    	var avatarUrl = data;
+		    	console.log('url:'+avatarUrl);
+		    	console.log('api'+avatarApi)
 		    	
 				// 获取 CSRF Token 
 				var csrfToken = $("meta[name='_csrf']").attr("content");
@@ -72,7 +72,7 @@ $(function() {
 					 contentType: "application/json; charset=utf-8",
 					 data: JSON.stringify({"id":Number($("#userId").val()), "avatar":avatarUrl}),
 					 beforeSend: function(request) {
-		                 request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token 
+		                 request.setRequestHeader(csrfHeader, csrfToken); // 添加 CSRF Token
 		             },
 					 success: function(data){
 						 if (data.success) {
@@ -81,7 +81,6 @@ $(function() {
 						 } else {
 							 oastr.error("error!");
 						 }
-						 
 				     },
 				     error : function() {
 				    	 toastr.error("error!");
@@ -93,7 +92,4 @@ $(function() {
 		    }
 		})
 	});
- 
-
-	 
 });
