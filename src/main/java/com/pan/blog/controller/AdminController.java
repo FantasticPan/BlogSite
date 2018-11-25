@@ -19,9 +19,6 @@ public class AdminController {
 
     /**
      * 获取后台管理主页面
-     *
-     * @param model
-     * @return
      */
     @GetMapping
     public ModelAndView listUsers(Model model) {

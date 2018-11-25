@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html data-th-fragment="header">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5" data-th-fragment="header">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
     <!-- CSRF -->
-	<!--<meta name="_csrf" th:content="${_csrf.token}"/>-->
+	<meta name="_csrf" th:content="${_csrf.token}"/>
 	<!-- default header name is X-CSRF-TOKEN -->
-	<!--<meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 	
     <!-- Tether core CSS -->
     <link href="../../css/tether.min.css" th:href="@{/css/tether.min.css}" rel="stylesheet">
@@ -54,7 +54,7 @@
         <div class="collapse navbar-collapse" id="navbarsContainer">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/blogs?order=new&tag=1">最新 <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/blogs?order=new&tag=1">最新<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/blogs?order=hot&tag=2">最热</a>
@@ -64,25 +64,26 @@
                     <a href="/search?q=ww" class="btn btn-outline-secondary my-2 my-sm-0"><i class="fa fa-search" aria-hidden="true"></i></a>
                 </form>
             </ul>
-            <!--<div sec:authorize="isAuthenticated()"  class="row" >-->
-				<!--<div class="dropdown">-->
-					<!--<a class=" dropdown-toggle" href="/u/waylau" th:href="@{'/u/' + ${#authentication.name}}" data-toggle="dropdown"><span sec:authentication="name"></span></a>-->
-					<!--<div class="dropdown-menu" >-->
-						<!--<a class=" dropdown-item" href="/u/waylau" th:href="@{'/u/' + ${#authentication.name}}">个人主页</a> -->
-						<!--<a class="dropdown-item" href="/u/waylau/profile" th:href="@{'/u/' + ${#authentication.name}} + '/profile'" >个人设置</a>-->
-					<!--</div>-->
-				<!--</div>-->
-				<!--<form action="/logout" th:action="@{/logout}" method="post">-->
-					<!--<input class="btn btn-outline-success " type="submit" value="退出">-->
-				<!--</form>-->
-            <!--</div>-->
+            <div sec:authorize="isAuthenticated()" class="row" >
+				<div class="dropdown">
+					<a class=" dropdown-toggle" href="/u/waylau" th:href="@{'/u/' + ${#authentication.name}}" data-toggle="dropdown"><span sec:authentication="name"></span></a>
+					<div class="dropdown-menu" >
+						<a class=" dropdown-item" href="/u/waylau" th:href="@{'/u/' + ${#authentication.name}}">个人主页</a>
+						<a class="dropdown-item" href="/u/waylau/profile" th:href="@{'/u/' + ${#authentication.name}} + '/profile'" >个人设置</a>
+					</div>
+				</div>
+                <div style="padding-right: 5px">
+                    <a href="/u/waylau/blogs/edit" th:href="'/u/' + ${#authentication.name} + '/blogs/edit'" class="btn btn-outline-success my-2 my-sm-0">写博客</a>
+                </div>
+				<form action="/logout" th:action="@{/logout}" method="post">
+					<input class="btn btn-outline-success " type="submit" value="退出">
+				</form>
+            </div>
             <div sec:authorize="isAnonymous()">
                 <a href="/login" class="btn btn-outline-success my-2 my-sm-0" type="submit">登录</a>
                 <a href="/register" class="btn btn-outline-success my-2 my-sm-0" type="submit">注册</a>
             </div>
-
         </div>
-
     </div>
 </nav>
 </body>

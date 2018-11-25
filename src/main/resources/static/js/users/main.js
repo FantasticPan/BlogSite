@@ -92,18 +92,18 @@ $(function() {
 	// 删除用户
 	$("#rightContainer").on("click",".blog-delete-user", function () { 
 		// 获取 CSRF Token 
-		// var csrfToken = $("meta[name='_csrf']").attr("content");
-		// var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+		var csrfToken = $("meta[name='_csrf']").attr("content");
+		var csrfHeader = $("meta[name='_csrf_header']").attr("content");
 
 		$.ajax({ 
 			 url: "/users/" + $(this).attr("userId") , 
 			 type: 'DELETE', 
-             // beforeSend: function(request) {
-             //     request.setRequestHeader(csrfHeader, csrfToken); // 添加 CSRF Token
-             // },
+             beforeSend: function(request) {
+                 request.setRequestHeader(csrfHeader, csrfToken); // 添加 CSRF Token
+             },
 			 success: function(data){
 				 if (data.success) {
-					 // 从新刷新主界面
+					 // 重新刷新主界面
 					 getUersByName(0, _pageSize);
 				 } else {
 					 toastr.error(data.message);
