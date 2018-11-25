@@ -2,7 +2,6 @@ package com.pan.blog.controller;
 
 import com.pan.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +21,8 @@ public class UserspaceController {
     //@Qualifier("userServiceImpl")
     //@Autowired
     //private UserDetailsService userDetailsService;
-    @Value("${file.server.url}")
-    private String fileServerUrl;
+    //@Value("${file.server.url}")
+    //private String fileServerUrl;
 
     @GetMapping("/{username}")
     public String userSpace(@PathVariable("username") String username) {

@@ -1,7 +1,10 @@
 package com.pan.blog.controller;
 
+import com.pan.blog.entity.Authority;
 import com.pan.blog.entity.User;
+import com.pan.blog.service.AuthorityService;
 import com.pan.blog.service.UserService;
+import com.pan.blog.util.ConstraintViolationExceptionHandler;
 import com.pan.blog.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +15,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,9 +30,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
-
-    //@Autowired
-    //private AuthorityService authorityService;
+    @Autowired
+    private AuthorityService authorityService;
 
     /**
      * 查询所用用户
@@ -48,15 +52,15 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Response> saveOrUpdate(User user) {
-        //List<Authority> authorities = new ArrayList<>();
-        //authorities.add(authorityService.getAuthorityById(authorityId));
-        //user.setAuthorities(authorities);
-        //try {
+    public ResponseEntity<Response> saveOrUpdateUser(User user, Long authorityId) {
+        List<Authority> authorities = new ArrayList<>();
+        authorities.add(authorityService.getAuthorityById(authorityId));
+        user.setAuthorities(authorities);
+        try {
         userService.saveOrUpdateUser(user);
-        //} catch (ConstraintViolationException e) {
-        //    return ResponseEntity.ok().body(new Response(false, ConstraintViolationExceptionHandler.getMessage(e)));
-        //}
+        } catch (ConstraintViolationException e) {
+            return ResponseEntity.ok().body(new Response(false, ConstraintViolationExceptionHandler.getMessage(e)));
+        }
         return ResponseEntity.ok().body(new Response(true, "处理成功", user));
     }
 

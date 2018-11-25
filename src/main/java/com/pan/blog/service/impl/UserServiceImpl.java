@@ -6,6 +6,9 @@ import com.pan.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,8 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by FantasticPan on 2018/11/23.
  */
 @Service
-public class UserServiceImpl implements UserService
-        //, UserDetailsService
+public class UserServiceImpl implements UserService, UserDetailsService
 {
 
     @Autowired
@@ -47,7 +49,7 @@ public class UserServiceImpl implements UserService
 
     @Override
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.getOne(id);
     }
 
     //@Override
@@ -62,8 +64,8 @@ public class UserServiceImpl implements UserService
         return userRepository.findByNameLike(name, pageable);
     }
 
-    //@Override
-    //public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    //    return userRepository.findByUsername(username);
-    //}
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
+    }
 }

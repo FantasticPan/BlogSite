@@ -10,11 +10,11 @@ spring:
     url: jdbc:mysql://119.29.233.28:3306/blog?useSSL=false&serverTimeZone=UTC&characterEncoding=utf-8
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: false
+    show-sql: true
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     open-in-view: false
 
-file:
-  server:
-    url: http://localhost:8081/upload
+#file:
+#  server:
+#    url: http://localhost:8081/upload
