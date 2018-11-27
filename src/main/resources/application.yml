@@ -10,7 +10,7 @@ spring:
     url: jdbc:mysql://119.29.233.28:3306/blog?useSSL=false&serverTimeZone=UTC&characterEncoding=utf-8
   jpa:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
-    show-sql: true
+    show-sql: false
     hibernate:
       ddl-auto: create-drop
 #    open-in-view: false 设为false不能头像上传

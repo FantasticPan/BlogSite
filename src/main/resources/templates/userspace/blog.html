@@ -65,6 +65,7 @@
                     <button class="btn btn-primary float-right" th:if="${currentVote}" th:attr="voteId=${currentVote.id}" id="cancelVote">取消点赞</button>
                 </div>
                 <div class="card-block" id="mainContainer">
+
                     <div class="row" id="mainContainerRepleace" th:each="comment,commentStat : ${comments}" th:object="${comment}">
                         <h2 class="card-title col-lg-1 col-md-2">
 							<span>

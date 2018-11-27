@@ -2,6 +2,7 @@ package com.pan.blog.controller;
 
 import com.pan.blog.entity.Blog;
 import com.pan.blog.entity.User;
+import com.pan.blog.entity.Vote;
 import com.pan.blog.service.BlogService;
 import com.pan.blog.service.UserService;
 import com.pan.blog.util.ConstraintViolationExceptionHandler;
@@ -210,21 +211,23 @@ public class UserspaceController {
             }
         }
 
-        //List<Vote> votes = blog.getVotes();
-        //Vote currentVote = null;
-        //if (principal != null) {
-        //    Iterator var10 = votes.iterator();
-        //    if (var10.hasNext()) {
-        //        Vote vote = (Vote) var10.next();
-        //        vote.getUser().getUsername().equals(principal.getUsername());
-        //        currentVote = vote;
-        //    }
-        //}
+        //判断操作用户的点赞情况
+        List<Vote> votes = blog.getVotes();
+        Vote currentVote = null; //当前用户的点赞情况
+        if (principal != null) {
+            for (Vote vote : votes) {
+                if (vote.getUser().getUsername().equals(principal.getUsername())) {
+                    currentVote = vote;
+                    break;
+                }
+            }
+        }
 
+        model.addAttribute("currentVote", currentVote);
         model.addAttribute("isBlogOwner", isBlogOwner);
         model.addAttribute("blogModel", blog);
-        //model.addAttribute("currentVote", currentVote);
-        return "userspace/blog";
+
+        return "/userspace/blog";
     }
 
     /**
