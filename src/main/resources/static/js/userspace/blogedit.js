@@ -18,21 +18,27 @@ $(function() {
         },
         resize:'vertical',
         localStorage:'md',
-        imgurl: 'http://localhost:8081',
-        base64url: 'http://localhost:8081'
+        // imgurl: 'http://localhost:8081',
+        // base64url: 'http://localhost:8081'
     });
-  
-    // 初始化标签控件
-    $('.form-control-tag').tagEditor({
-        initialTags: [],
-        maxTags: 5,
-        delimiter: ', ',
-        forceLowercase: false,
-        animateDelete: 0,
-        placeholder: '请输入标签'
-    });
-    
+
+    // 初始化下拉
     $('.form-control-chosen').chosen();
+  
+    // // 初始化标签控件
+    // $('.form-control-tag').tagEditor({
+    //     initialTags: [],
+    //     maxTags: 5,
+    //     delimiter: ', ',
+    //     forceLowercase: false,
+    //     animateDelete: 0,
+    //     placeholder: '请输入标签'
+    // });
+
+    // 初始化标签
+    $('.form-control-tag').tagEditor({
+        'placeholder' : '输入标签'
+    });
  
  	$("#uploadImage").click(function() {
 		$.ajax({
@@ -69,7 +75,8 @@ $(function() {
                 "content": $('#md').val(),
                 "catalog":{
                     "id":$('#catalogSelect').val()
-                }
+                },
+                "tags":$('.form-control-tag').val()
             }),
             beforeSend: function(request) {
                 request.setRequestHeader(csrfHeader, csrfToken); // 添加  CSRF Token

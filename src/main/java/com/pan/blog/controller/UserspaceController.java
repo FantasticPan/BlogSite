@@ -302,7 +302,7 @@ public class UserspaceController {
                 originalBlog.setContent(blog.getContent());
                 originalBlog.setSummary(blog.getSummary());
                 originalBlog.setCatalog(blog.getCatalog());
-                //originalBlog.setTags(blog.getTags());
+                originalBlog.setTags(blog.getTags());
                 blogService.saveBlog(originalBlog);
             } else {
                 User user = (User) userDetailsService.loadUserByUsername(username);
