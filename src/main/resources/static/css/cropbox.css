@@ -28,7 +28,7 @@ ul {
 body {
     width: 100%;
     *cursor: default;
-    overflow: hidden;
+    /*overflow: hidden;*/
     font: 16px/1.5 "Microsoft YaHei", Helvetica, STHeiti STXihei, Microsoft JhengHei, Arial;
 }
 
