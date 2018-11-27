@@ -1,6 +1,7 @@
 package com.pan.blog.service;
 
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.Catalog;
 import com.pan.blog.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -100,4 +101,13 @@ public interface BlogService {
      * @return
      */
     void removeVote(Long blogId, Long voteId);
+
+    /**
+     * 根据分类进行查询
+     *
+     * @param catalog
+     * @param var2
+     * @return
+     */
+    Page<Blog> listBlogsByCatalog(Catalog catalog, Pageable var2);
 }

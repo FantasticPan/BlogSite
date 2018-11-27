@@ -1,9 +1,6 @@
 package com.pan.blog.service.impl;
 
-import com.pan.blog.entity.Blog;
-import com.pan.blog.entity.Comment;
-import com.pan.blog.entity.User;
-import com.pan.blog.entity.Vote;
+import com.pan.blog.entity.*;
 import com.pan.blog.repository.BlogRepository;
 import com.pan.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +76,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Blog createVote(Long blogId) {
         Blog originalBlog = blogRepository.getOne(blogId);
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Vote vote = new Vote(user);
         boolean isExist = originalBlog.addVote(vote);
         if (isExist) {
@@ -93,5 +90,10 @@ public class BlogServiceImpl implements BlogService {
         Blog originalBlog = blogRepository.getOne(blogId);
         originalBlog.removeVote(voteId);
         this.saveBlog(originalBlog);
+    }
+
+    @Override
+    public Page<Blog> listBlogsByCatalog(Catalog catalog, Pageable pageable) {
+        return blogRepository.findByCatalog(catalog, pageable);
     }
 }

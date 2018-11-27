@@ -1,9 +1,11 @@
 package com.pan.blog.controller;
 
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.Catalog;
 import com.pan.blog.entity.User;
 import com.pan.blog.entity.Vote;
 import com.pan.blog.service.BlogService;
+import com.pan.blog.service.CatalogService;
 import com.pan.blog.service.UserService;
 import com.pan.blog.util.ConstraintViolationExceptionHandler;
 import com.pan.blog.vo.Response;
@@ -45,6 +47,8 @@ public class UserspaceController {
     private String fileServerUrl;
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private CatalogService catalogService;
 
     /**
      * 用户主页
@@ -156,30 +160,34 @@ public class UserspaceController {
                                    @RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
                                    @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
                                    Model model) {
+
         User user = (User) userDetailsService.loadUserByUsername(username);
         Page<Blog> page = null;
 
         if (catalogId != null && catalogId > 0) { //分类查询
-            //Catalog catalog = this.catalogService.getCatalogById(catalogId);
-            //pageable = new PageRequest(pageIndex, pageSize);
-            //page = this.blogService.listBlogsByCatalog(catalog, pageable);
-            //order = "";
+            Catalog catalog = catalogService.getCatalogById(catalogId);
+            Pageable pageable = new PageRequest(pageIndex, pageSize);
+            page = blogService.listBlogsByCatalog(catalog, pageable);
+            order = "";
         } else if (order.equals("hot")) { //最热查询
             Sort sort = new Sort(Sort.Direction.DESC, "readSize", "commentSize", "voteSize"); //逆序，最高的排在最前面
             PageRequest pageable = new PageRequest(pageIndex, pageSize, sort);
             page = blogService.listBlogsByTitleVoteAndSort(user, keyword, pageable);
-        } else if (order.equals("new")) {
+        } else if (order.equals("new")) { //最新查询
             Pageable pageable = new PageRequest(pageIndex, pageSize);
             page = blogService.listBlogsByTitleVote(user, keyword, pageable);
         }
 
+        //当前所在页面数据列表
         List<Blog> list = page.getContent();
+
         model.addAttribute("user", user);
         model.addAttribute("order", order);
         model.addAttribute("catalogId", catalogId);
         model.addAttribute("keyword", keyword);
         model.addAttribute("page", page);
         model.addAttribute("blogList", list);
+
         return async ? "userspace/u :: #mainContainerRepleace" : "userspace/u";
     }
 
@@ -239,11 +247,14 @@ public class UserspaceController {
      */
     @GetMapping({"/{username}/blogs/edit"})
     public ModelAndView createBlog(@PathVariable("username") String username, Model model) {
-        //User user = (User) userDetailsService.loadUserByUsername(username);
-        //List<Catalog> catalogs = catalogService.listCatalogs(user);
+        //获取用户分类列表
+        User user = (User) userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs = catalogService.listCatalogs(user);
+
         model.addAttribute("blog", new Blog(null, null, null));
         model.addAttribute("fileServerUrl", fileServerUrl);
-        //model.addAttribute("catalogs", catalogs);
+        model.addAttribute("catalogs", catalogs);
+
         return new ModelAndView("userspace/blogedit", "blogModel", model);
     }
 
@@ -257,46 +268,46 @@ public class UserspaceController {
      */
     @GetMapping({"/{username}/blogs/edit/{id}"})
     public ModelAndView editBlog(@PathVariable("username") String username, @PathVariable("id") Long id, Model model) {
-        //User user = (User)this.userDetailsService.loadUserByUsername(username);
-        //List<Catalog> catalogs = this.catalogService.listCatalogs(user);
+        //获取用户分类列表
+        User user = (User) this.userDetailsService.loadUserByUsername(username);
+        List<Catalog> catalogs = this.catalogService.listCatalogs(user);
+
         model.addAttribute("blog", blogService.getBlogById(id));
         model.addAttribute("fileServerUrl", fileServerUrl);
-        //model.addAttribute("catalogs", catalogs);
+        model.addAttribute("catalogs", catalogs);
+
         return new ModelAndView("userspace/blogedit", "blogModel", model);
     }
 
+    /**
+     * 保存博客
+     *
+     * @param username
+     * @param blog
+     * @return
+     */
     @PostMapping({"/{username}/blogs/edit"})
     @PreAuthorize("authentication.name.equals(#username)")
     public ResponseEntity<Response> saveBlog(@PathVariable("username") String username, @RequestBody Blog blog) {
-        try {
+        // 对 Catalog 进行空处理
+        if (blog.getCatalog().getId() == null) {
+            return ResponseEntity.ok().body(new Response(false, "未选择分类"));
+        }
 
-            //通过Id是否存在判断新增还是修改
+        try {
+            // 判断是修改还是新增
             if (blog.getId() != null) {
-                Blog originalBlog = this.blogService.getBlogById(blog.getId());
+                Blog originalBlog = blogService.getBlogById(blog.getId());
                 originalBlog.setTitle(blog.getTitle());
                 originalBlog.setContent(blog.getContent());
                 originalBlog.setSummary(blog.getSummary());
-                //originalBlog.setCatalog(blog.getCatalog());
+                originalBlog.setCatalog(blog.getCatalog());
                 //originalBlog.setTags(blog.getTags());
-                this.blogService.saveBlog(originalBlog);
+                blogService.saveBlog(originalBlog);
             } else {
-                User user = (User)userDetailsService.loadUserByUsername(username);
-                //if (blog.getCatalog().getId() == null) {
-                //    Catalog catalog = new Catalog(user, "未分类");
-                //    catalog = this.catalogService.insertAnonymousCatalog(catalog);
-                //    catalogId = catalog.getId();
-                //}
-                //
-                //if (blog.getCatalog().getId() == null && this.catalogService.getCatalogById(catalogId) != null) {
-                //    blog.setCatalog(this.catalogService.getCatalogById(catalogId));
-                //} else {
-                //    blog.setCatalog(blog.getCatalog());
-                //}
-                //
+                User user = (User) userDetailsService.loadUserByUsername(username);
                 blog.setUser(user);
                 blogService.saveBlog(blog);
-                //originalBlog = (Blog)this.blogRepository.saveAndFlush(blog);
-                //blogId = "" + originalBlog.getId();
             }
         } catch (ConstraintViolationException e) {
             return ResponseEntity.ok().body(new Response(false, ConstraintViolationExceptionHandler.getMessage(e)));
@@ -310,6 +321,7 @@ public class UserspaceController {
 
     /**
      * 删除博客
+     *
      * @param username
      * @param id
      * @return

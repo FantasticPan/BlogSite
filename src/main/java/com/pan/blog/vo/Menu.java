@@ -1,11 +1,14 @@
 package com.pan.blog.vo;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
  * 菜单值对象
  * Created by FantasticPan on 2018/11/23.
  */
+@Data
 public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -15,22 +18,6 @@ public class Menu implements Serializable {
 
     public Menu(String name, String url) {
         this.name = name;
-        this.url = url;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
         this.url = url;
     }
 }
