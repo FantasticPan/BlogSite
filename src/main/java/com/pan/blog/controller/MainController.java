@@ -32,9 +32,10 @@ public class MainController {
         return "redirect:/index";
     }
 
+    //TODO 合并两个请求
     @GetMapping("/index")
     public String index() {
-        return "index";
+        return "redirect:/blogs";
     }
 
     @GetMapping("/login")

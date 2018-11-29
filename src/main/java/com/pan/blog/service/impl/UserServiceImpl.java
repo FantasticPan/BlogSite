@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by FantasticPan on 2018/11/23.
  */
@@ -62,6 +65,11 @@ public class UserServiceImpl implements UserService, UserDetailsService
         // 模糊查询
         name = "%" + name + "%";
         return userRepository.findByNameLike(name, pageable);
+    }
+
+    @Override
+    public List<User> listUsersByUsernames(Collection<String> usernames) {
+        return userRepository.findByUsernameIn(usernames);
     }
 
     @Override

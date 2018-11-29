@@ -1,8 +1,10 @@
 package com.pan.blog.service.impl;
 
 import com.pan.blog.entity.*;
+import com.pan.blog.entity.es.EsBlog;
 import com.pan.blog.repository.BlogRepository;
 import com.pan.blog.service.BlogService;
+import com.pan.blog.service.EsBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,17 +20,34 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private BlogRepository blogRepository;
+    @Autowired
+    private EsBlogService esBlogService;
 
     @Transactional
     @Override
     public Blog saveBlog(Blog blog) {
-        return blogRepository.save(blog);
+        boolean isNew = (blog.getId() == null);
+        EsBlog esBlog = null;
+
+        Blog returnBlog = blogRepository.save(blog);
+
+        if (isNew) {
+            esBlog = new EsBlog(returnBlog);
+        } else {
+            esBlog = esBlogService.getEsBlogByBlogId(blog.getId());
+            esBlog.update(returnBlog);
+        }
+        esBlogService.updateEsBlog(esBlog);
+
+        return returnBlog;
     }
 
     @Transactional
     @Override
     public void removeBlog(Long id) {
         blogRepository.deleteById(id);
+        EsBlog esBlog = esBlogService.getEsBlogByBlogId(id);
+        esBlogService.removeEsBlog(esBlog.getId());
     }
 
     @Override

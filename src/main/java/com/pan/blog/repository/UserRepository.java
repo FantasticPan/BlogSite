@@ -5,6 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by FantasticPan on 2018/11/23.
  */
@@ -26,4 +29,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return
      */
     User findByUsername(String username);
+
+    /**
+     * 根据名称列表查询
+     * @param usernames
+     * @return
+     */
+    List<User> findByUsernameIn(Collection<String> usernames);
 }

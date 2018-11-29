@@ -1,11 +1,22 @@
 package com.pan.blog.controller;
 
+import com.pan.blog.entity.es.EsBlog;
+import com.pan.blog.entity.User;
 import com.pan.blog.service.BlogService;
+import com.pan.blog.service.EsBlogService;
+import com.pan.blog.vo.TagVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * 主页控制器
@@ -17,56 +28,56 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private EsBlogService esBlogService;
 
     @GetMapping
-    public String listBlogs(@RequestParam(value = "order", required = false, defaultValue = "new") String order,
-                            @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword) {
-        System.out.println("order:" + order + ";keyword:" + keyword);
-        return "redirect:/index?order=" + order + "&keyword=" + keyword;
-    }
+    public String listEsBlogs(@RequestParam(value = "order", required = false, defaultValue = "new") String order,
+                              @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
+                              @RequestParam(value = "async", required = false) boolean async,
+                              @RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
+                              @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
+                              Model model) {
 
-    //@GetMapping
-    //public String listEsBlogs(@RequestParam(value = "async", required = false) boolean async,
-    //                          @RequestParam(value = "order", required = false, defaultValue = "new") String order,
-    //                          @RequestParam(value = "keyword", required = false, defaultValue = "") String keyword,
-    //                          @RequestParam(value = "pageIndex", required = false, defaultValue = "0") int pageIndex,
-    //                          @RequestParam(value = "pageSize", required = false, defaultValue = "10") int pageSize,
-    //                          Model model) {
-    //    Page<Blog> page = null;
-    //    List<Blog> list = null;
-    //    boolean isEmpty = true;
-    //
-    //    PageRequest pageable;
-    //    try {
-    //        Sort sort;
-    //        if (order.equals("hot")) {
-    //            sort = new Sort(Sort.Direction.DESC, "readSize", "commentSize", "voteSize", "createTime");
-    //            pageable = new PageRequest(pageIndex, pageSize, sort);
-    //            page = blogService.listBlogsByTitleVoteAndSort(keyword, pageable);
-    //        } else if (order.equals("new")) {
-    //            sort = new Sort(Sort.Direction.DESC, new String[]{"createTime"});
-    //            pageable = new PageRequest(pageIndex, pageSize, sort);
-    //            page = blogService.listBlogsByTitleVote(keyword, pageable);
-    //        }
-    //
-    //        isEmpty = false;
-    //    } catch (Exception var12) {
-    //        pageable = new PageRequest(pageIndex, pageSize);
-    //        page = blogService.listBlogs(pageable);
-    //    }
-    //
-    //    list = page.getContent();
-    //    model.addAttribute("order", order);
-    //    model.addAttribute("keyword", keyword);
-    //    model.addAttribute("page", page);
-    //    model.addAttribute("blogList", list);
-    //    if (!async && !isEmpty) {
-    //        List<Blog> newest = this.blogService.listTop5NewestBlogs();
-    //        model.addAttribute("newest", newest);
-    //        List<Blog> hotest = this.blogService.listTop5HotestBlogs();
-    //        model.addAttribute("hotest", hotest);
-    //    }
-    //
-    //    return async ? "index :: #mainContainerRepleace" : "index";
-    //}
+        Page<EsBlog> page = null;
+        List<EsBlog> list = null;
+        boolean isEmpty = true; // 系统初始化时，没有博客数据
+
+        try {
+            if (order.equals("hot")) { // 最热查询
+                Sort sort = new Sort(Sort.Direction.DESC, "readSize", "commentSize", "voteSize", "createTime");
+                Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
+                page = esBlogService.listHotestEsBlogs(keyword, pageable);
+            } else if (order.equals("new")) { // 最新查询
+                Sort sort = new Sort(Sort.Direction.DESC, "createTime");
+                Pageable pageable = new PageRequest(pageIndex, pageSize, sort);
+                page = esBlogService.listNewestEsBlogs(keyword, pageable);
+            }
+            isEmpty = false;
+        } catch (Exception e) {
+            Pageable pageable = new PageRequest(pageIndex, pageSize);
+            page = esBlogService.listEsBlogs(pageable);
+        }
+
+        list = page.getContent();    // 当前所在页面数据列表
+
+        model.addAttribute("order", order);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("page", page);
+        model.addAttribute("blogList", list);
+
+        // 首次访问页面才加载
+        if (!async && !isEmpty) {
+            List<EsBlog> newest = esBlogService.listTop5NewestEsBlogs();
+            model.addAttribute("newest", newest);
+            List<EsBlog> hotest = esBlogService.listTop5HotestEsBlogs();
+            model.addAttribute("hotest", hotest);
+            List<TagVO> tags = esBlogService.listTop30Tags();
+            model.addAttribute("tags", tags);
+            List<User> users = esBlogService.listTop12Users();
+            model.addAttribute("users", users);
+        }
+
+        return (async ? "/index :: #mainContainerRepleace" : "/index");
+    }
 }
