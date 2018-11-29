@@ -2,10 +2,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<!--<head th:replace="~{fragments/header :: header}">-->
-<!--</head>-->
 <head>
     <title>博客</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .container{
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
 <!-- Page Content -->
@@ -19,21 +27,21 @@
                 <div class="card-block">
                     <h2 class="card-title">
 							<span>
-			                  <a href="/u/waylau" title="waylau" th:href="'/u/' + ${blogModel.user.username}"  th:title="${blogModel.user.username}" > 
+			                  <a href="/u/pan" title="pan" th:href="'/u/' + ${blogModel.user.username}"  th:title="${blogModel.user.username}" > 
 			                    <img src="/images/avatar-defualt.jpg" th:src="${blogModel.user.avatar} == null ? '/images/avatar-defualt.jpg' : ${blogModel.user.avatar}" class="blog-avatar-50">
 			                  </a>
 					        </span>
-                        <a href="/u/waylau/blogs/1" class="card-link" title="waylau" 
+                        <a href="/u/pan/blogs/1" class="card-link" title="pan" 
                         	th:href="'/u/' + ${blogModel.user.username} + '/blogs/'+ ${blogModel.id}"  th:title="${blogModel.user.username}" th:text="${blogModel.title}">
                             OAuth 2.0 认证的原理与实践
                         </a>
                     </h2>
                     <div class="card-text">
-                        <a href="/u/waylau" th:href="'/u/' + ${blogModel.user.username}" class="card-link" th:text="${blogModel.user.username}" >waylau</a> 发表于 [[${#dates.format(blogModel.createTime, 'yyyy-MM-dd HH:mm')}]] 
+                        <a href="/u/pan" th:href="'/u/' + ${blogModel.user.username}" class="card-link" th:text="${blogModel.user.username}" >pan</a> 发表于 [[${#dates.format(blogModel.createTime, 'yyyy-MM-dd HH:mm')}]] 
                         	<i class="fa fa-eye" aria-hidden="true">[[${blogModel.readSize}]]</i>
 		                    <i class="fa fa-heart-o" aria-hidden="true">[[${blogModel.voteSize}]]</i> 
 		                    <i class="fa fa-comment-o" aria-hidden="true">[[${blogModel.commentSize}]]</i>
-                         <a href="/u/waylau" th:if="${isBlogOwner}" th:href="'/u/' + ${blogModel.user.username}+ '/blogs/edit/'+ ${blogModel.id}" class="btn btn-primary float-right">编辑</a>
+                         <a href="/u/pan" th:if="${isBlogOwner}" th:href="'/u/' + ${blogModel.user.username}+ '/blogs/edit/'+ ${blogModel.id}" class="btn btn-primary float-right">编辑</a>
                          <a href="javascript:void(0)" th:if="${isBlogOwner}" class="btn btn-primary float-right blog-delete-blog">删除</a>
                     </div>
                     <hr>
@@ -55,7 +63,7 @@
                     <h5>评论：</h5>
                     <div class="row">
                         <div class="col-lg-12">
-                            <textarea class="blog-textarea" placeholder="看帖需留言~" id="commentContent"></textarea>
+                            <textarea class="blog-textarea" placeholder="看帖留言~" id="commentContent"></textarea>
                         </div>
                     </div>
                     <button class="btn btn-primary float-right" id="submitComment">发表评论</button>
@@ -67,13 +75,13 @@
                     <div class="row" id="mainContainerRepleace" th:each="comment,commentStat : ${comments}" th:object="${comment}">
                         <h2 class="card-title col-lg-1 col-md-2">
 							<span>
-			                  <a href="/u/waylau" th:href="'/u/'+ *{user.username}" title="waylau" th:title="*{user.username}">
+			                  <a href="/u/pan" th:href="'/u/'+ *{user.username}" title="pan" th:title="*{user.username}">
 			                    <img src="/images/avatar-defualt.jpg" th:src="*{user.avatar} == null ? '/images/avatar-defualt.jpg' : *{user.avatar}" class="blog-avatar-50">
 			                  </a>
 					        </span>
                         </h2>
                         <div class="card-text col-lg-11 col-md-10">
-                            <a href="/u/waylau" th:href="'/u/'+ *{user.username}" class="card-link" th:text="*{user.username}">waylau</a> [[${commentStat.index} + 1]]楼  [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]] 
+                            <a href="/u/pan" th:href="'/u/'+ *{user.username}" class="card-link" th:text="*{user.username}">pan</a> [[${commentStat.index} + 1]]楼  [[${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}]] 
                             <a href="javascript:void(0)" class="blog-delete-comment" th:if="${commentOwner} eq *{user.username}" th:attr="commentId=*{id}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                             <p th:text="*{content}">不错哦，顶起！</p>
                         </div>
@@ -98,28 +106,28 @@
                 </div>
 
                 <!-- 相关博客 -->
-                <div class="card my-4">
-                    <h5 class="card-header"><i class="fa fa-connectdevelop" aria-hidden="true"></i> 相关博客</h5>
-                    <div class="list-group">
-                        <ul class="list-group">
-                            <a href="/u/pan/blogs/1" class="list-group-item" title="pan">
-                                Spring Data + Thymeleaf 3 + Bootstrap 4 实现分页器
-                            </a>
-                            <a href="/u/pan/blogs/1" class="list-group-item" title="pan">
-                                用大白话聊聊分布式系统
-                            </a>
-                            <a href="/u/pan/blogs/1" class="list-group-item" title="pan">
-                                用大白话聊聊分布式系统>
-                            </a>
-                            <a href="/u/pan/blogs/1" class="list-group-item" title="pan">
-                                使用 Eclipse Checkstyle Plugin
-                            </a>
-                            <a href="/u/pan/blogs/1" class="list-group-item" title="pan">
-                                使用 Eclipse Checkstyle Plugin
-                            </a>
-                        </ul>
-                    </div>
-                </div>
+                <!--<div class="card my-4">-->
+                    <!--<h5 class="card-header"><i class="fa fa-connectdevelop" aria-hidden="true"></i> 相关博客</h5>-->
+                    <!--<div class="list-group">-->
+                        <!--<ul class="list-group">-->
+                            <!--<a href="/u/pan/blogs/1" class="list-group-item" title="pan">-->
+                                <!--Spring Data + Thymeleaf 3 + Bootstrap 4 实现分页器-->
+                            <!--</a>-->
+                            <!--<a href="/u/pan/blogs/1" class="list-group-item" title="pan">-->
+                                <!--用大白话聊聊分布式系统-->
+                            <!--</a>-->
+                            <!--<a href="/u/pan/blogs/1" class="list-group-item" title="pan">-->
+                                <!--用大白话聊聊分布式系统>-->
+                            <!--</a>-->
+                            <!--<a href="/u/pan/blogs/1" class="list-group-item" title="pan">-->
+                                <!--使用 Eclipse Checkstyle Plugin-->
+                            <!--</a>-->
+                            <!--<a href="/u/pan/blogs/1" class="list-group-item" title="pan">-->
+                                <!--使用 Eclipse Checkstyle Plugin-->
+                            <!--</a>-->
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</div>-->
             </div>
         </div>
     </div>

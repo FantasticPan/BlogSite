@@ -1,4 +1,4 @@
-package com.pan.blog.repository;
+package com.pan.blog.repository.es;
 
 import com.pan.blog.entity.es.EsBlog;
 import org.springframework.data.domain.Page;

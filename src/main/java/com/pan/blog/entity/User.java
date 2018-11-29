@@ -85,8 +85,7 @@ public class User implements UserDetails {
 
     public void setEncodePassword(String password) {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodePasswd = encoder.encode(password);
-        this.password = password;
+        this.password = encoder.encode(password);
     }
 
     @Override

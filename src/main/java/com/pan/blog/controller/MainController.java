@@ -27,14 +27,8 @@ public class MainController {
     @Autowired
     private AuthorityService authorityService;
 
-    @GetMapping("/")
+    @GetMapping(value = {"/", ""})
     public String root() {
-        return "redirect:/index";
-    }
-
-    //TODO 合并两个请求
-    @GetMapping("/index")
-    public String index() {
         return "redirect:/blogs";
     }
 
@@ -63,13 +57,9 @@ public class MainController {
         List<Authority> authorities = new ArrayList<>();
         authorities.add(authorityService.getAuthorityById(ROLE_USER_AUTHORITY_ID));
         user.setAuthorities(authorities);
-
+        user.setEncodePassword(user.getPassword());
         userService.saveOrUpdateUser(user);
+
         return "redirect:/login";
     }
-
-    //@GetMapping("/search")
-    //public String search() {
-    //    return "search";
-    //}
 }

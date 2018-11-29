@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="~{fragments/header :: header}">
+<head>
+    <title>Li Pan's 博客</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .container{
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}">...</div>
 <!-- Page Content -->
 <div class="container blog-content-container">
     <div class="row">
@@ -14,31 +25,31 @@
             <div class="row">
                 <div class="col-md-12">
                     <span>
-                      <a href="/u/waylau" title="waylau" >
-                        <img src="https://waylau.com/images/waylau_181_181.jpg" class="blog-avatar-230" alt="waylau">
+                      <a href="/u/pan" th:href="'/u/' + ${user.username}" title="pan" th:title="${user.username}" >
+                        <img th:src="${user.avatar} == null ? '/images/avatar-defualt.jpg' : ${user.avatar} " class="blog-avatar-230">
                       </a>
                     </span>
                 </div>
             </div>
+            <br/>
+            
             <div class="row">
 
                 <div class="col-md-12">
-                    <h2 class="card-text">老卫</h2>
+                    <!--<h2 class="card-text" th:text="${user.name}">攀</h2>-->
+                    <h4 class="card-text" th:text="${user.username}">pan</h4>
                 </div>
             </div>
-            <div class="row">
+            <br/>
 
-                <div class="col-md-12">
-                    <h4 class="card-text">waylau</h4>
-                </div>
-            </div>
-            <hr>
+
             <div class="row ">
                 <div class="col-md-12">
                     <h5><i class="fa fa-envelope-o" aria-hidden="true"></i>
-                        <a href="mailto:waylau521@gmail.com">waylau521@gmail.com</a></h5>
+                        <a href="mailto:18380321869@163.com" th:href="'mailto:'+ ${user.email}" th:text="${user.email}">18380321869@163.com</a></h5>
                 </div>
             </div>
+            <hr>
 
             <!-- 分类 -->
             <div id="catalogMain">
@@ -71,29 +82,30 @@
 
         <div class="col-md-8 col-xl-9">
             <!-- 工具栏 -->
- 
+
             <ul class="nav nav-tabs mr-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link active" href="/u/waylau/blogs?order=new">最新</a>
+                    <a class="nav-link " data-th-classappend="${order} eq 'new' ? 'active' : ''" href="javascript:void(0)" th:attr="url='/u/'+${user.username}+'/blogs?order=new'">最新</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/u/waylau/blogs?order=hot">最热</a>
+                    <a class="nav-link" data-th-classappend="${order} eq 'hot' ? 'active' : ''" href="javascript:void(0)" th:attr="url='/u/'+${user.username}+'/blogs?order=hot'">最热</a>
                 </li>
 
                 <form class="form-inline mt-2 mt-md-0">
-                    <input class="form-control mr-sm-2" type="text" placeholder="搜索">
-                    <a href="/u/waylau/blogs?keyword=ww" class="btn btn-outline-secondary my-2 my-sm-0"><i class="fa fa-search" aria-hidden="true"></i></a>
+                    <input class="form-control mr-sm-2" type="text" placeholder="搜索" id="keyword" th:value="${keyword}">
+                    <a href="javascript:void(0)" class="btn btn-outline-secondary my-2 my-sm-0" id="searchBlogs"><i class="fa fa-search" aria-hidden="true"></i></a>
                 </form>
             </ul>
 
             <div id="mainContainer">
+
                 <div id="mainContainerRepleace">
                     <div class="card mb-4" th:each="blog : ${blogList}">
                         <div class="card-block">
                             <h2 class="card-title">
-                                <a href="/u/waylau/blogs/1" class="card-link" title="waylau"
+                                <a href="/u/pan/blogs/1" class="card-link" title="pan"
                                    th:href="'/u/' + ${blog.user.username} + '/blogs/'+ ${blog.id}"  th:title="${blog.user.username}" th:text="${blog.title}">
                                     OAuth 2.0 认证的原理与实践
                                 </a>
@@ -112,35 +124,13 @@
                 </div>
             </div>
 
-            <!--&lt;!&ndash; Pagination &ndash;&gt;-->
-            <!--<nav>-->
-                <!--<ul class="pagination justify-content-center mb-4">-->
-                    <!--<li class="page-item">-->
-                        <!--<a href="#" class="page-link" aria-label="Previous">-->
-                            <!--<span aria-hidden="true">&laquo;</span>-->
-                        <!--</a>-->
-                    <!--</li>-->
-                    <!--<li class="page-item active"><a href="#" class="page-link">1</a></li>-->
-                    <!--<li class="page-item"><a href="#" class="page-link">2</a></li>-->
-                    <!--<li class="page-item"><a href="#" class="page-link">3</a></li>-->
-                    <!--<li class="page-item"><a href="#" class="page-link">4</a></li>-->
-                    <!--<li class="page-item"><a href="#" class="page-link">5</a></li>-->
-                    <!--<li class="page-item"><a href="#" class="page-link">6</a></li>-->
-                    <!--<li class="page-item"><a href="#" class="page-link">7</a></li>-->
-                    <!--<li class="page-item">-->
-                        <!--<a href="#" class="page-link" aria-label="Next">-->
-                            <!--<span aria-hidden="true">&raquo;</span>-->
-                        <!--</a>-->
-                    <!--</li>-->
-                <!--</ul>-->
-            <!--</nav>-->
         </div>
     </div>
 </div>
 
 <!-- The modal -->
-<div class="modal fade" id="flipFlop" tabindex="-1" role="dialog"
-     aria-labelledby="modalLabel" aria-hidden="true">
+<div class="modal fade" id="flipFlop" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

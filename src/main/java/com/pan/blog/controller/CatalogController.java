@@ -3,7 +3,7 @@ package com.pan.blog.controller;
 import com.pan.blog.entity.Catalog;
 import com.pan.blog.entity.User;
 import com.pan.blog.service.CatalogService;
-import com.pan.blog.util.ConstraintViolationExceptionHandler;
+import com.pan.blog.handler.ConstraintViolationExceptionHandler;
 import com.pan.blog.vo.CatalogVO;
 import com.pan.blog.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;

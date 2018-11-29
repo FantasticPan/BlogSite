@@ -4,7 +4,7 @@ import com.pan.blog.entity.*;
 import com.pan.blog.entity.es.EsBlog;
 import com.pan.blog.repository.BlogRepository;
 import com.pan.blog.service.BlogService;
-import com.pan.blog.service.EsBlogService;
+import com.pan.blog.service.es.EsBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -72,7 +72,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public void readingIncrease(Long id) {
         Blog blog = blogRepository.getOne(id);
-        blog.setReadSize(blog.getCommentSize() + 1);
+        blog.setReadSize(blog.getReadSize() + 1);
         this.saveBlog(blog);
     }
 

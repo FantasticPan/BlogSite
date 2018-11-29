@@ -1,4 +1,4 @@
-package com.pan.blog.util;
+package com.pan.blog.handler;
 
 import org.apache.commons.lang.StringUtils;
 

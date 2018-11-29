@@ -1,4 +1,4 @@
-package com.pan.blog.service;
+package com.pan.blog.service.es;
 
 import com.pan.blog.entity.es.EsBlog;
 import com.pan.blog.entity.User;

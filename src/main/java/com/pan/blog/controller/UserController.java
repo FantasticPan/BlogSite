@@ -4,7 +4,7 @@ import com.pan.blog.entity.Authority;
 import com.pan.blog.entity.User;
 import com.pan.blog.service.AuthorityService;
 import com.pan.blog.service.UserService;
-import com.pan.blog.util.ConstraintViolationExceptionHandler;
+import com.pan.blog.handler.ConstraintViolationExceptionHandler;
 import com.pan.blog.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

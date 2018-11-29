@@ -3,7 +3,7 @@ package com.pan.blog.controller;
 import com.pan.blog.entity.es.EsBlog;
 import com.pan.blog.entity.User;
 import com.pan.blog.service.BlogService;
-import com.pan.blog.service.EsBlogService;
+import com.pan.blog.service.es.EsBlogService;
 import com.pan.blog.vo.TagVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -40,7 +40,6 @@ public class BlogController {
                               Model model) {
 
         Page<EsBlog> page = null;
-        List<EsBlog> list = null;
         boolean isEmpty = true; // 系统初始化时，没有博客数据
 
         try {
@@ -59,7 +58,7 @@ public class BlogController {
             page = esBlogService.listEsBlogs(pageable);
         }
 
-        list = page.getContent();    // 当前所在页面数据列表
+        List<EsBlog> list = page.getContent();    // 当前所在页面数据列表
 
         model.addAttribute("order", order);
         model.addAttribute("keyword", keyword);

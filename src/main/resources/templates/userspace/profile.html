@@ -2,9 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="~{fragments/header :: header}">
+<head>
+    <title>Li Pan's 博客</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .container{
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}">...</div>
 <!-- Page Content -->
 <div class="container blog-content-container">
     <div class="row">
@@ -15,8 +27,7 @@
                     <span>
                     <a class="blog-edit-avatar" data-toggle="modal"
                        data-target="#flipFlop" role="button" data-th-attr="userName=${userModel.user.username}">
-								<img th:src="${userModel.user.avatar} == null ? '/images/avatar-defualt.jpg' : ${userModel.user.avatar} "
-                                     class="blog-avatar blog-avatar-230"/>
+								<img th:src="${userModel.user.avatar} == null ? '/images/avatar-defualt.jpg' : ${userModel.user.avatar} " class="blog-avatar blog-avatar-230"/>
                     </a>
                     </span>
                 </div>

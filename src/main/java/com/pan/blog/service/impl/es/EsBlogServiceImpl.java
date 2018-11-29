@@ -1,9 +1,9 @@
-package com.pan.blog.service.impl;
+package com.pan.blog.service.impl.es;
 
 import com.pan.blog.entity.User;
 import com.pan.blog.entity.es.EsBlog;
-import com.pan.blog.repository.EsBlogRepository;
-import com.pan.blog.service.EsBlogService;
+import com.pan.blog.repository.es.EsBlogRepository;
+import com.pan.blog.service.es.EsBlogService;
 import com.pan.blog.service.UserService;
 import com.pan.blog.vo.TagVO;
 import org.elasticsearch.action.search.SearchResponse;

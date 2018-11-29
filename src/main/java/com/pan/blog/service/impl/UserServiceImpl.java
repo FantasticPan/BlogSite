@@ -44,21 +44,10 @@ public class UserServiceImpl implements UserService, UserDetailsService
         userRepository.deleteById(id);
     }
 
-    //@Transactional
-    //@Override
-    //public void removeUsersInBatch(List<User> users) {
-    //    userRepository.deleteInBatch(users);
-    //}
-
     @Override
     public User getUserById(Long id) {
         return userRepository.getOne(id);
     }
-
-    //@Override
-    //public List<User> listUsers() {
-    //    return userRepository.findAll();
-    //}
 
     @Override
     public Page<User> listUsersByNameLike(String name, Pageable pageable) {
