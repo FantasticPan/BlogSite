@@ -27,14 +27,9 @@ public class MainController {
     @Autowired
     private AuthorityService authorityService;
 
-    @GetMapping("/")
+    @GetMapping(value = {"/", ""})
     public String root() {
-        return "redirect:/index";
-    }
-
-    @GetMapping("/index")
-    public String index() {
-        return "index";
+        return "redirect:/blogs";
     }
 
     @GetMapping("/login")
@@ -62,13 +57,9 @@ public class MainController {
         List<Authority> authorities = new ArrayList<>();
         authorities.add(authorityService.getAuthorityById(ROLE_USER_AUTHORITY_ID));
         user.setAuthorities(authorities);
-
+        user.setEncodePassword(user.getPassword());
         userService.saveOrUpdateUser(user);
+
         return "redirect:/login";
     }
-
-    //@GetMapping("/search")
-    //public String search() {
-    //    return "search";
-    //}
 }

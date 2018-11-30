@@ -15,7 +15,7 @@ spring:
       ddl-auto: create-drop
   data:
     elasticsearch:
-      cluster-nodes: localhost:9300
+      cluster-nodes: 192.168.231.1:9200
 #    open-in-view: false 设为false不能头像上传
 file:
   server:

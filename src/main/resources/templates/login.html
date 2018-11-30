@@ -1,17 +1,29 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/header :: header}">
+<head>
+    <title>登录</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .container{
+            flex-grow: 1;
+        }
+    </style>
 </head>
     <body>
+    <div th:replace="~{fragments/header :: header}">...</div>
     <div class="container blog-content-container">
 		<form th:action="@{~/login}" method="post">
 			<h2 >请登录</h2>
-			
+
 			<div class="form-group col-md-5">
 				<label for="username" class="col-form-label">账号</label>
 				<input type="text" class="form-control" id="username" name="username" maxlength="50" placeholder="请输入账号">
-	 
+
 			</div>
 			<div class="form-group col-md-5">
 				<label for="password" class="col-form-label">密码</label>

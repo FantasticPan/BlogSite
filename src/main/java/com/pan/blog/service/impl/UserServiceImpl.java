@@ -12,6 +12,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collection;
+import java.util.List;
+
 /**
  * Created by FantasticPan on 2018/11/23.
  */
@@ -41,27 +44,21 @@ public class UserServiceImpl implements UserService, UserDetailsService
         userRepository.deleteById(id);
     }
 
-    //@Transactional
-    //@Override
-    //public void removeUsersInBatch(List<User> users) {
-    //    userRepository.deleteInBatch(users);
-    //}
-
     @Override
     public User getUserById(Long id) {
         return userRepository.getOne(id);
     }
-
-    //@Override
-    //public List<User> listUsers() {
-    //    return userRepository.findAll();
-    //}
 
     @Override
     public Page<User> listUsersByNameLike(String name, Pageable pageable) {
         // 模糊查询
         name = "%" + name + "%";
         return userRepository.findByNameLike(name, pageable);
+    }
+
+    @Override
+    public List<User> listUsersByUsernames(Collection<String> usernames) {
+        return userRepository.findByUsernameIn(usernames);
     }
 
     @Override

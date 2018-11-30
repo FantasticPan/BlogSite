@@ -7,7 +7,7 @@ import com.pan.blog.entity.Vote;
 import com.pan.blog.service.BlogService;
 import com.pan.blog.service.CatalogService;
 import com.pan.blog.service.UserService;
-import com.pan.blog.util.ConstraintViolationExceptionHandler;
+import com.pan.blog.handler.ConstraintViolationExceptionHandler;
 import com.pan.blog.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

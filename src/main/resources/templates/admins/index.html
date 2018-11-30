@@ -2,9 +2,21 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head th:replace="~{fragments/header :: header}">
+<head>
+    <title>管理员界面</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .container{
+            flex-grow: 1;
+        }
+    </style>
 </head>
 <body>
+<div th:replace="~{fragments/header :: header}">...</div>
 <!-- Page Content -->
 <div class="container blog-content-container">
     <div class="row">
