@@ -2,15 +2,16 @@ package com.pan.blog.controller;
 
 import com.pan.blog.entity.Authority;
 import com.pan.blog.entity.User;
+import com.pan.blog.handler.ConstraintViolationExceptionHandler;
 import com.pan.blog.service.AuthorityService;
 import com.pan.blog.service.UserService;
-import com.pan.blog.handler.ConstraintViolationExceptionHandler;
 import com.pan.blog.vo.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/users")
-//@PreAuthorize("hasAuthority('ROLE_ADMIN')")  // 指定角色权限才能操作方法
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")  // 指定角色权限才能操作方法
 public class UserController {
 
     @Autowired

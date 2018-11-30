@@ -40,7 +40,7 @@ public class EsBlog implements Serializable {
     private String username;
     //@Field(type = FieldType.Keyword)  // 不做全文检索字段
     private String avatar;
-    //@Field(type = FieldType.Keyword)  // 不做全文检索字段
+    @Field(type = FieldType.Date)  // 不做全文检索字段
     private Timestamp createTime;
     //@Field(type = FieldType.Keyword)  // 不做全文检索字段
     private Integer readSize = 0; // 访问量、阅读量
