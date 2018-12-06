@@ -92,6 +92,16 @@
             <!--<artifactId>elasticsearch</artifactId>-->
             <!--<version>2.1.1</version>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>org.pegdown</groupId>
+            <artifactId>pegdown</artifactId>
+            <version>1.6.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.markdownj</groupId>
+            <artifactId>markdownj-core</artifactId>
+            <version>0.4</version>
+        </dependency>
 	</dependencies>
 
 	<build>

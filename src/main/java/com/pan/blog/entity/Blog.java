@@ -1,8 +1,8 @@
 package com.pan.blog.entity;
 
-import com.github.rjeschke.txtmark.Processor;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.pegdown.PegDownProcessor;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -94,7 +94,9 @@ public class Blog implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
-        this.htmlContent = Processor.process(content); //将Markdown内容转化为HTML格式
+        this.htmlContent = new PegDownProcessor().markdownToHtml(content);
+        //this.htmlContent = new MarkdownProcessor().markdown(content);
+        //this.htmlContent = Processor.process(content); //将Markdown内容转化为HTML格式
     }
 
     public void setComments(List<Comment> comments) {
