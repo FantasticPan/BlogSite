@@ -56,13 +56,14 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
      */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().permitAll()
+        http.authorizeRequests().antMatchers("/admin/**").hasRole("ADMIN")
                 .and()
                 .formLogin().loginPage("/login").failureUrl("/login-error")
                 .and().exceptionHandling().accessDeniedPage("/403");
+
         //.antMatchers("/assets/**", "/index").permitAll() // 都可以访问
         //        .antMatchers("/h2-console/**").permitAll() // 都可以访问
-        //        .antMatchers("/admins/**").hasRole("ADMIN") // 需要相应的角色才能访问
+        //        .antMatchers("/admin/**").hasRole("ADMIN"); // 需要相应的角色才能访问
         //        .and()
         //        .formLogin()
         //        .loginPage("/login").failureUrl("/login-error") // 自定义登录界面

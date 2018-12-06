@@ -54,5 +54,9 @@ public class Blog implements Serializable {
     @Column(name = "tags", length = 100)
     private String tags;
 
-    private String catalog;
+    @OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
+    @JoinColumn(name = "catalog_id")
+    private Catalog catalog;
+
+    private String category;
 }

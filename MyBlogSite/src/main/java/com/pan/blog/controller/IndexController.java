@@ -2,6 +2,7 @@ package com.pan.blog.controller;
 
 import com.pan.blog.entity.Blog;
 import com.pan.blog.service.BlogService;
+import com.pan.blog.util.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +25,8 @@ public class IndexController {
     public ModelAndView index(Model model) {
         List<Blog> blogList = blogService.getAllBlog();
         model.addAttribute("blogList", blogList);
-        return new ModelAndView("index", "blogModel", model);
+        model.addAttribute("blogNum", blogService.blogNum());
+        return ResultUtil.view("index", "blogModel", model);
     }
 
     //@RequestMapping("/")
@@ -34,22 +36,22 @@ public class IndexController {
     //}
 
     @RequestMapping("/403")
-    public String page403() {
-        return "403";
+    public ModelAndView page403() {
+        return ResultUtil.view("403");
     }
 
     @GetMapping("/login")
-    public String loginHtml() {
-        return "login";
+    public ModelAndView loginHtml() {
+        return ResultUtil.view("login");
     }
 
     @RequestMapping("/register")
-    public String register() {
-        return "register";
+    public ModelAndView register() {
+        return ResultUtil.view("register");
     }
 
     @RequestMapping("/tag")
-    public String tag() {
-        return "tag-catalog";
+    public ModelAndView tag() {
+        return ResultUtil.view("tag-catalog");
     }
 }

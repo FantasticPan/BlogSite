@@ -27,7 +27,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Transactional
     @Override
-    public void removeBlog(Long id) {
+    public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
     }
 
@@ -39,5 +39,10 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<Blog> getAllBlog() {
         return blogRepository.findAll();
+    }
+
+    @Override
+    public Long blogNum() {
+        return blogRepository.count();
     }
 }

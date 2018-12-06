@@ -23,7 +23,7 @@ public interface BlogService {
      * @param id
      * @return
      */
-    void removeBlog(Long id);
+    void deleteBlog(Long id);
 
     /**
      * 根据id获取博客
@@ -34,4 +34,6 @@ public interface BlogService {
     Blog getBlogById(Long id);
 
     List<Blog> getAllBlog();
+
+    Long blogNum();
 }
