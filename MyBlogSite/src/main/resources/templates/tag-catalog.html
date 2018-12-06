@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tag-catalog</title>
+    <link rel="stylesheet" href="/assets/css/amazeui.min.css"/>
+    <link rel="stylesheet" href="/assets/css/amazeui.tagsinput.css"/>
+    <style>
+        .am-form .am-tagsinput {
+            min-width: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="am-g">
+    <div class="am-u-md-8 am-u-md-centered">
+        <form class="am-form" action="/submit" method="post">
+            <div class="am-form-group">
+                <label for="tags">输入标签：</label>
+                <input id="tags" type="text" name="tags" data-role="tagsinput"/>
+            </div>
+            <div class="am-form-group">
+                <select name="catalog">
+                    <option>java</option>
+                    <option>linux</option>
+                    <option>spring</option>
+                </select>
+            </div>
+            <div class="am-align-right">
+                <input type="submit" class="am-btn am-btn-primary" value="submit"/>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="/assets/js/jquery.min.js"></script>
+<script src="/assets/js/amazeui.tagsinput.min.js"></script>
+</body>
+</html>
