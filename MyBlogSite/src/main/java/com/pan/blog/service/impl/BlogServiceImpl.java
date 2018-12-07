@@ -45,4 +45,14 @@ public class BlogServiceImpl implements BlogService {
     public Long blogNum() {
         return blogRepository.count();
     }
+
+    @Override
+    public List<Blog> findBlogByTag(String tag) {
+        return blogRepository.findBlogByTags(tag);
+    }
+
+    @Override
+    public List<Blog> findBlogByCatalog(String catalog) {
+        return blogRepository.findBlogsByCatalog(catalog);
+    }
 }

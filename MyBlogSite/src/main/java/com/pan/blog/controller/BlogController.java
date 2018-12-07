@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by FantasticPan on 2018/12/3.
@@ -75,13 +78,19 @@ public class BlogController {
         return ResultUtil.view("tag-catalog");
     }
 
-    @RequestMapping("/blog/{id}")
+    @RequestMapping("/blog/{catalog}/{id}")
     public ModelAndView showBlog(@PathVariable("id") Long id,
+                                 @PathVariable("catalog") String catalog,
                                  Model model,
                                  HttpServletRequest request) {
 
         Blog blog = blogService.getBlogById(id);
+        String[] tags = blog.getTags().split(",");
+        Set<String> tagsList = new HashSet<>(Arrays.asList(tags));
         model.addAttribute("blog", blog);
+        model.addAttribute("catalog", catalog);
+        model.addAttribute("tags", tagsList);
+
         return ResultUtil.view("article", "blogModel", model);
     }
 
@@ -97,6 +106,7 @@ public class BlogController {
                                    @RequestParam("category") String category,
                                    @RequestParam(value = "image", defaultValue = "") String image,
                                    HttpServletRequest request) {
+
         Blog blog = (Blog) request.getSession().getAttribute("blog");
         request.getSession().removeAttribute("blog");
         if (blog.getId() == null) {

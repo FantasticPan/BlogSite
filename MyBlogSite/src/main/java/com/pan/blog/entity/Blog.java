@@ -47,18 +47,18 @@ public class Blog implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)                     //映射为字段，值不能为空
+    @Column(nullable = false)                       //映射为字段，值不能为空
     //@org.hibernate.annotations.CreationTimestamp  //由数据库自动创建时间
     private Date createTime;
 
-    @Column(name = "readSize")
-    private Integer readSize = 0;    //访问量、阅读量
+    @Column(name = "readSize", columnDefinition = "INT default 0")
+    private Integer readSize;    //访问量、阅读量
 
-    @Column(name = "commentSize")
-    private Integer commentSize = 0; //评论量
+    @Column(name = "commentSize", columnDefinition = "INT default 0")
+    private Integer commentSize; //评论量
 
-    @Column(name = "voteSize")
-    private Integer voteSize = 0;    //点赞量
+    @Column(name = "voteSize", columnDefinition = "INT default 0")
+    private Integer voteSize;    //点赞量
 
     @Column(name = "tags", length = 100)
     private String tags;

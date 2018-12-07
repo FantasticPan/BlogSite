@@ -89,11 +89,10 @@
      style="display: none;" id="cover-img">
 <div class="container custome-container">
     <nav class="breadcrumb">
-        <a class="crumbs" title="" href="https://www.zhyd.me/" data-toggle="tooltip" data-placement="bottom"
+        <a class="crumbs" title="" href="/" data-toggle="tooltip" data-placement="bottom"
            data-original-title="返回首页"><i class="fa fa-home"></i>首页</a>
         <i class="fa fa-angle-right"></i>
-        <a href="https://www.zhyd.me/type/2" title="" data-toggle="tooltip" data-placement="bottom"
-           data-original-title="点击查看该分类文章">后端技术</a>
+        <a href="https://www.zhyd.me/type/2" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="点击查看该分类文章" th:text="${blogModel.catalog}">后端技术</a>
         <i class="fa fa-angle-right"></i>正文
     </nav>
     <div class="row">
@@ -101,7 +100,7 @@
             <div class="blog-body overflow-initial fade-in">
                 <div class="article-flag">
                     <span class="article-blockquote article-blockquote-green"></span>
-                    <span class="article-original article-original-green"><a href="detail.html">原创</a></span>
+                    <span class="article-original article-original-green"><a href="detail.html" th:text="${blogModel.blog.category}">原创</a></span>
                     <div class="blog-info-meta pull-right">
                         <ul class="list-unstyled list-inline">
                             <li><i class="fa fa-clock-o fa-fw"></i>发表于 [[${blogModel.blog.createTime}]]</li>
@@ -184,8 +183,8 @@
                         </div>
                     </div>
                     <div class="article-footer overflow-initial">所属分类：
-                        <a href="https://www.zhyd.me/type/2" data-original-title="点击查看后端技术分类的文章" data-toggle="tooltip"
-                           data-placement="bottom">后端技术</a>
+                        <a href="https://www.zhyd.me/type/2" data-toggle="tooltip"
+                           data-placement="bottom" th:text="${blogModel.blog.catalog}">后端技术</a>
                     </div>
                 </div>
             </div>
@@ -194,11 +193,11 @@
                     <ul class="list-unstyled">
                         <li>
                             <strong>本文标签：</strong>
-                            <a href="https://www.zhyd.me/tag/32" class="c-label" data-original-title="Cordova"
-                               data-toggle="tooltip" data-placement="bottom" target="_blank">Cordova</a>
-                            <a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android"
-                               data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>
-                        </li>
+                            <!--<a href="https://www.zhyd.me/tag/32" class="c-label" data-original-title="Cordova" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag}]]</a>-->
+                            <a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag}]]</a>
+                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
+                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
+                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
                         <li>
                             <strong>版权声明：</strong> 本站原创文章，于[[${blogModel.blog.createTime}]]由
                             <a href="https://www.lipan.xyz/" target="_blank" data-original-title="李攀"
@@ -207,12 +206,6 @@
                     </ul>
                 </div>
             </div>
-            <!--<div class="blog-body">-->
-                <!--<a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=wylo59db&amp;utm_source=wylo59db"-->
-                   <!--target="_blank" rel="external nofollow">-->
-                    <!--<img src="/db/img/ad/aliyun_sale1000-60.png" alt="阿里云首购8折" class="img-responsive">-->
-                <!--</a>-->
-            <!--</div>-->
             <div class="blog-body prev-next">
                 <nav class="nav-single wow" data-wow-delay="0.3s">
                     <a href="detail.html" rel="prev">
@@ -240,10 +233,10 @@
             <div class="sidebar-module">
                 <h5 class="sidebar-title"><i class="fa fa-tags icon"></i><strong>文章标签</strong></h5>
                 <ul class="list-unstyled list-inline">
-                    <li class="tag-li">
+                    <li class="tag-li" th:each="tag : ${blogModel.tags}">
                         <a class="btn btn-default btn-xs" href="https://www.zhyd.me/tag/1" title=""
                            data-toggle="tooltip" data-placement="bottom" data-original-title="Linux">
-                            Linux
+                            [[${tag}]]
                         </a>
                     </li>
                 </ul>
