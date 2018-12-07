@@ -25,7 +25,7 @@
             <button id="submit" class="am-btn am-btn-primary">发布</button>
         </div>
         <div class="editormd" id="content-editormd">
-            <textarea class="editormd-markdown-textarea" th:value="*{content}" name="content-editormd-markdown-doc"></textarea>
+            <textarea class="editormd-markdown-textarea" name="content-editormd-markdown-doc">[[*{content}]]</textarea>
         </div>
     </form>
 </div>

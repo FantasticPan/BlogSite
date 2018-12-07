@@ -113,6 +113,10 @@ public class BlogController {
             originBlog.setCatalog(catalog);
             originBlog.setCategory(category);
             originBlog.setImage(image);
+            originBlog.setTitle(blog.getTitle());
+            originBlog.setSummary(blog.getSummary());
+            originBlog.setContent(blog.getContent());
+            originBlog.setHtmlContent(blog.getHtmlContent());
             blogService.saveBlog(originBlog);
         }
         return ResultUtil.redirect("/");
