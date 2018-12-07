@@ -32,24 +32,46 @@ public class BlogController {
     public ModelAndView getBlogEditPage(@PathVariable("username") String username, Model model) {
         User user = (User) userDetailsService.loadUserByUsername(username);
         model.addAttribute("user", user);
+        model.addAttribute("blog", new Blog(null, null, null, null, null, null));
+
+        return ResultUtil.view("blog-edit", "blogModel", model);
+    }
+
+    @GetMapping({"/{username}/blog/edit/{id}"})
+    public ModelAndView getBlogModifyPage(@PathVariable("username") String username,
+                                          @PathVariable("id") Long id,
+                                          Model model) {
+
+        User user = (User) userDetailsService.loadUserByUsername(username);
+        model.addAttribute("user", user);
+        model.addAttribute("blog", blogService.getBlogById(id));
 
         return ResultUtil.view("blog-edit", "blogModel", model);
     }
 
     @PostMapping("/publishBlog")
-    public ModelAndView publishBlog(@RequestParam("title") String title,
+    public ModelAndView publishBlog(@RequestParam("id") Long id,
+                                    @RequestParam("title") String title,
                                     @RequestParam("summary") String summary,
                                     @RequestParam("content-editormd-markdown-doc") String content,
                                     @RequestParam("content-editormd-html-code") String htmlContent,
                                     HttpServletRequest request) {
 
-        Blog blog = new Blog();
-        blog.setTitle(title);
-        blog.setSummary(summary);
-        blog.setContent(content);
-        blog.setHtmlContent(htmlContent);
-
-        request.getSession().setAttribute("blog", blog);
+        if (id == null) {
+            Blog blog = new Blog();
+            blog.setTitle(title);
+            blog.setSummary(summary);
+            blog.setContent(content);
+            blog.setHtmlContent(htmlContent);
+            request.getSession().setAttribute("blog", blog);
+        } else {
+            Blog blog = blogService.getBlogById(id);
+            blog.setTitle(title);
+            blog.setSummary(summary);
+            blog.setContent(content);
+            blog.setHtmlContent(htmlContent);
+            request.getSession().setAttribute("blog", blog);
+        }
         return ResultUtil.view("tag-catalog");
     }
 
@@ -73,15 +95,26 @@ public class BlogController {
     public ModelAndView submitBlog(@RequestParam("tags") String tags,
                                    @RequestParam("catalog") String catalog,
                                    @RequestParam("category") String category,
+                                   @RequestParam(value = "image", defaultValue = "") String image,
                                    HttpServletRequest request) {
         Blog blog = (Blog) request.getSession().getAttribute("blog");
         request.getSession().removeAttribute("blog");
-        blog.setUser((User) userDetailsService.loadUserByUsername(SecurityUtil.getCurrentUsername()));
-        blog.setCreateTime(new Date());
-        blog.setTags(tags);
-        blog.setCatalog(catalog);
-        blog.setCategory(category);
-        blogService.saveBlog(blog);
+        if (blog.getId() == null) {
+            blog.setUser((User) userDetailsService.loadUserByUsername(SecurityUtil.getCurrentUsername()));
+            blog.setCreateTime(new Date());
+            blog.setTags(tags);
+            blog.setCatalog(catalog);
+            blog.setCategory(category);
+            blog.setImage(image);
+            blogService.saveBlog(blog);
+        } else {
+            Blog originBlog = blogService.getBlogById(blog.getId());
+            originBlog.setTags(tags);
+            originBlog.setCatalog(catalog);
+            originBlog.setCategory(category);
+            originBlog.setImage(image);
+            blogService.saveBlog(originBlog);
+        }
         return ResultUtil.redirect("/");
     }
 }

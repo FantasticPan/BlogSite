@@ -54,9 +54,27 @@ public class Blog implements Serializable {
     @Column(name = "tags", length = 100)
     private String tags;
 
-    @OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "catalog_id")
-    private Catalog catalog;
+    //@OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
+    //@JoinColumn(name = "catalog_id")
+    //private Catalog catalog;
 
     private String category;
+    private String catalog;
+    private String image;
+
+    public Blog() {
+    }
+
+    public Blog(@Size(min = 2, max = 200) String title,
+                @Size(min = 2, max = 200) String summary,
+                @Size(min = 2) String content,
+                @Size(min = 2) String htmlContent, String tags, String image) {
+
+        this.title = title;
+        this.summary = summary;
+        this.content = content;
+        this.htmlContent = htmlContent;
+        this.tags = tags;
+        this.image = image;
+    }
 }
