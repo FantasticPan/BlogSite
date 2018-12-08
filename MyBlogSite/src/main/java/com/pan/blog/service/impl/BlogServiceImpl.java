@@ -2,6 +2,7 @@ package com.pan.blog.service.impl;
 
 import com.pan.blog.dao.BlogRepository;
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.Tag;
 import com.pan.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,7 +48,7 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public List<Blog> findBlogByTag(String tag) {
+    public Blog findBlogByTag(Tag tag) {
         return blogRepository.findBlogByTags(tag);
     }
 

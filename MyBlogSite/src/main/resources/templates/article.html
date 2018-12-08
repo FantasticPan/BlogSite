@@ -40,13 +40,15 @@
         </div>
         <div class="menu-topmenu-container pull-right">
             <ul class="list-unstyled list-inline pull-left">
-                <li>
-                    <a href="about.html" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom"
-                       data-original-title="关于博客"><i class="fa fa-info fa-fw"></i>关于</a>
+                <li sec:authorize="isAnonymous()">
+                    <a href="/login" class="menu_a" data-toggle="tooltip" data-placement="bottom" data-original-title="登录">
+                        <i class="fa fa-sign-in"></i>登录</a>
                 </li>
-                <li>
-                    <a href="links.html" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom"
-                       data-original-title="友情链接"><i class="fa fa-link fa-fw"></i>友情链接</a>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-link fa-fw"></i><span sec:authentication="name">李攀</span></a>
+                    <a th:href="@{'/' + ${#authentication.name} + '/blog/edit'}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-gg fa-fw"></i>写博客</a>
+                    <a th:href="@{'/admin/' + ${#authentication.name} + '/manager'}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-fire fa-fw"></i>后台管理</a>
+                    <a th:href="@{/logout}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-sign-in"></i>退出</a>
                 </li>
             </ul>
         </div>
@@ -68,8 +70,10 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <div class="pull-left" style="line-height: 0.9;">
-                <h1 style="font-size: 20px;font-weight: 700;" class="auto-shake">
-                    <a href="https://www.zhyd.me/" data-original-title="写博客、记日志、闲聊扯淡鼓捣技术" data-toggle="tooltip" data-placement="bottom">Li Pan's 博客</a>
+                <h1 style="font-size: 20px;font-weight: 700;" class="auto-shake"><a href="/"
+                                                                                    data-original-title="写博客、记日志、闲聊扯淡鼓捣技术"
+                                                                                    data-toggle="tooltip"
+                                                                                    data-placement="bottom">Li Pan's 博客</a>
                 </h1>
                 <p class="site-description">写博客、记日志、闲聊扯淡鼓捣技术</p>
             </div>
@@ -77,8 +81,17 @@
                 <li class="active">
                     <a href="/" class="menu_a"><i class="fa fa-home"></i>首页</a>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle menu_a" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-code"></i>编程相关</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="" title="">1</a></li>
+                        <li><a href="" title="">1</a></li>
+                        <li><a href="" title="">1</a></li>
+                    </ul>
+                </li>
                 <!--<li>-->
-                    <!--<a href="guestbook.html" class="menu_a"><i class="fa fa-comments-o"></i>留言板</a>-->
+                <!--<a href="guestbook.html" class="menu_a"><i class="fa fa-comments-o"></i>留言板</a>-->
                 <!--</li>-->
                 <!--<li><span class="pull-right nav-search main-search" data-toggle="modal" data-target=".nav-search-box"><i class="fa fa-search"></i></span></li>-->
             </ul>
@@ -92,7 +105,7 @@
         <a class="crumbs" title="" href="/" data-toggle="tooltip" data-placement="bottom"
            data-original-title="返回首页"><i class="fa fa-home"></i>首页</a>
         <i class="fa fa-angle-right"></i>
-        <a href="https://www.zhyd.me/type/2" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="点击查看该分类文章" th:text="${blogModel.catalog}">后端技术</a>
+        <a th:href="'/catalog/' + ${blogModel.blog.catalog}" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="点击查看该分类文章" th:text="${blogModel.blog.catalog}">后端技术</a>
         <i class="fa fa-angle-right"></i>正文
     </nav>
     <div class="row">
@@ -183,7 +196,7 @@
                         </div>
                     </div>
                     <div class="article-footer overflow-initial">所属分类：
-                        <a href="https://www.zhyd.me/type/2" data-toggle="tooltip"
+                        <a th:href="'/catalog/' + ${blogModel.blog.catalog}" data-toggle="tooltip"
                            data-placement="bottom" th:text="${blogModel.blog.catalog}">后端技术</a>
                     </div>
                 </div>
@@ -193,14 +206,9 @@
                     <ul class="list-unstyled">
                         <li>
                             <strong>本文标签：</strong>
-                            <span th:each="tag : ${blogModel.tags}">
-                                <a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag.tagName}]]</a>
+                            <span th:each="tag : ${blogModel.blogTags}">
+                                <a th:href="'/tag/' + ${tag.tagName}" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag.tagName}]]</a>
                             </span>
-                            <!--<a href="https://www.zhyd.me/tag/32" class="c-label" data-original-title="Cordova" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag}]]</a>-->
-                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag}]]</a>-->
-                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
-                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
-                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
                         </li>
                         <li>
                             <strong>版权声明：</strong> 本站原创文章，于[[${blogModel.blog.createTime}]]由
@@ -210,21 +218,21 @@
                     </ul>
                 </div>
             </div>
-            <div class="blog-body prev-next">
-                <nav class="nav-single wow" data-wow-delay="0.3s">
-                    <a href="detail.html" rel="prev">
-								<span class="meta-nav" data-original-title="【漏洞公告】Spring Framework多个安全漏洞预警"
-                                      data-toggle="tooltip" data-placement="bottom"><span class="post-nav"><i
-                                        class="fa fa-angle-left"></i> 上一篇</span>
-								<br>【漏洞公告】Spring Framework多个安全漏洞预警
-								</span>
-                    </a>
-                    <a href="detail.html" rel="nofollow next">
-                        <span class="meta-nav" data-original-title="已经到最后一篇了" data-toggle="tooltip" data-placement="bottom"><span class="post-nav">下一篇 <i class="fa fa-angle-right"></i></span><br>已经到最后一篇了</span>
-                    </a>
-                    <div class="clear"></div>
-                </nav>
-            </div>
+            <!--<div class="blog-body prev-next">-->
+                <!--<nav class="nav-single wow" data-wow-delay="0.3s">-->
+                    <!--<a href="detail.html" rel="prev">-->
+								<!--<span class="meta-nav" data-original-title="【漏洞公告】Spring Framework多个安全漏洞预警"-->
+                                      <!--data-toggle="tooltip" data-placement="bottom"><span class="post-nav"><i-->
+                                        <!--class="fa fa-angle-left"></i> 上一篇</span>-->
+								<!--<br>【漏洞公告】Spring Framework多个安全漏洞预警-->
+								<!--</span>-->
+                    <!--</a>-->
+                    <!--<a href="detail.html" rel="nofollow next">-->
+                        <!--<span class="meta-nav" data-original-title="已经到最后一篇了" data-toggle="tooltip" data-placement="bottom"><span class="post-nav">下一篇 <i class="fa fa-angle-right"></i></span><br>已经到最后一篇了</span>-->
+                    <!--</a>-->
+                    <!--<div class="clear"></div>-->
+                <!--</nav>-->
+            <!--</div>-->
         </div>
         <div class="col-sm-3 blog-sidebar">
             <div class="sidebar-module article-module">
@@ -238,111 +246,26 @@
                 <h5 class="sidebar-title"><i class="fa fa-tags icon"></i><strong>文章标签</strong></h5>
                 <ul class="list-unstyled list-inline">
                     <li class="tag-li" th:each="tag : ${blogModel.tags}">
-                        <a class="btn btn-default btn-xs" href="https://www.zhyd.me/tag/1" title=""
+                        <a class="btn btn-default btn-xs" th:href="'/tag/' + ${tag}" title=""
                            data-toggle="tooltip" data-placement="bottom" data-original-title="Linux">
-                            [[${tag.tagName}]]
+                            [[${tag}]]
                         </a>
                     </li>
                 </ul>
             </div>
+            <div class="clear"></div>
             <div class="sidebar-module">
-                <h5 class="sidebar-title"><i class="fa fa-comments icon"></i><strong>近期评论</strong></h5>
-                <ul class="list-unstyled list-inline comments">
-                    <li>
-                        <a href="detail.html#comment-58" title="" rel="external nofollow" data-toggle="tooltip"
-                           data-placement="bottom" data-original-title="可以">
-                            <img alt="骑着蜗牛追法拉利" src="/db/img/user.png" class="avatar auto-shake" height="64" width="64"
-                                 onerror="this.src='/db/img/user.png'">
-                            <span class="comment-author">骑着蜗牛追法拉利</span> 可以
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <!--<div class="sidebar-module">-->
-                <!--<ul class="nav nav-tabs sidebar-tabs" role="tablist">-->
-                    <!--<li role="presentation" class="active">-->
-                        <!--<a href="detail.html#home" aria-controls="home" role="tab" data-toggle="tab"><i-->
-                                <!--class="fa fa-thumbs-o-up"></i>站长推荐</a>-->
-                    <!--</li>-->
-                    <!--<li role="presentation">-->
-                        <!--<a href="detail.html#profile" aria-controls="profile" role="tab" data-toggle="tab"><i-->
-                                <!--class="fa fa-list"></i>近期文章</a>-->
-                    <!--</li>-->
-                    <!--<li role="presentation">-->
-                        <!--<a href="detail.html#messages" aria-controls="messages" role="tab" data-toggle="tab"><i-->
-                                <!--class="fa fa-hand-peace-o"></i>随机文章</a>-->
-                    <!--</li>-->
-                <!--</ul>-->
-                <!--<div class="tab-content">-->
-                    <!--<div role="tabpanel" class="tab-pane active" id="home">-->
-                        <!--<ol class="list-unstyled">-->
-                            <!--<li>-->
-                                <!--<span class="li-icon li-icon-1">1</span>-->
-                                <!--<a href="detail.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                                   <!--data-original-title="Cordova入门（一）创建android项目">-->
-                                    <!--Cordova入门（一）创建android项目-->
-                                <!--</a>-->
-                            <!--</li>-->
-                            <!--<li>-->
-                                <!--<span class="li-icon li-icon-2">2</span>-->
-                                <!--<a href="detail.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                                   <!--data-original-title="【漏洞公告】Spring Framework多个安全漏洞预警">-->
-                                    <!--【漏洞公告】Spring Framework多个安全漏洞预警-->
-                                <!--</a>-->
-                            <!--</li>-->
-                        <!--</ol>-->
-                    <!--</div>-->
-                    <!--<div role="tabpanel" class="tab-pane" id="profile">-->
-                        <!--<ol class="list-unstyled">-->
-                            <!--<li>-->
-                                <!--<span class="li-icon li-icon-1">1</span>-->
-                                <!--<a href="detail.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                                   <!--data-original-title="Cordova入门（一）创建android项目">-->
-                                    <!--Cordova入门（一）创建android项目-->
-                                <!--</a>-->
-                            <!--</li>-->
-                            <!--<li>-->
-                                <!--<span class="li-icon li-icon-2">2</span>-->
-                                <!--<a href="detail.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                                   <!--data-original-title="【漏洞公告】Spring Framework多个安全漏洞预警">-->
-                                    <!--【漏洞公告】Spring Framework多个安全漏洞预警-->
-                                <!--</a>-->
-                            <!--</li>-->
-                        <!--</ol>-->
-                    <!--</div>-->
-                    <!--<div role="tabpanel" class="tab-pane" id="messages">-->
-                        <!--<ol class="list-unstyled">-->
-                            <!--<li>-->
-                                <!--<span class="li-icon li-icon-1">1</span>-->
-                                <!--<a href="detail.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                                   <!--data-original-title="SpringBoot配置属性之Security">-->
-                                    <!--SpringBoot配置属性之Security-->
-                                <!--</a>-->
-                            <!--</li>-->
-                            <!--<li>-->
-                                <!--<span class="li-icon li-icon-2">2</span>-->
-                                <!--<a href="detail.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                                   <!--data-original-title="2016年总结">-->
-                                    <!--2016年总结-->
-                                <!--</a>-->
-                            <!--</li>-->
-                        <!--</ol>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-            <!--<div class="clear"></div>-->
-            <!--<div class="sidebar-module">-->
-                <!--<h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>-->
-                <!--<ul class="ul-default">-->
-                    <!--<li><i class="fa fa-file fa-fw"></i> 文章总数：92 篇</li>-->
-                    <!--<li><i class="fa fa-tags fa-fw"></i> 标签总数：33 个</li>-->
-                    <!--<li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>-->
+                <h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>
+                <ul class="ul-default">
+                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.blogNum}]] 篇</li>
+                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.tagsSize}]] 个</li>
+                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>
                     <!--<li><i class="fa fa-comments fa-fw"></i> 留言数量：50 条</li>-->
                     <!--<li><i class="fa fa-users fa-fw"></i> 在线人数：<span class="online">11</span>人</li>-->
-                    <!--<li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>-->
-                    <!--<li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>-->
-                <!--</ul>-->
-            <!--</div>-->
+                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>
+                    <li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
@@ -502,75 +425,31 @@
         <div class="loading-2">Loading...</div>
     </div>
 </div>
-<div class="clear blog-footer">
-    <div class="container">
+<!--<div class="clear blog-footer">-->
+    <!--<div class="container">-->
         <!--<div class="col-xs-12 col-sm-4 col-md-4 text-left fade-in">-->
-            <!--<h4>其他链接</h4>-->
-            <!--<ul class="list-unstyled list-inline">-->
-                <!--<li>-->
-                    <!--<a href="http://shang.qq.com/wpa/qunwpa?idkey=9f986e9b33b1de953e1ef9a96cdeec990affd0ac7855e00ff103514de2027b60"-->
-                       <!--target="_blank" title="" data-toggle="tooltip" data-placement="bottom" rel="external nofollow"-->
-                       <!--data-original-title="加入我的QQ交流群：190886500"><i class="fa fa-qq"></i>QQ交流群</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=wylo59db"-->
-                       <!--target="_blank" title="" data-toggle="tooltip" data-placement="bottom" rel="external nofollow"-->
-                       <!--data-original-title="史上最全的阿里云优惠券"><i class="fa fa-fire fa-fw"></i>阿里云券</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="https://mi.aliyun.com/shop/19462" target="_blank" title="" data-toggle="tooltip"-->
-                       <!--data-placement="bottom" rel="external nofollow" data-original-title="闲置域名出售"><i-->
-                            <!--class="fa fa-globe fa-fw fa-spin"></i>域名出售</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="sitemap.html" target="_blank" title="" data-toggle="tooltip" data-placement="bottom"-->
-                       <!--data-original-title="网站地图"><i class="fa fa-map-o fa-fw"></i>网站地图</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="https://www.zhyd.me/recommended" title="" data-toggle="tooltip" data-placement="bottom"-->
-                       <!--data-original-title="站长推荐"><i class="fa fa-thumbs-o-up fa-fw"></i>站长推荐</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="https://www.zhyd.me/updateLog" title="" data-toggle="tooltip" data-placement="bottom"-->
-                       <!--data-original-title="更新记录"><i class="fa fa-file-o fa-fw"></i>更新记录</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="archives.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                       <!--data-original-title="归档目录"><i class="fa fa-folder-o fa-fw"></i>归档目录</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="https://www.zhyd.me/tool" title="" data-toggle="tooltip" data-placement="bottom"-->
-                       <!--data-original-title="推荐工具"><i class="fa fa-fire fa-fw red"></i>推荐工具</a>-->
-                <!--</li>-->
-                <!--<li>-->
-                    <!--<a href="disclaimer.html" title="" data-toggle="tooltip" data-placement="bottom"-->
-                       <!--data-original-title="免责声明"><i class="fa fa-file-o fa-fw"></i>免责声明</a>-->
-                <!--</li>-->
-            <!--</ul>-->
+            <!--<h4>关于本站</h4>-->
+            <!--<div style="padding: 4px;padding-left: 10px;">-->
+                <!--<p style="white-space: initial;">本站定位：个人技术类博客</p>-->
+                <!--<p style="white-space: initial;">本站作用：写博客、记日志、闲聊扯淡鼓捣技术。</p>-->
+            <!--</div>-->
         <!--</div>-->
-        <div class="col-xs-12 col-sm-4 col-md-4 text-left fade-in">
-            <h4>关于本站</h4>
-            <div style="padding: 4px;padding-left: 10px;">
-                <p style="white-space: initial;">本站定位：个人技术类博客</p>
-                <p style="white-space: initial;">本站作用：写博客、记日志、闲聊扯淡鼓捣技术。</p>
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-4 col-md-4 text-left fade-in">
-            <h4>问题交流</h4>
-            <div class="row" style="padding: 4px;padding-left: 10px;">
-                <div class="col-xs-12 col-sm-7 col-md-7" style="white-space: initial;">
-                    <span>志同道合者欢迎进QQ交流群(190886500)</span>
-                </div>
-                <div class="col-xs-12 col-sm-5 col-md-5">
-                    <a href="/db/img/qq_group.png" class="showImage" title="QQ群(190886500)二维码" rel="external nofollow">
-                        <img data-original="/db/img/qq_group.png" alt="QQ群(190886500)二维码"
-                             class="img-responsive img-rounded auto-shake lazy-img" style="width: 100px;">
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+        <!--<div class="col-xs-12 col-sm-4 col-md-4 text-left fade-in">-->
+            <!--<h4>问题交流</h4>-->
+            <!--<div class="row" style="padding: 4px;padding-left: 10px;">-->
+                <!--<div class="col-xs-12 col-sm-7 col-md-7" style="white-space: initial;">-->
+                    <!--<span>志同道合者欢迎进QQ交流群(190886500)</span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-12 col-sm-5 col-md-5">-->
+                    <!--<a href="/db/img/qq_group.png" class="showImage" title="QQ群(190886500)二维码" rel="external nofollow">-->
+                        <!--<img data-original="/db/img/qq_group.png" alt="QQ群(190886500)二维码"-->
+                             <!--class="img-responsive img-rounded auto-shake lazy-img" style="width: 100px;">-->
+                    <!--</a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
 <footer class="footer">
     <div class="clear">
         <p>托管于

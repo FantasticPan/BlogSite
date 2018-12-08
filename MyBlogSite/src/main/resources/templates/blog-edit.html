@@ -16,10 +16,10 @@
     <form action="/publishBlog" class="am-form" method="post">
         <input type="hidden" name="id" th:value="*{id}" id="id">
         <div class="am-form-group">
-            <input class="am-form-field am-input-sm" type="text" name="title" th:value="*{title}" maxlength="100" placeholder="输入文章标题">
+            <input class="am-form-field am-input-sm" type="text" name="title" th:value="*{title}" maxlength="100" placeholder="输入文章标题" autocomplete="off">
         </div>
         <div class="am-form-group">
-            <input class="am-form-field am-input-sm" type="text" name="summary" th:value="*{summary}" maxlength="100" placeholder="输入文章摘要">
+            <input class="am-form-field am-input-sm" type="text" name="summary" th:value="*{summary}" maxlength="100" placeholder="输入文章摘要" autocomplete="off">
         </div>
         <div class="am-form-group">
             <button id="submit" class="am-btn am-btn-primary">发布</button>

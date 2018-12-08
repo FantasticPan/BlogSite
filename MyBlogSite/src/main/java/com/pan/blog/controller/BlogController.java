@@ -18,9 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by FantasticPan on 2018/12/3.
@@ -57,6 +55,81 @@ public class BlogController {
         return ResultUtils.view("blog-edit", "blogModel", model);
     }
 
+    @GetMapping("/blog/{id}")
+    public ModelAndView showBlog(@PathVariable("id") Long id,
+                                 Model model,
+                                 HttpServletRequest request) {
+
+        Blog blog = blogService.getBlogById(id);
+        List<Tag> blogTags = tagService.findTagsByUser(blog.getUser());
+        List<Tag> tags = tagService.findAllTags();
+        Set<String> tagsList = new HashSet<>();
+        for (Tag tag : tags) {
+            tagsList.add(tag.getTagName());
+        }
+
+        model.addAttribute("blog", blog);
+        model.addAttribute("tags", tagsList);
+        model.addAttribute("blogTags", blogTags);
+        model.addAttribute("blogNum", blogService.blogNum());
+        model.addAttribute("tagsSize", tagsList.size());
+
+        return ResultUtils.view("article", "blogModel", model);
+    }
+
+    @GetMapping("/catalog/{catalog}")
+    public ModelAndView showBlogByCatalog(@PathVariable("catalog") String catalog,
+                                          Model model) {
+
+        List<Blog> blogList = blogService.findBlogByCatalog(catalog);
+        List<Tag> tags = tagService.findAllTags();
+        Set<String> tagsList = new HashSet<>();
+        for (Tag tag : tags) {
+            tagsList.add(tag.getTagName());
+        }
+
+        model.addAttribute("tags", tagsList);
+        model.addAttribute("blogNum", blogService.blogNum());
+        model.addAttribute("tagsSize", tagsList.size());
+        model.addAttribute("type", "博客分类");
+        model.addAttribute("blogList", blogList);
+        model.addAttribute("name", catalog);
+
+        return ResultUtils.view("show-catalog-type", "blogModel", model);
+    }
+
+    @GetMapping("/tag/{tag}")
+    public ModelAndView showBlogByTag(@PathVariable("tag") String tag,
+                                      Model model) {
+
+        List<Tag> tagList1 = tagService.findTagsByTagName(tag);
+        List<Blog> blogList = new ArrayList<>();
+        for (Tag tag1 : tagList1) {
+            blogList.add(blogService.findBlogByTag(tag1));
+        }
+
+        List<Tag> tags = tagService.findAllTags();
+        Set<String> tagsList = new HashSet<>();
+        for (Tag tag2 : tags) {
+            tagsList.add(tag2.getTagName());
+        }
+        model.addAttribute("tags", tagsList);
+        model.addAttribute("blogNum", blogService.blogNum());
+        model.addAttribute("tagsSize", tagsList.size());
+
+        model.addAttribute("type", "博客标签");
+        model.addAttribute("blogList", blogList);
+        model.addAttribute("name", tag);
+
+        return ResultUtils.view("show-catalog-type", "blogModel", model);
+    }
+
+    @RequestMapping("/delete/{id}")
+    public ModelAndView deleteBlog(@PathVariable("id") Long id) {
+        blogService.deleteBlog(id);
+        return ResultUtils.redirect("/");
+    }
+
     @PostMapping("/publishBlog")
     public ModelAndView publishBlog(@RequestParam("id") Long id,
                                     @RequestParam("title") String title,
@@ -67,6 +140,7 @@ public class BlogController {
                                     Model model) {
 
         Blog blog;
+        List<String> tags = new ArrayList<>();
 
         if (id == null) {
             blog = new Blog();
@@ -84,34 +158,16 @@ public class BlogController {
             request.getSession().setAttribute("blog", blog);
         }
 
-        model.addAttribute("tags", StringUtils.join(blog.getTags(), ","));
+        for (Tag tag : blog.getTags()) {
+            tags.add(tag.getTagName());
+        }
+        model.addAttribute("tags", StringUtils.join(tags, ","));
 
         return ResultUtils.view("tag-catalog", "blogModel", model);
     }
 
-    @GetMapping("/blog/{catalog}/{id}")
-    public ModelAndView showBlog(@PathVariable("id") Long id,
-                                 @PathVariable("catalog") String catalog,
-                                 Model model,
-                                 HttpServletRequest request) {
-
-        Blog blog = blogService.getBlogById(id);
-        List<Tag> tags = tagService.findTagsByUser(blog.getUser());
-        model.addAttribute("blog", blog);
-        model.addAttribute("catalog", catalog);
-        model.addAttribute("tags", tags);
-
-        return ResultUtils.view("article", "blogModel", model);
-    }
-
-    @RequestMapping("/delete/{id}")
-    public ModelAndView deleteBlog(@PathVariable("id") Long id) {
-        blogService.deleteBlog(id);
-        return ResultUtils.redirect("/");
-    }
-
     @PostMapping("/submit")
-    public ModelAndView submitBlog(@RequestParam(value = "tags", defaultValue = "学习,总结") String tags,
+    public ModelAndView submitBlog(@RequestParam(value = "tags", defaultValue = "学习") String tags,
                                    @RequestParam("catalog") String catalog,
                                    @RequestParam("category") String category,
                                    @RequestParam(value = "image", defaultValue = "") String image,
@@ -119,13 +175,17 @@ public class BlogController {
 
         Blog blog = (Blog) request.getSession().getAttribute("blog");
         List<Tag> tagList = new ArrayList<>();
+        User user = (User) userDetailsService.loadUserByUsername(SecurityUtils.getCurrentUsername());
         request.getSession().removeAttribute("blog");
         if (blog.getId() == null) {
+            Tag tag;
             for (String s : tags.split(",")) {
-                tagList.add(new Tag(s));
+                tagList.add(tag = new Tag(s));
+                tag.setUser(user);
+                tagService.saveTag(tag);
             }
 
-            blog.setUser((User) userDetailsService.loadUserByUsername(SecurityUtils.getCurrentUsername()));
+            blog.setUser(user);
             blog.setCreateTime(DateUtils.dateTimeToDateString(new Date()));
             blog.setTags(tagList);
             blog.setCatalog(catalog);

@@ -1,6 +1,7 @@
 package com.pan.blog.service;
 
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.Tag;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public interface BlogService {
 
     Long blogNum();
 
-    List<Blog> findBlogByTag(String tag);
+    Blog findBlogByTag(Tag tag);
 
     List<Blog> findBlogByCatalog(String catalog);
 }

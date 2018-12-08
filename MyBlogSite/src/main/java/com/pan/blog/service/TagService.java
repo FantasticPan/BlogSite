@@ -15,4 +15,6 @@ public interface TagService {
     List<Tag> findTagsByUser(User user);
 
     List<Tag> findAllTags();
+
+    List<Tag> findTagsByTagName(String tagName);
 }

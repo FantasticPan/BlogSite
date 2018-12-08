@@ -77,6 +77,9 @@ public class Blog implements Serializable {
     private String image;
 
     public Blog() {
+        this.readSize = 0;
+        this.commentSize = 0;
+        this.voteSize = 0;
     }
 
     public Blog(@Size(min = 2, max = 200) String title,

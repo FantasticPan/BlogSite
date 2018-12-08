@@ -1,6 +1,7 @@
 package com.pan.blog.dao;
 
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,5 +13,5 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     List<Blog> findBlogsByCatalog(String catalog);
 
-    List<Blog> findBlogByTags(String tag);
+    Blog findBlogByTags(Tag tag);
 }

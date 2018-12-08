@@ -22,34 +22,6 @@ public class DateUtils {
     public static final String HOUR_ONLY_PATTERN = "HH";
 
     /**
-     * 日期相加减天数
-     *
-     * @param date        如果为Null，则为当前时间
-     * @param days        加减天数
-     * @param includeTime 是否包括时分秒,true表示包含
-     * @return
-     * @throws ParseException
-     */
-
-
-    public static Date dateAdd(Date date, int days, boolean includeTime) throws ParseException {
-        if (date == null) {
-            date = new Date();
-
-        }
-        if (!includeTime) {
-            SimpleDateFormat sdf = new SimpleDateFormat(DateUtils.DATE_PATTERN);
-            date = sdf.parse(sdf.format(date));
-
-        }
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.DATE, days);
-        return cal.getTime();
-
-    }
-
-    /**
      * 时间格式化成字符串
      *
      * @param date    Date
@@ -57,8 +29,6 @@ public class DateUtils {
      * @return
      * @throws ParseException
      */
-
-
     public static String dateFormat(Date date, String pattern) {
         if (StringUtils.isBlank(pattern)) {
             pattern = DateUtils.DATE_PATTERN;
@@ -66,7 +36,6 @@ public class DateUtils {
         }
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.format(date);
-
     }
 
     /**
@@ -77,15 +46,12 @@ public class DateUtils {
      * @return
      * @throws ParseException
      */
-
-
     public static Date dateParse(String dateTimeString, String pattern) throws ParseException {
         if (StringUtils.isBlank(pattern)) {
             pattern = DateUtils.DATE_PATTERN;
         }
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         return sdf.parse(dateTimeString);
-
     }
 
     /**
@@ -94,33 +60,9 @@ public class DateUtils {
      * @param dateTime Date
      * @return
      */
-
-
     public static String dateTimeToDateString(Date dateTime) {
         String dateTimeString = DateUtils.dateFormat(dateTime, DateUtils.DATE_TIME_PATTERN);
         return dateTimeString.substring(0, 10);
-
-    }
-
-    /**
-     * 当时、分、秒为00:00:00时，将日期时间格式成只有日期的字符串，
-     * 当时、分、秒不为00:00:00时，直接返回
-     *
-     * @param dateTime Date
-     * @return
-     */
-
-
-    public static String dateTimeToDateStringIfTimeEndZero(Date dateTime) {
-        String dateTimeString = DateUtils.dateFormat(dateTime, DateUtils.DATE_TIME_PATTERN);
-        if (dateTimeString.endsWith("00:00:00")) {
-            return dateTimeString.substring(0, 10);
-
-        } else {
-            return dateTimeString;
-
-        }
-
     }
 
     /**
@@ -130,8 +72,6 @@ public class DateUtils {
      * @return Date
      * @throws ParseException
      */
-
-
     public static Date dateTimeToDate(Date dateTime) throws ParseException {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dateTime);
@@ -140,7 +80,6 @@ public class DateUtils {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
-
     }
 
     /**
@@ -150,8 +89,6 @@ public class DateUtils {
      * @param hours     加减的小时
      * @return Date
      */
-
-
     public static Date dateAddHours(Date startDate, int hours) {
         if (startDate == null) {
             startDate = new Date();
@@ -161,7 +98,6 @@ public class DateUtils {
         c.setTime(startDate);
         c.set(Calendar.HOUR, c.get(Calendar.HOUR) + hours);
         return c.getTime();
-
     }
 
     /**
@@ -171,8 +107,6 @@ public class DateUtils {
      * @param minutes   加减的分钟
      * @return
      */
-
-
     public static Date dateAddMinutes(Date startDate, int minutes) {
         if (startDate == null) {
             startDate = new Date();
@@ -182,7 +116,6 @@ public class DateUtils {
         c.setTime(startDate);
         c.set(Calendar.MINUTE, c.get(Calendar.MINUTE) + minutes);
         return c.getTime();
-
     }
 
     /**
@@ -192,8 +125,6 @@ public class DateUtils {
      * @param seconds   加减的秒数
      * @return
      */
-
-
     public static Date dateAddSeconds(Date startDate, int seconds) {
         if (startDate == null) {
             startDate = new Date();
@@ -203,7 +134,6 @@ public class DateUtils {
         c.setTime(startDate);
         c.set(Calendar.SECOND, c.get(Calendar.SECOND) + seconds);
         return c.getTime();
-
     }
 
     /**
@@ -213,8 +143,6 @@ public class DateUtils {
      * @param days      加减的天数
      * @return Date
      */
-
-
     public static Date dateAddDays(Date startDate, int days) {
         if (startDate == null) {
             startDate = new Date();
@@ -224,7 +152,6 @@ public class DateUtils {
         c.setTime(startDate);
         c.set(Calendar.DATE, c.get(Calendar.DATE) + days);
         return c.getTime();
-
     }
 
     /**
@@ -234,8 +161,6 @@ public class DateUtils {
      * @param months    加减的月数
      * @return Date
      */
-
-
     public static Date dateAddMonths(Date startDate, int months) {
         if (startDate == null) {
             startDate = new Date();
@@ -245,7 +170,6 @@ public class DateUtils {
         c.setTime(startDate);
         c.set(Calendar.MONTH, c.get(Calendar.MONTH) + months);
         return c.getTime();
-
     }
 
     /**
@@ -255,8 +179,6 @@ public class DateUtils {
      * @param years     加减的年数
      * @return Date
      */
-
-
     public static Date dateAddYears(Date startDate, int years) {
         if (startDate == null) {
             startDate = new Date();
@@ -266,7 +188,6 @@ public class DateUtils {
         c.setTime(startDate);
         c.set(Calendar.YEAR, c.get(Calendar.YEAR) + years);
         return c.getTime();
-
     }
 
     /**
@@ -276,15 +197,12 @@ public class DateUtils {
      * @param compareDate 要比较的时间
      * @return int
      */
-
-
     public static int dateCompare(Date myDate, Date compareDate) {
         Calendar myCal = Calendar.getInstance();
         Calendar compareCal = Calendar.getInstance();
         myCal.setTime(myDate);
         compareCal.setTime(compareDate);
         return myCal.compareTo(compareCal);
-
     }
 
     /**
@@ -294,8 +212,6 @@ public class DateUtils {
      * @param compareDate
      * @return
      */
-
-
     public static Date dateMin(Date date, Date compareDate) {
         if (date == null) {
             return compareDate;
@@ -313,7 +229,6 @@ public class DateUtils {
 
         }
         return date;
-
     }
 
     /**
@@ -323,8 +238,6 @@ public class DateUtils {
      * @param compareDate
      * @return
      */
-
-
     public static Date dateMax(Date date, Date compareDate) {
         if (date == null) {
             return compareDate;
@@ -342,7 +255,6 @@ public class DateUtils {
 
         }
         return date;
-
     }
 
     /**
@@ -359,7 +271,6 @@ public class DateUtils {
         Date dateStart = dateParse(dateFormat(startDate, DATE_PATTERN), DATE_PATTERN);
         Date dateEnd = dateParse(dateFormat(endDate, DATE_PATTERN), DATE_PATTERN);
         return (int) ((dateEnd.getTime() - dateStart.getTime()) / 1000 / 60 / 60 / 24);
-
     }
 
     /**
@@ -374,7 +285,6 @@ public class DateUtils {
 
     public static int dateBetweenIncludeToday(Date startDate, Date endDate) throws ParseException {
         return dateBetween(startDate, endDate) + 1;
-
     }
 
     /**
@@ -389,7 +299,6 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.YEAR);
-
     }
 
     /**
@@ -404,7 +313,6 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.MONTH) + 1;
-
     }
 
     /**
@@ -419,7 +327,6 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.get(Calendar.DATE);
-
     }
 
     /**
@@ -434,7 +341,6 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.getActualMaximum(Calendar.DATE);
-
     }
 
     /**
@@ -449,7 +355,6 @@ public class DateUtils {
         Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         return cal.getActualMaximum(Calendar.DAY_OF_YEAR);
-
     }
 
     /**
@@ -469,7 +374,6 @@ public class DateUtils {
         cal.setTime(date);
         int value = cal.getActualMaximum(Calendar.DATE);
         return dateParse(dateFormat(date, MONTH_PATTERN) + "-" + value, null);
-
     }
 
     /**
@@ -486,6 +390,5 @@ public class DateUtils {
         cal.setTime(date);
         int value = cal.getActualMinimum(Calendar.DATE);
         return dateParse(dateFormat(date, MONTH_PATTERN) + "-" + value, null);
-
     }
 }
