@@ -193,11 +193,15 @@
                     <ul class="list-unstyled">
                         <li>
                             <strong>本文标签：</strong>
+                            <span th:each="tag : ${blogModel.tags}">
+                                <a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag.tagName}]]</a>
+                            </span>
                             <!--<a href="https://www.zhyd.me/tag/32" class="c-label" data-original-title="Cordova" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag}]]</a>-->
-                            <a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag}]]</a>
+                            <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag}]]</a>-->
                             <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
                             <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
                             <!--<a href="https://www.zhyd.me/tag/33" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">Android</a>-->
+                        </li>
                         <li>
                             <strong>版权声明：</strong> 本站原创文章，于[[${blogModel.blog.createTime}]]由
                             <a href="https://www.lipan.xyz/" target="_blank" data-original-title="李攀"
@@ -236,7 +240,7 @@
                     <li class="tag-li" th:each="tag : ${blogModel.tags}">
                         <a class="btn btn-default btn-xs" href="https://www.zhyd.me/tag/1" title=""
                            data-toggle="tooltip" data-placement="bottom" data-original-title="Linux">
-                            [[${tag}]]
+                            [[${tag.tagName}]]
                         </a>
                     </li>
                 </ul>
@@ -326,19 +330,19 @@
                     <!--</div>-->
                 <!--</div>-->
             <!--</div>-->
-            <div class="clear"></div>
-            <div class="sidebar-module">
-                <h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>
-                <ul class="ul-default">
-                    <li><i class="fa fa-file fa-fw"></i> 文章总数：92 篇</li>
-                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：33 个</li>
-                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>
-                    <li><i class="fa fa-comments fa-fw"></i> 留言数量：50 条</li>
-                    <li><i class="fa fa-users fa-fw"></i> 在线人数：<span class="online">11</span>人</li>
-                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>
-                    <li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>
-                </ul>
-            </div>
+            <!--<div class="clear"></div>-->
+            <!--<div class="sidebar-module">-->
+                <!--<h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>-->
+                <!--<ul class="ul-default">-->
+                    <!--<li><i class="fa fa-file fa-fw"></i> 文章总数：92 篇</li>-->
+                    <!--<li><i class="fa fa-tags fa-fw"></i> 标签总数：33 个</li>-->
+                    <!--<li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>-->
+                    <!--<li><i class="fa fa-comments fa-fw"></i> 留言数量：50 条</li>-->
+                    <!--<li><i class="fa fa-users fa-fw"></i> 在线人数：<span class="online">11</span>人</li>-->
+                    <!--<li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>-->
+                    <!--<li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>-->
+                <!--</ul>-->
+            <!--</div>-->
         </div>
     </div>
 </div>

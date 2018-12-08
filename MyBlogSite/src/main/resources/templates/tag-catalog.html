@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Tag-catalog</title>
@@ -17,7 +17,7 @@
         <form class="am-form" action="/submit" method="post">
             <div class="am-form-group">
                 <label for="tags">输入标签：</label>
-                <input id="tags" type="text" name="tags" data-role="tagsinput"/>
+                <input id="tags" type="text" name="tags" th:value="${blogModel.tags}" data-role="tagsinput"/>
             </div>
             <div class="am-form-group">
                 <label for="tags">输入博客图片：</label>

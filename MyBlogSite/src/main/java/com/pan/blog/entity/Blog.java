@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Blog 实体
@@ -49,7 +49,10 @@ public class Blog implements Serializable {
 
     @Column(nullable = false)                       //映射为字段，值不能为空
     //@org.hibernate.annotations.CreationTimestamp  //由数据库自动创建时间
-    private Date createTime;
+    private String createTime;
+
+    @Column(nullable = true)
+    private String updateTime;
 
     @Column(name = "readSize", columnDefinition = "INT default 0")
     private Integer readSize;    //访问量、阅读量
@@ -60,8 +63,10 @@ public class Blog implements Serializable {
     @Column(name = "voteSize", columnDefinition = "INT default 0")
     private Integer voteSize;    //点赞量
 
-    @Column(name = "tags", length = 100)
-    private String tags;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "blog_tag", joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+    private List<Tag> tags;
 
     //@OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
     //@JoinColumn(name = "catalog_id")
@@ -77,8 +82,9 @@ public class Blog implements Serializable {
     public Blog(@Size(min = 2, max = 200) String title,
                 @Size(min = 2, max = 200) String summary,
                 @Size(min = 2) String content,
-                @Size(min = 2) String htmlContent, String tags, String image) {
-
+                @Size(min = 2) String htmlContent,
+                List<Tag> tags,
+                String image) {
         this.title = title;
         this.summary = summary;
         this.content = content;
