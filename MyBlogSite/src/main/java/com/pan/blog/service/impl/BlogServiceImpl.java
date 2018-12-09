@@ -56,4 +56,9 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> findBlogByCatalog(String catalog) {
         return blogRepository.findBlogsByCatalog(catalog);
     }
+
+    @Override
+    public List<String> findCatalog() {
+        return blogRepository.findCatalog();
+    }
 }

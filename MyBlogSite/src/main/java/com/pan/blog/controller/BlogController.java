@@ -1,9 +1,11 @@
 package com.pan.blog.controller;
 
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.SiteInfo;
 import com.pan.blog.entity.Tag;
 import com.pan.blog.entity.User;
 import com.pan.blog.service.BlogService;
+import com.pan.blog.service.SiteInfoService;
 import com.pan.blog.service.TagService;
 import com.pan.blog.util.DateUtils;
 import com.pan.blog.util.ResultUtils;
@@ -33,6 +35,8 @@ public class BlogController {
     private UserDetailsService userDetailsService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private SiteInfoService siteInfoService;
 
     @GetMapping({"/{username}/blog/edit"})
     public ModelAndView getBlogEditPage(@PathVariable("username") String username, Model model) {
@@ -60,6 +64,7 @@ public class BlogController {
                                  Model model,
                                  HttpServletRequest request) {
 
+        List<SiteInfo> siteInfo = siteInfoService.findAll();
         Blog blog = blogService.getBlogById(id);
         List<Tag> blogTags = blog.getTags();
         List<Tag> tags = tagService.findAllTags();
@@ -71,8 +76,7 @@ public class BlogController {
         model.addAttribute("blog", blog);
         model.addAttribute("tags", tagsList);
         model.addAttribute("blogTags", blogTags);
-        model.addAttribute("blogNum", blogService.blogNum());
-        model.addAttribute("tagsSize", tagsList.size());
+        model.addAttribute("info", siteInfo.get(0));
 
         return ResultUtils.view("article", "blogModel", model);
     }
@@ -88,6 +92,7 @@ public class BlogController {
     public ModelAndView showBlogByCatalog(@PathVariable("catalog") String catalog,
                                           Model model) {
 
+        List<SiteInfo> siteInfo = siteInfoService.findAll();
         List<Blog> blogList = blogService.findBlogByCatalog(catalog);
         List<Tag> tags = tagService.findAllTags();
         Set<String> tagsList = new HashSet<>();
@@ -96,8 +101,7 @@ public class BlogController {
         }
 
         model.addAttribute("tags", tagsList);
-        model.addAttribute("blogNum", blogService.blogNum());
-        model.addAttribute("tagsSize", tagsList.size());
+        model.addAttribute("info", siteInfo.get(0));
         model.addAttribute("type", "博客分类");
         model.addAttribute("blogList", blogList);
         model.addAttribute("name", catalog);
@@ -116,6 +120,7 @@ public class BlogController {
     public ModelAndView showBlogByTag(@PathVariable("tag") String tagName,
                                       Model model) {
 
+        List<SiteInfo> siteInfo = siteInfoService.findAll();
         Tag tag = tagService.findTagByTagName(tagName);
         List<Blog> blogList = blogService.findBlogsByTag(tag);
 
@@ -128,8 +133,7 @@ public class BlogController {
         }
 
         model.addAttribute("tags", tagsList);
-        model.addAttribute("blogNum", blogService.blogNum());
-        model.addAttribute("tagsSize", tagsList.size());
+        model.addAttribute("info", siteInfo.get(0));
         model.addAttribute("type", "博客标签");
         model.addAttribute("blogList", blogList);
         model.addAttribute("name", tagName);

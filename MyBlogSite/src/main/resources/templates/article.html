@@ -120,12 +120,12 @@
                             <li><i class="fa fa-eye fa-fw"></i>
                                 <a class="pointer" data-original-title="89人浏览了该文章" data-toggle="tooltip"
                                    data-placement="bottom">浏览 (
-                                    <num>89</num>
+                                    <num>[[${blog.readSize}]]</num>
                                     )</a>
                             </li>
                             <li>
                                 <a href="detail.html#comment-box" data-original-title="0人评论了该文章" data-toggle="tooltip"
-                                   data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>评论 (0)</a>
+                                   data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>评论 ([[${blog.commentSize}]])</a>
                             </li>
                             <li>
                                 <a th:href="@{'/' + ${#authentication.name} + '/blog/edit/' + ${blog.id}}" th:if="${blog.user.username} eq ${#authentication.name}" data-toggle="tooltip"
@@ -207,7 +207,7 @@
                         <li>
                             <strong>本文标签：</strong>
                             <span th:each="tag : ${blogModel.blogTags}">
-                                <a th:href="'/tag/' + ${tag.tagName}" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag.tagName}]]</a>
+                                <a th:href="'/tag/' + ${tag.tagName}" class="c-label" data-original-title="" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag.tagName}]]</a>
                             </span>
                         </li>
                         <li>
@@ -257,12 +257,12 @@
             <div class="sidebar-module">
                 <h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>
                 <ul class="ul-default">
-                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.blogNum}]] 篇</li>
-                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.tagsSize}]] 个</li>
-                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>
+                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.info.articleNum}]] 篇</li>
+                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.info.tagNum}]] 个</li>
+                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：[[${blogModel.info.catalogNum}]] 个</li>
                     <!--<li><i class="fa fa-comments fa-fw"></i> 留言数量：50 条</li>-->
                     <!--<li><i class="fa fa-users fa-fw"></i> 在线人数：<span class="online">11</span>人</li>-->
-                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>
+                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：[[${blogModel.info.runDays}]] 天</li>
                     <li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>
                 </ul>
             </div>

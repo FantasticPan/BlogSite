@@ -10,20 +10,8 @@ import java.util.List;
  */
 public interface BlogService {
 
-    /**
-     * 保存博客
-     *
-     * @param blog
-     * @return
-     */
     Blog saveBlog(Blog blog);
 
-    /**
-     * 删除博客
-     *
-     * @param id
-     * @return
-     */
     void deleteBlog(Long id);
 
     /**
@@ -41,4 +29,6 @@ public interface BlogService {
     List<Blog> findBlogsByTag(Tag tag);
 
     List<Blog> findBlogByCatalog(String catalog);
+
+    List<String> findCatalog();
 }
