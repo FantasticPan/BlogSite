@@ -13,5 +13,5 @@ public interface BlogRepository extends JpaRepository<Blog, Long> {
 
     List<Blog> findBlogsByCatalog(String catalog);
 
-    Blog findBlogByTags(Tag tag);
+    List<Blog> findBlogsByTags(Tag tag);
 }

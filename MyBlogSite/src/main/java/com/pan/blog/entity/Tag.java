@@ -23,10 +23,6 @@ public class Tag implements Serializable {
     @Column(nullable = false)
     private String tagName;
 
-    @OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     public Tag() {
     }
 

@@ -51,7 +51,7 @@ public class Blog implements Serializable {
     //@org.hibernate.annotations.CreationTimestamp  //由数据库自动创建时间
     private String createTime;
 
-    @Column(nullable = true)
+    @Column()
     private String updateTime;
 
     @Column(name = "readSize", columnDefinition = "INT default 0")
@@ -63,7 +63,7 @@ public class Blog implements Serializable {
     @Column(name = "voteSize", columnDefinition = "INT default 0")
     private Integer voteSize;    //点赞量
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "blog_tag", joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
     private List<Tag> tags;

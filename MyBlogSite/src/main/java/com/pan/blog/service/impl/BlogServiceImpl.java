@@ -48,8 +48,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Blog findBlogByTag(Tag tag) {
-        return blogRepository.findBlogByTags(tag);
+    public List<Blog> findBlogsByTag(Tag tag) {
+        return blogRepository.findBlogsByTags(tag);
     }
 
     @Override

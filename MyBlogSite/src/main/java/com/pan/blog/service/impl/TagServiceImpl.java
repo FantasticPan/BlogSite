@@ -2,7 +2,6 @@ package com.pan.blog.service.impl;
 
 import com.pan.blog.dao.TagRepository;
 import com.pan.blog.entity.Tag;
-import com.pan.blog.entity.User;
 import com.pan.blog.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,17 +25,17 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findTagsByUser(User user) {
-        return tagRepository.findTagsByUser(user);
-    }
-
-    @Override
     public List<Tag> findAllTags() {
         return tagRepository.findAll();
     }
 
     @Override
-    public List<Tag> findTagsByTagName(String tagName) {
-        return tagRepository.findTagsByTagName(tagName);
+    public Tag findTagByTagName(String tagName) {
+        return tagRepository.findTagByTagName(tagName);
+    }
+
+    @Override
+    public void deleteTag(Tag tag) {
+        tagRepository.delete(tag);
     }
 }

@@ -61,7 +61,7 @@ public class BlogController {
                                  HttpServletRequest request) {
 
         Blog blog = blogService.getBlogById(id);
-        List<Tag> blogTags = tagService.findTagsByUser(blog.getUser());
+        List<Tag> blogTags = blog.getTags();
         List<Tag> tags = tagService.findAllTags();
         Set<String> tagsList = new HashSet<>();
         for (Tag tag : tags) {
@@ -77,6 +77,13 @@ public class BlogController {
         return ResultUtils.view("article", "blogModel", model);
     }
 
+    /**
+     * 通过分类获取博客列表
+     *
+     * @param catalog
+     * @param model
+     * @return
+     */
     @GetMapping("/catalog/{catalog}")
     public ModelAndView showBlogByCatalog(@PathVariable("catalog") String catalog,
                                           Model model) {
@@ -98,28 +105,34 @@ public class BlogController {
         return ResultUtils.view("show-catalog-type", "blogModel", model);
     }
 
+    /**
+     * 通过标签获取博客列表
+     *
+     * @param tagName
+     * @param model
+     * @return
+     */
     @GetMapping("/tag/{tag}")
-    public ModelAndView showBlogByTag(@PathVariable("tag") String tag,
+    public ModelAndView showBlogByTag(@PathVariable("tag") String tagName,
                                       Model model) {
 
-        List<Tag> tagList1 = tagService.findTagsByTagName(tag);
-        List<Blog> blogList = new ArrayList<>();
-        for (Tag tag1 : tagList1) {
-            blogList.add(blogService.findBlogByTag(tag1));
-        }
+        Tag tag = tagService.findTagByTagName(tagName);
+        List<Blog> blogList = blogService.findBlogsByTag(tag);
 
         List<Tag> tags = tagService.findAllTags();
+
+        //去除重复的标签
         Set<String> tagsList = new HashSet<>();
         for (Tag tag2 : tags) {
             tagsList.add(tag2.getTagName());
         }
+
         model.addAttribute("tags", tagsList);
         model.addAttribute("blogNum", blogService.blogNum());
         model.addAttribute("tagsSize", tagsList.size());
-
         model.addAttribute("type", "博客标签");
         model.addAttribute("blogList", blogList);
-        model.addAttribute("name", tag);
+        model.addAttribute("name", tagName);
 
         return ResultUtils.view("show-catalog-type", "blogModel", model);
     }
@@ -149,6 +162,8 @@ public class BlogController {
             blog.setContent(content);
             blog.setHtmlContent(htmlContent);
             request.getSession().setAttribute("blog", blog);
+
+            model.addAttribute("tags", "");
         } else {
             blog = blogService.getBlogById(id);
             blog.setTitle(title);
@@ -156,12 +171,12 @@ public class BlogController {
             blog.setContent(content);
             blog.setHtmlContent(htmlContent);
             request.getSession().setAttribute("blog", blog);
-        }
 
-        for (Tag tag : blog.getTags()) {
-            tags.add(tag.getTagName());
+            for (Tag tag : blog.getTags()) {
+                tags.add(tag.getTagName());
+            }
+            model.addAttribute("tags", StringUtils.join(tags, ","));
         }
-        model.addAttribute("tags", StringUtils.join(tags, ","));
 
         return ResultUtils.view("tag-catalog", "blogModel", model);
     }
@@ -180,9 +195,13 @@ public class BlogController {
         if (blog.getId() == null) {
             Tag tag;
             for (String s : tags.split(",")) {
-                tagList.add(tag = new Tag(s));
-                tag.setUser(user);
-                tagService.saveTag(tag);
+                Tag tags1 = tagService.findTagByTagName(s);
+                if (tags1 == null) {
+                    tagService.saveTag(tag = new Tag(s));
+                    tagList.add(tag);
+                } else {
+                    tagList.add(tags1);
+                }
             }
 
             blog.setUser(user);
@@ -192,11 +211,24 @@ public class BlogController {
             blog.setCategory(category);
             blog.setImage(image);
             blogService.saveBlog(blog);
+
+            for (Tag tag1 : tagService.findAllTags()) {
+                if (blogService.findBlogsByTag(tag1).isEmpty()) {
+                    tagService.deleteTag(tag1);
+                }
+            }
         } else {
+            Tag tag;
             Blog originBlog = blogService.getBlogById(blog.getId());
 
             for (String s : tags.split(",")) {
-                tagList.add(new Tag(s));
+                Tag tags1 = tagService.findTagByTagName(s);
+                if (tags1 == null) {
+                    tagService.saveTag(tag = new Tag(s));
+                    tagList.add(tag);
+                } else {
+                    tagList.add(tags1);
+                }
             }
 
             originBlog.setTags(tagList);
@@ -208,6 +240,12 @@ public class BlogController {
             originBlog.setContent(blog.getContent());
             originBlog.setHtmlContent(blog.getHtmlContent());
             blogService.saveBlog(originBlog);
+
+            for (Tag tag1 : tagService.findAllTags()) {
+                if (blogService.findBlogsByTag(tag1).isEmpty()) {
+                    tagService.deleteTag(tag1);
+                }
+            }
         }
         return ResultUtils.redirect("/");
     }

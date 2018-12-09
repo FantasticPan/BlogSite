@@ -38,7 +38,7 @@ public interface BlogService {
 
     Long blogNum();
 
-    Blog findBlogByTag(Tag tag);
+    List<Blog> findBlogsByTag(Tag tag);
 
     List<Blog> findBlogByCatalog(String catalog);
 }
