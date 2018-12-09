@@ -1,6 +1,7 @@
 package com.pan.blog.service;
 
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.Tag;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public interface BlogService {
      * @param id
      * @return
      */
-    void removeBlog(Long id);
+    void deleteBlog(Long id);
 
     /**
      * 根据id获取博客
@@ -34,4 +35,10 @@ public interface BlogService {
     Blog getBlogById(Long id);
 
     List<Blog> getAllBlog();
+
+    Long blogNum();
+
+    List<Blog> findBlogsByTag(Tag tag);
+
+    List<Blog> findBlogByCatalog(String catalog);
 }

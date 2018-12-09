@@ -2,6 +2,7 @@ package com.pan.blog.service.impl;
 
 import com.pan.blog.dao.BlogRepository;
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.Tag;
 import com.pan.blog.service.BlogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Transactional
     @Override
-    public void removeBlog(Long id) {
+    public void deleteBlog(Long id) {
         blogRepository.deleteById(id);
     }
 
@@ -39,5 +40,20 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<Blog> getAllBlog() {
         return blogRepository.findAll();
+    }
+
+    @Override
+    public Long blogNum() {
+        return blogRepository.count();
+    }
+
+    @Override
+    public List<Blog> findBlogsByTag(Tag tag) {
+        return blogRepository.findBlogsByTags(tag);
+    }
+
+    @Override
+    public List<Blog> findBlogByCatalog(String catalog) {
+        return blogRepository.findBlogsByCatalog(catalog);
     }
 }

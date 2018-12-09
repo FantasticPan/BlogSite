@@ -1,270 +1,475 @@
-<!doctype html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<!DOCTYPE html>
+<!-- saved from url=(0030)detail.html -->
+<html lang="zh-CN" class=""
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="keywords" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>article with sidebar | Amaze UI Examples</title>
-    <meta name="renderer" content="webkit">
-    <meta http-equiv="Cache-Control" content="no-siteapp"/>
-    <link rel="icon" type="image/png" href="/assets/i/favicon.png">
-    <meta name="mobile-web-app-capable" content="yes">
-    <link rel="icon" sizes="192x192" href="/assets/i/app-icon72x72@2x.png">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
-    <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
-    <link rel="apple-touch-icon-precomposed" href="/assets/i/app-icon72x72@2x.png">
-    <meta name="msapplication-TileImage" content="/assets/i/app-icon72x72@2x.png">
-    <meta name="msapplication-TileColor" content="#0e90d2">
-    <link rel="stylesheet" href="/assets/css/amazeui.min.css">
-    <link rel="stylesheet" href="/assets/css/app.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    <meta name="baidu-site-verification" content="d4kcdwiGHw">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Cordova入门（一）创建android项目 | 张亚东博客</title>
+    <meta name="author" content="张亚东(yadong.zhang0415#gmail.com)">
+    <meta name="keywords" content="Android打包,Cordova创建app,Cordova打包App,Cordova应用,Cordova学习教程,张亚东博客">
+    <meta name="description" content="APP开发之路第一篇：使用Cordova创建并打包一个Android平台的app应用" id="meta_description">
+    <link rel="canonical" href="detail.html">
+    <link href="/db/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/jquery-confirm/2.5.1/jquery-confirm.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/css/bootstrapValidator.min.css"
+          rel="stylesheet">
+    <link href="/db/css/zhyd.core.css" rel="stylesheet" type="text/css">
+    <link href="/db/css/zhyd.comment.css" rel="stylesheet" type="text/css">
 
     <link rel="stylesheet" href="/css/editormd.preview.min.css"/>
     <link rel="stylesheet" href="/css/editormd.min.css"/>
 </head>
 
-<body id="blog-article-sidebar">
-
-<!-- nav start -->
-<nav class="am-topbar am-topbar-fixed-top">
-    <div class="am-container">
-        <h1 class="am-topbar-brand">
-            <a href="#">Pan</a>
-        </h1>
-
-        <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-secondary am-show-sm-only"
-                data-am-collapse="{target: '#collapse-head'}"><span class="am-sr-only">导航切换</span> <span
-                class="am-icon-bars"></span></button>
-
-        <div class="am-collapse am-topbar-collapse" id="collapse-head">
-            <ul class="am-nav am-nav-pills am-topbar-nav">
-                <li><a href="/">首页</a></li>
-                <li><a href="#">项目</a></li>
-                <li class="am-dropdown" data-am-dropdown>
-                    <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
-                        下拉菜单 <span class="am-icon-caret-down"></span>
-                    </a>
-                    <ul class="am-dropdown-content">
-                        <!--<li class="am-dropdown-header">标题</li>-->
-                        <li><a href="#">1. 默认样式</a></li>
-                        <li><a href="#">2. 基础设置</a></li>
-                        <li><a href="#">3. 文字排版</a></li>
-                        <li><a href="#">4. 网格系统</a></li>
-                    </ul>
+<body>
+<nav id="topmenu" class="navbar navbar-default navbar-fixed-top" style="opacity: 1;">
+    <div class="menu-box">
+        <div class="pull-left">
+            <ul class="list-unstyled list-inline">
+                <li><span id="currentTime">2018年04月11日 09时43分24秒 星期三</span></li>
+            </ul>
+            <div class="clear"></div>
+        </div>
+        <div class="menu-topmenu-container pull-right">
+            <ul class="list-unstyled list-inline pull-left">
+                <li sec:authorize="isAnonymous()">
+                    <a href="/login" class="menu_a" data-toggle="tooltip" data-placement="bottom" data-original-title="登录">
+                        <i class="fa fa-sign-in"></i>登录</a>
+                </li>
+                <li sec:authorize="isAuthenticated()">
+                    <a th:href="@{/}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-link fa-fw"></i><span sec:authentication="name">李攀</span></a>
+                    <a th:href="@{'/' + ${#authentication.name} + '/blog/edit'}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-gg fa-fw"></i>写博客</a>
+                    <a th:href="@{'/admin/' + ${#authentication.name} + '/manager'}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-fire fa-fw"></i>后台管理</a>
+                    <a th:href="@{/logout}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-sign-in"></i>退出</a>
                 </li>
             </ul>
-
-            <div sec:authorize="isAuthenticated()" style="padding-top: 5px" class="am-topbar-right">
-                <!--<a class="am-btn am-btn-default am-radius log-button" th:href="@{'/' + ${#authentication.name} + '/blog/edit'}"><span>写博客</span></a>-->
-
-                <li class="am-dropdown" data-am-dropdown>
-                    <a class="am-dropdown-toggle am-btn am-btn-default am-radius" data-am-dropdown-toggle href="javascript:;">
-                        <span class="am-icon-caret-down" sec:authentication="name"></span>
-                    </a>
-                    <ul class="am-dropdown-content">
-                        <li><a th:href="@{'/' + ${#authentication.name} + '/blog/edit'}">写博客</a></li>
-                        <li><a href="/logout">退出</a></li>
-                    </ul>
-                </li>
-            </div>
-
-            <div sec:authorize="isAnonymous()">
-                <!--<div class="am-topbar-right">-->
-                <!--<button class="am-btn am-btn-secondary am-topbar-btn am-btn-sm" type="button"-->
-                <!--onclick="location.href='/register'"><span class="am-icon-pencil"></span> 注册-->
-                <!--</button>-->
-                <!--</div>-->
-
-                <div class="am-topbar-right">
-                    <button class="am-btn am-btn-primary am-topbar-btn am-btn-sm" type="button"
-                            onclick="location.href='/login'"><span class="am-icon-user"></span> 登录
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </nav>
-<!-- nav end -->
-<hr>
-<!-- content srart -->
-<div class="am-g am-g-fixed blog-fixed blog-content">
-    <div class="am-u-md-8 am-u-sm-12">
-        <article class="am-article blog-article-p">
-            <div class="am-article-hd">
-                <h1 class="am-article-title blog-text-center" th:text="${blogModel.blog.title}">我的文章哎</h1>
-                <p class="am-article-meta blog-text-center">
-                    <span><a href="#" class="blog-color">原创 &nbsp;</a></span>-
-                    <span><a href="#" th:text="${blog.user.username}">@amazeUI &nbsp;</a></span>-
-                    <span><a href="#" th:text="${blog.createTime}">2015/10/9</a></span>
-                </p>
-            </div>
-            <div class="am-article-bd">
-                <!--<img src="/assets/i/f10.jpg" alt="" class="blog-entry-img blog-article-margin">-->
-                <!--<p class="am-article-lead">-->
-                <!--引用blockquote：-->
-                <!--<blockquote><p>People think focus means saying yes to the thing you’ve got to focus on. But that’s not-->
-                    <!--what it means at all. It means saying no to the hundred other good ideas that there are. You have to-->
-                    <!--pick carefully. I’m actually as proud of the things we haven’t done as the things I have done.-->
-                    <!--Innovation is saying no to 1,000 things.</p>-->
-                    <!--<footer><cite>Steve Jobs</cite> – Apple Worldwide Developers’ Conference, 1997</footer>-->
-                <!--</blockquote>-->
-                <div class="content editormd-preview-theme-dark" id="content" th:utext="${blogModel.blog.htmlContent}"></div>
-            </div>
-        </article>
-
-        <div class="am-g blog-article-widget blog-article-margin">
-            <div class="am-u-lg-4 am-u-md-5 am-u-sm-7 am-u-sm-centered blog-text-center">
-                <span class="am-icon-tags"> &nbsp;</span><a href="#">标签</a> , <a href="#">TAG</a> , <a href="#">啦啦</a>
-                <hr>
-                <a href=""><span class="am-icon-qq am-icon-fw am-primary blog-icon"></span></a>
-                <a href=""><span class="am-icon-wechat am-icon-fw blog-icon"></span></a>
-                <a href=""><span class="am-icon-weibo am-icon-fw blog-icon"></span></a>
-            </div>
+<nav id="mainmenu" class="navbar navbar-default navbar-fixed-top" role="navigation" style="top: 30px; z-index: 998;">
+    <div class="menu-box">
+        <div class="navbar-header">
+            <span class="pull-right nav-search toggle-search" data-toggle="modal" data-target=".nav-search-box"><i
+                    class="fa fa-search"></i></span>
+            <a type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+               aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="navbar-brand logo" href="/"></a>
         </div>
-
-        <hr>
-        <div class="am-g blog-author blog-article-margin">
-            <div class="am-u-sm-3 am-u-md-3 am-u-lg-2">
-                <img src="/assets/i/f15.jpg" alt="" class="blog-author-img am-circle">
+        <div id="navbar" class="navbar-collapse collapse">
+            <div class="pull-left" style="line-height: 0.9;">
+                <h1 style="font-size: 20px;font-weight: 700;" class="auto-shake"><a href="/"
+                                                                                    data-original-title="写博客、记日志、闲聊扯淡鼓捣技术"
+                                                                                    data-toggle="tooltip"
+                                                                                    data-placement="bottom">Li Pan's 博客</a>
+                </h1>
+                <p class="site-description">写博客、记日志、闲聊扯淡鼓捣技术</p>
             </div>
-            <div class="am-u-sm-9 am-u-md-9 am-u-lg-10">
-                <h3><span>作者 &nbsp;: &nbsp;</span><span class="blog-color">amazeui</span></h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
-                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-                    aliquip ex ea commodo consequat.</p>
-            </div>
-        </div>
-        <hr>
-        <ul class="am-pagination blog-article-margin">
-            <li class="am-pagination-prev"><a href="#" class="">&laquo; 一切的回顾</a></li>
-            <li class="am-pagination-next"><a href="">不远的未来 &raquo;</a></li>
-        </ul>
-
-        <hr>
-
-        <form class="am-form am-g">
-            <h3 class="blog-comment">评论</h3>
-            <fieldset>
-                <div class="am-form-group am-u-sm-4 blog-clear-left">
-                    <input type="text" class="" placeholder="名字">
-                </div>
-                <div class="am-form-group am-u-sm-4">
-                    <input type="email" class="" placeholder="邮箱">
-                </div>
-
-                <div class="am-form-group am-u-sm-4 blog-clear-right">
-                    <input type="password" class="" placeholder="网站">
-                </div>
-
-                <div class="am-form-group">
-                    <textarea class="" rows="5" placeholder="一字千金"></textarea>
-                </div>
-
-                <p>
-                    <button type="submit" class="am-btn am-btn-default">发表评论</button>
-                </p>
-            </fieldset>
-        </form>
-
-        <hr>
-    </div>
-
-    <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
-        <div class="blog-sidebar-widget blog-bor">
-            <h2 class="blog-text-center blog-title"><span>About ME</span></h2>
-            <img src="/assets/i/f161.jpg" alt="about me" class="blog-entry-img">
-            <p>妹纸</p>
-            <p>
-                我是妹子UI，中国首个开源 HTML5 跨屏前端框架
-            </p>
-            <p>我不想成为一个庸俗的人。十年百年后，当我们死去，质疑我们的人同样死去，后人看到的是裹足不前、原地打转的你，还是一直奔跑、走到远方的我？</p>
-        </div>
-        <div class="blog-sidebar-widget blog-bor">
-            <h2 class="blog-text-center blog-title"><span>Contact ME</span></h2>
-            <p>
-                <a href=""><span class="am-icon-qq am-icon-fw am-primary blog-icon"></span></a>
-                <a href=""><span class="am-icon-github am-icon-fw blog-icon"></span></a>
-                <a href=""><span class="am-icon-weibo am-icon-fw blog-icon"></span></a>
-                <a href=""><span class="am-icon-reddit am-icon-fw blog-icon"></span></a>
-                <a href=""><span class="am-icon-weixin am-icon-fw blog-icon"></span></a>
-            </p>
-        </div>
-        <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
-            <h2 class="blog-title"><span>TAG cloud</span></h2>
-            <div class="am-u-sm-12 blog-clear-padding">
-                <a href="" class="blog-tag">amaze</a>
-                <a href="" class="blog-tag">妹纸 UI</a>
-                <a href="" class="blog-tag">HTML5</a>
-                <a href="" class="blog-tag">这是标签</a>
-                <a href="" class="blog-tag">Impossible</a>
-                <a href="" class="blog-tag">开源前端框架</a>
-            </div>
-        </div>
-        <div class="blog-sidebar-widget blog-bor">
-            <h2 class="blog-title"><span>么么哒</span></h2>
-            <ul class="am-list">
-                <li><a href="#">每个人都有一个死角， 自己走不出来，别人也闯不进去。</a></li>
-                <li><a href="#">我把最深沉的秘密放在那里。</a></li>
-                <li><a href="#">你不懂我，我不怪你。</a></li>
-                <li><a href="#">每个人都有一道伤口， 或深或浅，盖上布，以为不存在。</a></li>
+            <ul class="nav navbar-nav ">
+                <li class="active">
+                    <a href="/" class="menu_a"><i class="fa fa-home"></i>首页</a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle menu_a" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-code"></i>编程相关</a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="" title="">1</a></li>
+                        <li><a href="" title="">1</a></li>
+                        <li><a href="" title="">1</a></li>
+                    </ul>
+                </li>
+                <!--<li>-->
+                <!--<a href="guestbook.html" class="menu_a"><i class="fa fa-comments-o"></i>留言板</a>-->
+                <!--</li>-->
+                <!--<li><span class="pull-right nav-search main-search" data-toggle="modal" data-target=".nav-search-box"><i class="fa fa-search"></i></span></li>-->
             </ul>
         </div>
-
+    </div>
+</nav>
+<img src="/db/img/default_article_cover.jpg" onerror="this.src='/db/img/default_article_cover.jpg'"
+     style="display: none;" id="cover-img">
+<div class="container custome-container">
+    <nav class="breadcrumb">
+        <a class="crumbs" title="" href="/" data-toggle="tooltip" data-placement="bottom"
+           data-original-title="返回首页"><i class="fa fa-home"></i>首页</a>
+        <i class="fa fa-angle-right"></i>
+        <a th:href="'/catalog/' + ${blogModel.blog.catalog}" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="点击查看该分类文章" th:text="${blogModel.blog.catalog}">后端技术</a>
+        <i class="fa fa-angle-right"></i>正文
+    </nav>
+    <div class="row">
+        <div class="col-sm-8 blog-main">
+            <div class="blog-body overflow-initial fade-in">
+                <div class="article-flag">
+                    <span class="article-blockquote article-blockquote-green"></span>
+                    <span class="article-original article-original-green"><a href="detail.html" th:text="${blogModel.blog.category}">原创</a></span>
+                    <div class="blog-info-meta pull-right">
+                        <ul class="list-unstyled list-inline">
+                            <li><i class="fa fa-clock-o fa-fw"></i>发表于 [[${blogModel.blog.createTime}]]</li>
+                            <li><i class="fa fa-eye fa-fw"></i>
+                                <a class="pointer" data-original-title="89人浏览了该文章" data-toggle="tooltip"
+                                   data-placement="bottom">浏览 (
+                                    <num>89</num>
+                                    )</a>
+                            </li>
+                            <li>
+                                <a href="detail.html#comment-box" data-original-title="0人评论了该文章" data-toggle="tooltip"
+                                   data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>评论 (0)</a>
+                            </li>
+                            <li>
+                                <a th:href="@{'/' + ${#authentication.name} + '/blog/edit/' + ${blog.id}}" th:if="${blog.user.username} eq ${#authentication.name}" data-toggle="tooltip"
+                                   data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>编辑</a>
+                            </li>
+                            <li>
+                                <a th:href="'/delete/' + ${blog.id}" th:if="${blog.user.username} eq ${#authentication.name}" data-toggle="tooltip"
+                                   data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>删除</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="blog-info overflow-initial">
+                    <div class="bottom-line">
+                        <h1 class="blog-info-title">
+                            <strong th:text="${blogModel.blog.title}">Cordova入门（一）创建android项目</strong>
+                        </h1>
+                    </div>
+                    <div class="blog-info-body">
+                        <div class="content editormd-preview-theme-dark" id="content"
+                             th:utext="${blogModel.blog.htmlContent}"></div>
+                    </div>
+                    <div class="separateline"><span>正文到此结束</span></div>
+                    <div id="social" style="margin-bottom: 45px;">
+                        <div class="social-main">
+									<span class="like">
+										<a href="javascript:;" data-id="92" title="点赞"><i class="fa fa-thumbs-up"></i>赞 <i
+                                                class="count"> 1</i> </a>
+									</span>
+                            <div class="shang-p">
+                                <div class="shang-empty"><span></span></div>
+                                <span class="shang-s"><a onclick="PaymentUtils.show();"
+                                                         style="cursor:pointer">赏</a> </span>
+                            </div>
+                            <div class="share-sd">
+                                <span class="share-s"><a href="javascript:void(0)" id="share-s" title="分享"><i
+                                        class="fa fa-share-alt"></i>分享</a></span>
+                                <!--<div id="share" style="display: none">-->
+                                    <!--<ul class="bdsharebuttonbox bdshare-button-style1-24" data-bd-bind="1523411015945">-->
+                                        <!--<li>-->
+                                            <!--<a title="分享到人人网" class="fa fa-renren" data-cmd="renren"-->
+                                               <!--onclick="return false;" href="detail.html#"></a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a title="分享到腾讯微博" class="fa fa-pinterest-square" data-cmd="tqq"-->
+                                               <!--onclick="return false;" href="detail.html#"></a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a title="分享到QQ空间" class="fa fa-qq" data-cmd="qzone" onclick="return false;"-->
+                                               <!--href="detail.html#"></a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a title="分享到新浪微博" class="fa fa-weibo" data-cmd="tsina"-->
+                                               <!--onclick="return false;" href="detail.html#"></a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a title="分享到微信" class="fa fa-weixin" data-cmd="weixin"-->
+                                               <!--onclick="return false;" href="detail.html#"></a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a title="更多" class="bds_more fa fa-plus-square" data-cmd="more"-->
+                                               <!--onclick="return false;" href="detail.html#"></a>-->
+                                        <!--</li>-->
+                                    <!--</ul>-->
+                                <!--</div>-->
+                            </div>
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                    <div class="article-footer overflow-initial">所属分类：
+                        <a th:href="'/catalog/' + ${blogModel.blog.catalog}" data-toggle="tooltip"
+                           data-placement="bottom" th:text="${blogModel.blog.catalog}">后端技术</a>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-body article-tag">
+                <div class="cat">
+                    <ul class="list-unstyled">
+                        <li>
+                            <strong>本文标签：</strong>
+                            <span th:each="tag : ${blogModel.blogTags}">
+                                <a th:href="'/tag/' + ${tag.tagName}" class="c-label" data-original-title="Android" data-toggle="tooltip" data-placement="bottom" target="_blank">[[${tag.tagName}]]</a>
+                            </span>
+                        </li>
+                        <li>
+                            <strong>版权声明：</strong> 本站原创文章，于[[${blogModel.blog.createTime}]]由
+                            <a href="https://www.lipan.xyz/" target="_blank" data-original-title="李攀"
+                               data-toggle="tooltip" data-placement="bottom"><strong>李攀</strong></a>发布，转载请注明出处
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!--<div class="blog-body prev-next">-->
+                <!--<nav class="nav-single wow" data-wow-delay="0.3s">-->
+                    <!--<a href="detail.html" rel="prev">-->
+								<!--<span class="meta-nav" data-original-title="【漏洞公告】Spring Framework多个安全漏洞预警"-->
+                                      <!--data-toggle="tooltip" data-placement="bottom"><span class="post-nav"><i-->
+                                        <!--class="fa fa-angle-left"></i> 上一篇</span>-->
+								<!--<br>【漏洞公告】Spring Framework多个安全漏洞预警-->
+								<!--</span>-->
+                    <!--</a>-->
+                    <!--<a href="detail.html" rel="nofollow next">-->
+                        <!--<span class="meta-nav" data-original-title="已经到最后一篇了" data-toggle="tooltip" data-placement="bottom"><span class="post-nav">下一篇 <i class="fa fa-angle-right"></i></span><br>已经到最后一篇了</span>-->
+                    <!--</a>-->
+                    <!--<div class="clear"></div>-->
+                <!--</nav>-->
+            <!--</div>-->
+        </div>
+        <div class="col-sm-3 blog-sidebar">
+            <div class="sidebar-module article-module">
+                <h5 class="sidebar-title"><i class="fa fa-book icon"></i><strong>本文目录</strong> <i class="fa fa-close pull-right close-article-menu hide pointer"></i></h5>
+                <div id="article-menu" style="display: block;">
+                    <ul class="list-unstyled">
+                    </ul>
+                </div>
+            </div>
+            <div class="sidebar-module">
+                <h5 class="sidebar-title"><i class="fa fa-tags icon"></i><strong>文章标签</strong></h5>
+                <ul class="list-unstyled list-inline">
+                    <li class="tag-li" th:each="tag : ${blogModel.tags}">
+                        <a class="btn btn-default btn-xs" th:href="'/tag/' + ${tag}" title=""
+                           data-toggle="tooltip" data-placement="bottom" data-original-title="Linux">
+                            [[${tag}]]
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="clear"></div>
+            <div class="sidebar-module">
+                <h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>
+                <ul class="ul-default">
+                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.blogNum}]] 篇</li>
+                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.tagsSize}]] 个</li>
+                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>
+                    <!--<li><i class="fa fa-comments fa-fw"></i> 留言数量：50 条</li>-->
+                    <!--<li><i class="fa fa-users fa-fw"></i> 在线人数：<span class="online">11</span>人</li>-->
+                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>
+                    <li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>
+                </ul>
+            </div>
+        </div>
     </div>
 </div>
-<!-- content end -->
-
-
-<footer class="blog-footer">
-    <div class="am-g am-g-fixed blog-fixed am-u-sm-centered blog-footer-padding">
-        <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
-            <h3>模板简介</h3>
-            <p class="am-text-sm">这是一个使用amazeUI做的简单的前端模板。<br> 博客/ 资讯类 前端模板 <br> 支持响应式，多种布局，包括主页、文章页、媒体页、分类页等<br>嗯嗯嗯，不知道说啥了。外面的世界真精彩<br><br>
-                Amaze UI 使用 MIT 许可证发布，用户可以自由使用、复制、修改、合并、出版发行、散布、再授权及贩售 Amaze UI 及其副本。</p>
-        </div>
-        <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
-            <h3>社交账号</h3>
-            <p>
-                <a href=""><span class="am-icon-qq am-icon-fw am-primary blog-icon blog-icon"></span></a>
-                <a href=""><span class="am-icon-github am-icon-fw blog-icon blog-icon"></span></a>
-                <a href=""><span class="am-icon-weibo am-icon-fw blog-icon blog-icon"></span></a>
-                <a href=""><span class="am-icon-reddit am-icon-fw blog-icon blog-icon"></span></a>
-                <a href=""><span class="am-icon-weixin am-icon-fw blog-icon blog-icon"></span></a>
-            </p>
-            <h3>Credits</h3>
-            <p>我们追求卓越，然时间、经验、能力有限。Amaze UI 有很多不足的地方，希望大家包容、不吝赐教，给我们提意见、建议。感谢你们！</p>
-        </div>
-        <div class="am-u-sm-12 am-u-md-4- am-u-lg-4">
-            <h1>我们站在巨人的肩膀上</h1>
-            <h3>Heroes</h3>
-            <p>
-            <ul>
-                <li>jQuery</li>
-                <li>Zepto.js</li>
-                <li>Seajs</li>
-                <li>LESS</li>
-                <li>...</li>
-            </ul>
-            </p>
+<div class="modal fade nav-search-box" tabindex="-1" role="dialog" aria-labelledby="navSearchModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="padding: 5px 15px;">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-top: 10px;">
+                    <span aria-hidden="true">×</span></button>
+                <h4><i class="fa fa-search"></i> 搜索文章</h4>
+            </div>
+            <div class="modal-body">
+                <form action="https://www.zhyd.me/" method="post" class="form-horizontal searchForm" id="searchForm">
+                    <input type="hidden" name="pageNumber" value="1">
+                    <div class="input-group bottom-line">
+                        <input type="text" class="form-control br-none" name="keywords" value="" required="required"
+                               placeholder="输入搜索内容">
+                        <span class="input-group-btn">
+									<button class="btn btn-default br-none nav-search-btn pointer" type="submit"><i
+                                            class="fa fa-search"></i> 搜索</button>
+								</span>
+                    </div>
+                    <div class="clear"></div>
+                    <ul class="list-unstyled list-inline search-hot">
+                        <li><strong style="position: relative;top: 2px;color: #999999;">热门搜索：</strong></li>
+                        <li>
+                            <a class="pointer" rel="external nofollow"><span class="label label-default">Java</span></a>
+                        </li>
+                        <li>
+                            <a class="pointer" rel="external nofollow"><span
+                                    class="label label-primary">Springboot</span></a>
+                        </li>
+                        <li>
+                            <a class="pointer" rel="external nofollow"><span
+                                    class="label label-success">Linux</span></a>
+                        </li>
+                        <li>
+                            <a class="pointer" rel="external nofollow"><span class="label label-info">Maven</span></a>
+                        </li>
+                        <li>
+                            <a class="pointer" rel="external nofollow"><span
+                                    class="label label-warning">Bootstrap</span></a>
+                        </li>
+                        <li>
+                            <a class="pointer" rel="external nofollow"><span class="label label-danger">阿里云</span></a>
+                        </li>
+                    </ul>
+                </form>
+            </div>
         </div>
     </div>
-    <div class="blog-text-center">© 2015 AllMobilize, Inc. Licensed under MIT license. Made with love By LWXYFER. 模板收集自
-        <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - More Templates <a
-                href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a></div>
+</div>
+<div class="modal fade bs-example-modal-sm" id="comment-detail-modal" tabindex="-1" role="dialog"
+     aria-labelledby="comment-detail-modal-label">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="comment-detail-modal-label">评论信息框</h4>
+                <small><i class="fa fa-lightbulb-o fa-fw"></i>可以通过QQ号实时获取昵称和头像</small>
+            </div>
+            <div class="modal-body">
+                <form id="detail-form" novalidate="novalidate" class="bv-form">
+                    <input type="hidden" name="avatar">
+                    <div class="form-group input-logo">
+                        <input type="text" class="form-control" name="qq" placeholder="选填" value="">
+                        <img class="pull-left hide" alt="">
+                        <span class="fa fa-qq pull-left" aria-hidden="true">QQ</span>
+                    </div>
+                    <div class="form-group input-logo has-feedback">
+                        <input type="text" class="form-control" name="nickname" placeholder="必填" value="匿名"
+                               data-bv-field="nickname"><i class="form-control-feedback" data-bv-icon-for="nickname"
+                                                           style="display: none; top: 0px;"></i>
+                        <span class="fa fa-user pull-left" aria-hidden="true">昵称</span>
+                        <small class="help-block" data-bv-validator="notEmpty" data-bv-for="nickname"
+                               data-bv-result="NOT_VALIDATED" style="display: none;">昵称必填
+                        </small>
+                    </div>
+                    <div class="form-group input-logo has-feedback">
+                        <input type="text" class="form-control" name="email" placeholder="选填" data-bv-field="email"><i
+                            class="form-control-feedback" data-bv-icon-for="email" style="display: none; top: 0px;"></i>
+                        <span class="fa fa-envelope pull-left" aria-hidden="true">邮箱</span>
+                        <small class="help-block" data-bv-validator="emailAddress" data-bv-for="email"
+                               data-bv-result="NOT_VALIDATED" style="display: none;">邮箱地址不正确
+                        </small>
+                    </div>
+                    <div class="form-group input-logo has-feedback">
+                        <input type="text" class="form-control" name="url" placeholder="选填" data-bv-field="url"><i
+                            class="form-control-feedback" data-bv-icon-for="url" style="display: none; top: 0px;"></i>
+                        <span class="fa fa-globe pull-left" aria-hidden="true">网址</span>
+                        <small class="help-block" data-bv-validator="uri" data-bv-for="url"
+                               data-bv-result="NOT_VALIDATED" style="display: none;">URL地址不正确
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default btn-sm" id="detail-form-btn"><i
+                                class="fa fa-smile-o"></i>提交评论
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="reward" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title">山无棱江水为竭，冬雷震震夏雨雪，才敢请君舍</h4>
+            </div>
+            <div class="modal-body">
+                <div class="rewardType" align="center">
+                    <ul class="list-unstyle list-inline">
+                        <li style="margin-right: 20px;">
+                            <div class="iradio_square-green checked" style="position: relative;"><input type="radio"
+                                                                                                        name="type"
+                                                                                                        id="alipay"
+                                                                                                        onclick="PaymentUtils.change(0)"
+                                                                                                        data-index="0"
+                                                                                                        checked="checked"
+                                                                                                        style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                <ins class="iCheck-helper"
+                                     style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                            </div>
+                            <span style="margin-left: 5px;">支付宝</span>
+                        </li>
+                        <li style="margin-right: 20px;">
+                            <div class="iradio_square-green" style="position: relative;"><input type="radio" name="type"
+                                                                                                id="wechat"
+                                                                                                onclick="PaymentUtils.change(1)"
+                                                                                                data-index="1"
+                                                                                                style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                                <ins class="iCheck-helper"
+                                     style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins>
+                            </div>
+                            <span style="margin-left: 5px;">微信</span>
+                        </li>
+                    </ul>
+                </div>
+                <div id="qrcode-container" align="center" style="margin-top: 10px;"></div>
+                <div style="width: 100%;color: #a3a3a3;font-size: 16px;font-family: &#39;Microsoft YaHei&#39;;text-align: center;">
+                    转账时请备注“<strong>博客赞助</strong>”
+                </div>
+            </div>
+        </div>
+        <small class="font-bold"></small>
+    </div>
+    <small class="font-bold"></small>
+</div>
+<div id="loading" style="display: none;">
+    <div class="filter"></div>
+    <div class="loader">
+        <div class="loading-1"></div>
+        <div class="loading-2">Loading...</div>
+    </div>
+</div>
+<!--<div class="clear blog-footer">-->
+    <!--<div class="container">-->
+        <!--<div class="col-xs-12 col-sm-4 col-md-4 text-left fade-in">-->
+            <!--<h4>关于本站</h4>-->
+            <!--<div style="padding: 4px;padding-left: 10px;">-->
+                <!--<p style="white-space: initial;">本站定位：个人技术类博客</p>-->
+                <!--<p style="white-space: initial;">本站作用：写博客、记日志、闲聊扯淡鼓捣技术。</p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-xs-12 col-sm-4 col-md-4 text-left fade-in">-->
+            <!--<h4>问题交流</h4>-->
+            <!--<div class="row" style="padding: 4px;padding-left: 10px;">-->
+                <!--<div class="col-xs-12 col-sm-7 col-md-7" style="white-space: initial;">-->
+                    <!--<span>志同道合者欢迎进QQ交流群(190886500)</span>-->
+                <!--</div>-->
+                <!--<div class="col-xs-12 col-sm-5 col-md-5">-->
+                    <!--<a href="/db/img/qq_group.png" class="showImage" title="QQ群(190886500)二维码" rel="external nofollow">-->
+                        <!--<img data-original="/db/img/qq_group.png" alt="QQ群(190886500)二维码"-->
+                             <!--class="img-responsive img-rounded auto-shake lazy-img" style="width: 100px;">-->
+                    <!--</a>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<footer class="footer">
+    <div class="clear">
+        <p>托管于
+            <a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=wylo59db"
+               target="_blank" title="" data-toggle="tooltip" data-placement="bottom" rel="external nofollow"
+               data-original-title="阿里云-为了无法计算的价值">阿里云</a> &amp;
+            <a href="https://www.qiniu.com/" target="_blank" title="" data-toggle="tooltip" data-placement="bottom"
+               rel="external nofollow" data-original-title="七牛云-国内领先的企业级云服务商">七牛云</a> ·
+            <a href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank" title=""
+               data-toggle="tooltip" data-placement="bottom" rel="external nofollow" data-original-title="查看备案信息">鲁ICP备17054970号-1</a>
+        </p>
+        <p>Copyright©2016-2018 张亚东博客 保留所有权利 ·
+            <a href="http://tongji.baidu.com/web/welcome/ico?s=590226d2f4ffbf051442eb75f37333c9" target="_blank"
+               title="" data-toggle="tooltip" data-placement="right" rel="external nofollow"
+               data-original-title="点击查看张亚东博客网站统计详情"><i class="fa fa-bar-chart-o fa-fw fa-spin"></i>网站统计</a>
+        </p>
+    </div>
 </footer>
-
-<!--[if (gte IE 9)|!(IE)]><!-->
-<script src="/assets/js/jquery.min.js"></script>
-<!--<![endif]-->
-<!--[if lte IE 8 ]>
-<script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
-<script src="/assets/js/amazeui.ie8polyfill.min.js"></script>
-<![endif]-->
-<script src="/assets/js/amazeui.min.js"></script>
-
+<a class="to-top" title="" data-toggle="tooltip" data-placement="bottom"
+   style="position: fixed; right: 25px; bottom: 50px; cursor: pointer; display: none;" data-original-title="点击返回顶部"></a>
 <script src="/js/jquery.min.js"></script>
 <script src="/lib/marked.min.js"></script>
 <script src="/lib/prettify.min.js"></script>
@@ -272,6 +477,25 @@
 <script type="text/javascript">
     editormd.markdownToHTML("content");
 </script>
-<!-- <script src="/assets/js/app.js"></script> -->
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery-confirm/2.5.1/jquery-confirm.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
+<script type="text/javascript">
+    var appConfig = {
+        wwwPath: 'https://www.zhyd.me',
+        staticPath: 'https://static.zhyd.me/static'
+    }
+</script>
+<script type="text/javascript" src="/db/js/wangEditor.min.js"></script>
+<script type="text/javascript" src="/db/js/zhyd.core.js"></script>
+<script type="text/javascript" src="/db/js/zhyd.js"></script>
+<!-- comment插件会请求服务器获取评论内容，静态示例页面中不需要 -->
+<!--<script type="text/javascript" src="/db/js/zhyd.comment.js"></script>-->
+<script src="https://v1.hitokoto.cn/?encode=js&c=d&select=%23hitokoto" defer></script>
 </body>
 </html>

@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.List;
 
 /**
  * Blog 实体
@@ -47,12 +47,52 @@ public class Blog implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)                     //映射为字段，值不能为空
+    @Column(nullable = false)                       //映射为字段，值不能为空
     //@org.hibernate.annotations.CreationTimestamp  //由数据库自动创建时间
-    private Date createTime;
+    private String createTime;
 
-    @Column(name = "tags", length = 100)
-    private String tags;
+    @Column()
+    private String updateTime;
 
+    @Column(name = "readSize", columnDefinition = "INT default 0")
+    private Integer readSize;    //访问量、阅读量
+
+    @Column(name = "commentSize", columnDefinition = "INT default 0")
+    private Integer commentSize; //评论量
+
+    @Column(name = "voteSize", columnDefinition = "INT default 0")
+    private Integer voteSize;    //点赞量
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "blog_tag", joinColumns = @JoinColumn(name = "blog_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "id"))
+    private List<Tag> tags;
+
+    //@OneToOne(cascade = {CascadeType.DETACH}, fetch = FetchType.LAZY)
+    //@JoinColumn(name = "catalog_id")
+    //private Catalog catalog;
+
+    private String category;
     private String catalog;
+    private String image;
+
+    public Blog() {
+        this.readSize = 0;
+        this.commentSize = 0;
+        this.voteSize = 0;
+    }
+
+    public Blog(@Size(min = 2, max = 200) String title,
+                @Size(min = 2, max = 200) String summary,
+                @Size(min = 2) String content,
+                @Size(min = 2) String htmlContent,
+                List<Tag> tags,
+                String image) {
+        this.title = title;
+        this.summary = summary;
+        this.content = content;
+        this.htmlContent = htmlContent;
+        this.tags = tags;
+        this.image = image;
+    }
 }

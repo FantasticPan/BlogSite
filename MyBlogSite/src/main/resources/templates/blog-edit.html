@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <title>Editor.md</title>
@@ -12,30 +12,22 @@
 </head>
 <body>
 
-<div id="layout" class="am-u-md-centered am-g">
+<div id="layout" class="am-u-md-centered am-g" th:object="${blogModel.blog}">
     <form action="/publishBlog" class="am-form" method="post">
+        <input type="hidden" name="id" th:value="*{id}" id="id">
         <div class="am-form-group">
-            <input class="am-form-field am-input-sm" type="text" name="title" maxlength="100" placeholder="输入文章标题">
+            <input class="am-form-field am-input-sm" type="text" name="title" th:value="*{title}" maxlength="100" placeholder="输入文章标题" autocomplete="off">
         </div>
         <div class="am-form-group">
-            <input class="am-form-field am-input-sm" type="text" name="summary" maxlength="100" placeholder="输入文章摘要">
+            <input class="am-form-field am-input-sm" type="text" name="summary" th:value="*{summary}" maxlength="100" placeholder="输入文章摘要" autocomplete="off">
         </div>
         <div class="am-form-group">
             <button id="submit" class="am-btn am-btn-primary">发布</button>
         </div>
         <div class="editormd" id="content-editormd">
-            <textarea class="editormd-markdown-textarea" name="content-editormd-markdown-doc"></textarea>
+            <textarea class="editormd-markdown-textarea" name="content-editormd-markdown-doc">[[*{content}]]</textarea>
         </div>
     </form>
-    <!--<header>-->
-        <!--<div class="am-form-group">-->
-            <!--<input id="title" class="am-form-field am-input-sm" type="text" maxlength="100" placeholder="输入文章标题">-->
-            <!--<button id="submit" class="am-btn am-btn-secondary am-topbar-btn am-btn-sm">发布</button>-->
-        <!--</div>-->
-    <!--</header>-->
-    <!--<div class="editormd" id="content-editormd">-->
-        <!--<textarea class="editormd-markdown-textarea" name="content-editormd-markdown-doc"></textarea>-->
-    <!--</div>-->
 </div>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/editormd.min.js"></script>
