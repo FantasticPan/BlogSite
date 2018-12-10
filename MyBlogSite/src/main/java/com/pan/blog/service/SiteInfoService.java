@@ -12,4 +12,6 @@ public interface SiteInfoService {
     void saveSiteInfo(SiteInfo siteInfo);
 
     List<SiteInfo> findAll();
+
+    void visitSizeIncrease();
 }

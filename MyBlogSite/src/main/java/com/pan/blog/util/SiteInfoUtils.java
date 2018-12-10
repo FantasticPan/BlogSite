@@ -8,7 +8,6 @@ import com.pan.blog.service.TagService;
 
 import java.text.ParseException;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,19 +19,23 @@ public class SiteInfoUtils {
     public static void initialSiteInfo(BlogService blogService,
                                        TagService tagService,
                                        SiteInfoService siteInfoService,
-                                       String initialDate) throws ParseException {
+                                       String initialDate,
+                                       List<Tag> tags,
+                                       Set<String> tagsList,
+                                       List<String> catalogs,
+                                       Set<String> catalogList) throws ParseException {
 
 
         //标签
-        List<Tag> tags = tagService.findAllTags();
-        Set<String> tagsList = new HashSet<>();
+        //List<Tag> tags = tagService.findAllTags();
+        //Set<String> tagsList = new HashSet<>();
         for (Tag tag : tags) {
             tagsList.add(tag.getTagName());
         }
 
         //分类
-        List<String> catalogs = blogService.findCatalog();
-        Set<String> catalogList = new HashSet<>();
+        //List<String> catalogs = blogService.findCatalog();
+        //Set<String> catalogList = new HashSet<>();
         catalogList.addAll(catalogs);
 
         //文章数

@@ -61,4 +61,11 @@ public class BlogServiceImpl implements BlogService {
     public List<String> findCatalog() {
         return blogRepository.findCatalog();
     }
+
+    @Override
+    public void readSizeIncrease(Long id) {
+        Blog blog = blogRepository.getOne(id);
+        blog.setReadSize(blog.getReadSize() + 1);
+        this.saveBlog(blog);
+    }
 }

@@ -13,6 +13,7 @@ import com.pan.blog.util.SecurityUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -39,6 +41,7 @@ public class BlogController {
     private SiteInfoService siteInfoService;
 
     @GetMapping({"/{username}/blog/edit"})
+    @PreAuthorize("authentication.name.equals(#username)")
     public ModelAndView getBlogEditPage(@PathVariable("username") String username, Model model) {
         User user = (User) userDetailsService.loadUserByUsername(username);
         model.addAttribute("user", user);
@@ -48,6 +51,7 @@ public class BlogController {
     }
 
     @GetMapping({"/{username}/blog/edit/{id}"})
+    @PreAuthorize("authentication.name.equals(#username)")
     public ModelAndView getBlogModifyPage(@PathVariable("username") String username,
                                           @PathVariable("id") Long id,
                                           Model model) {
@@ -64,19 +68,36 @@ public class BlogController {
                                  Model model,
                                  HttpServletRequest request) {
 
+        //通过session统计博客阅读量，在session存在期间重复刷新界面访问量不增加，可扩展通过ip统计
+        String stringId = String.valueOf(id);
+        LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(stringId);
+        if (time == null) {
+            request.getSession().setAttribute(stringId, LocalDateTime.now());
+            blogService.readSizeIncrease(id);
+        }
+
         List<SiteInfo> siteInfo = siteInfoService.findAll();
         Blog blog = blogService.getBlogById(id);
+
+        //在前端显示的某一的标签
         List<Tag> blogTags = blog.getTags();
+
+        //在前端显示的所有的标签
         List<Tag> tags = tagService.findAllTags();
         Set<String> tagsList = new HashSet<>();
         for (Tag tag : tags) {
             tagsList.add(tag.getTagName());
         }
 
+        //分类
+        List<String> catalogs = blogService.findCatalog();
+        Set<String> catalogList = new HashSet<>(catalogs);
+
         model.addAttribute("blog", blog);
         model.addAttribute("tags", tagsList);
         model.addAttribute("blogTags", blogTags);
         model.addAttribute("info", siteInfo.get(0));
+        model.addAttribute("catalogs", catalogList);
 
         return ResultUtils.view("article", "blogModel", model);
     }
@@ -95,16 +116,23 @@ public class BlogController {
         List<SiteInfo> siteInfo = siteInfoService.findAll();
         List<Blog> blogList = blogService.findBlogByCatalog(catalog);
         List<Tag> tags = tagService.findAllTags();
+
+        //标签
         Set<String> tagsList = new HashSet<>();
         for (Tag tag : tags) {
             tagsList.add(tag.getTagName());
         }
+
+        //分类
+        List<String> catalogs = blogService.findCatalog();
+        Set<String> catalogList = new HashSet<>(catalogs);
 
         model.addAttribute("tags", tagsList);
         model.addAttribute("info", siteInfo.get(0));
         model.addAttribute("type", "博客分类");
         model.addAttribute("blogList", blogList);
         model.addAttribute("name", catalog);
+        model.addAttribute("catalogs", catalogList);
 
         return ResultUtils.view("show-catalog-type", "blogModel", model);
     }
@@ -132,11 +160,16 @@ public class BlogController {
             tagsList.add(tag2.getTagName());
         }
 
+        //分类
+        List<String> catalogs = blogService.findCatalog();
+        Set<String> catalogList = new HashSet<>(catalogs);
+
         model.addAttribute("tags", tagsList);
         model.addAttribute("info", siteInfo.get(0));
         model.addAttribute("type", "博客标签");
         model.addAttribute("blogList", blogList);
         model.addAttribute("name", tagName);
+        model.addAttribute("catalogs", catalogList);
 
         return ResultUtils.view("show-catalog-type", "blogModel", model);
     }
@@ -196,7 +229,11 @@ public class BlogController {
         List<Tag> tagList = new ArrayList<>();
         User user = (User) userDetailsService.loadUserByUsername(SecurityUtils.getCurrentUsername());
         request.getSession().removeAttribute("blog");
+
+        //博客判断，存在更新，不存在删除
         if (blog.getId() == null) {
+
+            //进行标签的判断，已存在同名标签，标签表不变，不存在更新标签表
             Tag tag;
             for (String s : tags.split(",")) {
                 Tag tags1 = tagService.findTagByTagName(s);
@@ -251,6 +288,7 @@ public class BlogController {
                 }
             }
         }
+
         return ResultUtils.redirect("/");
     }
 }

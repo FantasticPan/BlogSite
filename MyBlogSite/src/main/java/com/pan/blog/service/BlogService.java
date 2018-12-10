@@ -31,4 +31,6 @@ public interface BlogService {
     List<Blog> findBlogByCatalog(String catalog);
 
     List<String> findCatalog();
+
+    void readSizeIncrease(Long id);
 }

@@ -41,7 +41,7 @@ function initArticeMenu() {
             var padding = [0, 10, 20, 30, 40];
             var liDom, aDom, spanDom;
             var dNum = 0;
-            $('.blog-info-body').find('h2,h3').each(function (index, item) {
+            $('.blog-info-body').find('h1,h2,h3').each(function (index, item) {
                 var $this = $(this);
                 $this.before($('<span id="menu_'+index+'" class="menu-point"></span>'));
                 $this.addClass("menu-title");

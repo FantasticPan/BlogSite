@@ -16,7 +16,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -37,10 +39,25 @@ public class IndexController {
     private String initialDate;
 
     @RequestMapping("/")
-    public ModelAndView index(Model model) {
+    public ModelAndView index(Model model,
+                              HttpServletRequest request) {
+
+        //通过session统计访问量，在session存在期间重复刷新界面访问量不增加，可扩展通过ip统计
+        String sessionId = "index";
+        LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(sessionId);
+        if (time == null) {
+            request.getSession().setAttribute(sessionId, LocalDateTime.now());
+            siteInfoService.visitSizeIncrease();
+        }
+
+        List<Tag> tags = tagService.findAllTags();
+        Set<String> tagsList = new HashSet<>();
+
+        List<String> catalogs = blogService.findCatalog();
+        Set<String> catalogList = new HashSet<>();
 
         try {
-            SiteInfoUtils.initialSiteInfo(blogService, tagService, siteInfoService, initialDate);
+            SiteInfoUtils.initialSiteInfo(blogService, tagService, siteInfoService, initialDate, tags, tagsList, catalogs, catalogList);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -49,12 +66,14 @@ public class IndexController {
 
         List<Blog> blogList = blogService.getAllBlog();
 
-        List<Tag> tags = tagService.findAllTags();
-        Set<String> tagsList = new HashSet<>();
-        for (Tag tag : tags) {
-            tagsList.add(tag.getTagName());
-        }
+        //List<Tag> tags = tagService.findAllTags();
+        //Set<String> tagsList = new HashSet<>();
+        //for (Tag tag : tags) {
+        //    tagsList.add(tag.getTagName());
+        //}
+
         model.addAttribute("blogList", blogList);
+        model.addAttribute("catalogs", catalogList);
         model.addAttribute("tags", tagsList);
         model.addAttribute("info", siteInfo.get(0));
 

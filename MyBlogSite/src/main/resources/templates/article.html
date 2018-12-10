@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<!-- saved from url=(0030)detail.html -->
 <html lang="zh-CN" class=""
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
     <meta name="baidu-site-verification" content="d4kcdwiGHw">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>Cordova入门（一）创建android项目 | 张亚东博客</title>
-    <meta name="author" content="张亚东(yadong.zhang0415#gmail.com)">
+    <title>[[${blogModel.blog.title}]]</title>
+    <meta name="author" content="李攀(18380321869@163.com)">
     <meta name="keywords" content="Android打包,Cordova创建app,Cordova打包App,Cordova应用,Cordova学习教程,张亚东博客">
     <meta name="description" content="APP开发之路第一篇：使用Cordova创建并打包一个Android平台的app应用" id="meta_description">
     <link rel="canonical" href="detail.html">
@@ -20,8 +18,7 @@
     <link href="https://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/jquery-confirm/2.5.1/jquery-confirm.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/css/bootstrapValidator.min.css"
-          rel="stylesheet">
+    <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/css/bootstrapValidator.min.css" rel="stylesheet">
     <link href="/db/css/zhyd.core.css" rel="stylesheet" type="text/css">
     <link href="/db/css/zhyd.comment.css" rel="stylesheet" type="text/css">
 
@@ -70,10 +67,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <div class="pull-left" style="line-height: 0.9;">
-                <h1 style="font-size: 20px;font-weight: 700;" class="auto-shake"><a href="/"
-                                                                                    data-original-title="写博客、记日志、闲聊扯淡鼓捣技术"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="bottom">Li Pan's 博客</a>
+                <h1 style="font-size: 20px;font-weight: 700;" class="auto-shake"><a href="/" data-original-title="写博客、记日志、闲聊扯淡鼓捣技术" data-toggle="tooltip" data-placement="bottom">Li Pan's 博客</a>
                 </h1>
                 <p class="site-description">写博客、记日志、闲聊扯淡鼓捣技术</p>
             </div>
@@ -83,11 +77,11 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle menu_a" data-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-code"></i>编程相关</a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="" title="">1</a></li>
-                        <li><a href="" title="">1</a></li>
-                        <li><a href="" title="">1</a></li>
+                        <i class="fa fa-code"></i>博客分类</a>
+                    <ul class="dropdown-menu" role="menu" th:each="s : ${blogModel.catalogs}">
+                        <li><a th:href="'/catalog/' + ${s}"  title="点击查看该分类文章">[[${s}]]</a></li>
+                        <!--<li><a href="" title="">1</a></li>-->
+                        <!--<li><a href="" title="">1</a></li>-->
                     </ul>
                 </li>
                 <!--<li>-->
@@ -123,10 +117,10 @@
                                     <num>[[${blog.readSize}]]</num>
                                     )</a>
                             </li>
-                            <li>
-                                <a href="detail.html#comment-box" data-original-title="0人评论了该文章" data-toggle="tooltip"
-                                   data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>评论 ([[${blog.commentSize}]])</a>
-                            </li>
+                            <!--<li>-->
+                                <!--<a href="detail.html#comment-box" data-original-title="0人评论了该文章" data-toggle="tooltip"-->
+                                   <!--data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>评论 ([[${blog.commentSize}]])</a>-->
+                            <!--</li>-->
                             <li>
                                 <a th:href="@{'/' + ${#authentication.name} + '/blog/edit/' + ${blog.id}}" th:if="${blog.user.username} eq ${#authentication.name}" data-toggle="tooltip"
                                    data-placement="bottom"><i class="fa fa-comments-o fa-fw"></i>编辑</a>
@@ -152,8 +146,7 @@
                     <div id="social" style="margin-bottom: 45px;">
                         <div class="social-main">
 									<span class="like">
-										<a href="javascript:;" data-id="92" title="点赞"><i class="fa fa-thumbs-up"></i>赞 <i
-                                                class="count"> 1</i> </a>
+										<a href="javascript:;" data-id="92" title="点赞"><i class="fa fa-thumbs-up"></i>赞 <i class="count"> 1</i> </a>
 									</span>
                             <div class="shang-p">
                                 <div class="shang-empty"><span></span></div>

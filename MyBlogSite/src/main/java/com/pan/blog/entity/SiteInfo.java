@@ -2,10 +2,7 @@ package com.pan.blog.entity;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -25,6 +22,8 @@ public class SiteInfo implements Serializable {
     private int tagNum;
     private int catalogNum;
     private int runDays;
+    @Column(columnDefinition = "BIGINT default 0")
+    private Long visitSize;
 
     public SiteInfo() {
     }
