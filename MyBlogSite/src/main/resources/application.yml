@@ -12,6 +12,7 @@ spring:
     show-sql: false
     hibernate:
       ddl-auto: update
+    open-in-view: true
 
 #博客时间配置
 blog:

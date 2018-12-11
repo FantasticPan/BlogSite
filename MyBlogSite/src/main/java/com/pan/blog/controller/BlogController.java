@@ -10,6 +10,7 @@ import com.pan.blog.service.TagService;
 import com.pan.blog.util.DateUtils;
 import com.pan.blog.util.ResultUtils;
 import com.pan.blog.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -28,7 +30,11 @@ import java.util.*;
  * Created by FantasticPan on 2018/12/3.
  */
 @Controller
+@Slf4j
 public class BlogController {
+
+    //使用@Slf4j注解可以不写这句，直接使用log.**打印日志
+    //private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
 
     @Autowired
     private BlogService blogService;
@@ -69,10 +75,13 @@ public class BlogController {
                                  HttpServletRequest request) {
 
         //通过session统计博客阅读量，在session存在期间重复刷新界面访问量不增加，可扩展通过ip统计
-        String stringId = String.valueOf(id);
-        LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(stringId);
+        String sessionId = "blogRead" + String.valueOf(id);
+        LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(sessionId);
         if (time == null) {
-            request.getSession().setAttribute(stringId, LocalDateTime.now());
+            //配置session
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(10 * 60);
+            session.setAttribute(sessionId, LocalDateTime.now());
             blogService.readSizeIncrease(id);
         }
 
@@ -290,5 +299,47 @@ public class BlogController {
         }
 
         return ResultUtils.redirect("/");
+    }
+
+    /**
+     * 响应js的ajax点赞请求，返回点赞后的点赞量
+     *
+     * @param username
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/{username}/submitVote/{id}")
+    @ResponseBody
+    public Integer submitVote(@PathVariable("username") String username,
+                              @PathVariable("id") Long id,
+                              HttpServletRequest request,
+                              Model model) {
+
+
+        //通过session统计博客点赞量，在session存在期间重复刷新界面访问量不增加，可扩展通过ip统计
+        String sessionId = "voteSize" + String.valueOf(id);
+        LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(sessionId);
+        if (time == null) {
+            //配置session
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(10 * 60);
+            session.setAttribute(sessionId, LocalDateTime.now());
+            blogService.voteSizeInIncrease(id);
+        }
+
+        return blogService.getVoteSize(id);
+    }
+
+    /**
+     * 响应js的ajax点赞数量请求，在页面加载时请求一次
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/vote/{id}")
+    @ResponseBody
+    public Integer getVoteSize(@PathVariable("id") Long id) {
+        return blogService.getVoteSize(id);
     }
 }

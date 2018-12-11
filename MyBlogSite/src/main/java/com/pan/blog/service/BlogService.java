@@ -33,4 +33,8 @@ public interface BlogService {
     List<String> findCatalog();
 
     void readSizeIncrease(Long id);
+
+    void voteSizeInIncrease(Long id);
+
+    Integer getVoteSize(Long id);
 }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -46,7 +47,9 @@ public class IndexController {
         String sessionId = "index";
         LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(sessionId);
         if (time == null) {
-            request.getSession().setAttribute(sessionId, LocalDateTime.now());
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(10 * 60); //设置session过期时间，单位：秒，这里我设为十分钟
+            session.setAttribute(sessionId, LocalDateTime.now());
             siteInfoService.visitSizeIncrease();
         }
 

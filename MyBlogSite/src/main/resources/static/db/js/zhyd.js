@@ -141,7 +141,7 @@ $(function () {
     initScrollMenu();
 
     console.group("关于本站");
-    console.log("写博客、记日志、闲聊扯淡鼓捣技术\n志同道合者欢迎进QQ交流群（190886500）");
+    console.log("写博客、记日志、闲聊扯淡鼓捣技术");
     console.groupEnd();
     console.log("%c生活真他妈好玩，因为生活老他妈玩我！", "color:green;font-size:20px;font-weight:blod");
     console.groupEnd();
@@ -161,11 +161,11 @@ $(function () {
     // 图片预览
     $(".showImage").fancybox();
 
-    $(document).ajaxStart(function () {
-        $("#loading").show();
-    }).ajaxStop(function () {
-        $("#loading").hide();
-    });
+    // $(document).ajaxStart(function () {
+    //     $("#loading").show();
+    // }).ajaxStop(function () {
+    //     $("#loading").hide();
+    // });
 
     if ($("#scrolldiv")) {
         $("#scrolldiv").textSlider({line: 1, speed: 300, timer: 5000});
