@@ -143,9 +143,9 @@ $(function () {
     console.group("关于本站");
     console.log("写博客、记日志、闲聊扯淡鼓捣技术");
     console.groupEnd();
-    console.log("%c生活真他妈好玩，因为生活老他妈玩我！", "color:green;font-size:20px;font-weight:blod");
+    console.log("%c前路任重而道远，还需砥砺前行", "color:green;font-size:20px;font-weight:blod");
     console.groupEnd();
-    console.log("爱谁谁...");
+    console.log("李攀 留字");
 
     $('.to-top').toTop({
         autohide: true,//返回顶部按钮是否自动隐藏。可以设置true或false。默认为true

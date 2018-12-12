@@ -20,3 +20,5 @@ spring:
 file:
   server:
     url: http://localhost:8081/upload
+server:
+  port: 7070
