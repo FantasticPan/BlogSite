@@ -1,16 +1,20 @@
 package com.pan.blog.controller;
 
 import com.pan.blog.entity.Blog;
+import com.pan.blog.entity.SiteInfo;
 import com.pan.blog.entity.Tag;
 import com.pan.blog.entity.User;
 import com.pan.blog.service.BlogService;
+import com.pan.blog.service.SiteInfoService;
 import com.pan.blog.service.TagService;
 import com.pan.blog.util.DateUtils;
 import com.pan.blog.util.ResultUtils;
 import com.pan.blog.util.SecurityUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +22,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
  * Created by FantasticPan on 2018/12/3.
  */
 @Controller
+@Slf4j
 public class BlogController {
+
+    //使用@Slf4j注解可以不写这句，直接使用log.**打印日志
+    //private static final Logger logger = LoggerFactory.getLogger(BlogController.class);
 
     @Autowired
     private BlogService blogService;
@@ -33,8 +43,11 @@ public class BlogController {
     private UserDetailsService userDetailsService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private SiteInfoService siteInfoService;
 
     @GetMapping({"/{username}/blog/edit"})
+    @PreAuthorize("authentication.name.equals(#username)")
     public ModelAndView getBlogEditPage(@PathVariable("username") String username, Model model) {
         User user = (User) userDetailsService.loadUserByUsername(username);
         model.addAttribute("user", user);
@@ -44,6 +57,7 @@ public class BlogController {
     }
 
     @GetMapping({"/{username}/blog/edit/{id}"})
+    @PreAuthorize("authentication.name.equals(#username)")
     public ModelAndView getBlogModifyPage(@PathVariable("username") String username,
                                           @PathVariable("id") Long id,
                                           Model model) {
@@ -60,19 +74,39 @@ public class BlogController {
                                  Model model,
                                  HttpServletRequest request) {
 
+        //通过session统计博客阅读量，在session存在期间重复刷新界面访问量不增加，可扩展通过ip统计
+        String sessionId = "blogRead" + String.valueOf(id);
+        LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(sessionId);
+        if (time == null) {
+            //配置session
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(10 * 60);
+            session.setAttribute(sessionId, LocalDateTime.now());
+            blogService.readSizeIncrease(id);
+        }
+
+        List<SiteInfo> siteInfo = siteInfoService.findAll();
         Blog blog = blogService.getBlogById(id);
+
+        //在前端显示的某一的标签
         List<Tag> blogTags = blog.getTags();
+
+        //在前端显示的所有的标签
         List<Tag> tags = tagService.findAllTags();
         Set<String> tagsList = new HashSet<>();
         for (Tag tag : tags) {
             tagsList.add(tag.getTagName());
         }
 
+        //分类
+        List<String> catalogs = blogService.findCatalog();
+        Set<String> catalogList = new HashSet<>(catalogs);
+
         model.addAttribute("blog", blog);
         model.addAttribute("tags", tagsList);
         model.addAttribute("blogTags", blogTags);
-        model.addAttribute("blogNum", blogService.blogNum());
-        model.addAttribute("tagsSize", tagsList.size());
+        model.addAttribute("info", siteInfo.get(0));
+        model.addAttribute("catalogs", catalogList);
 
         return ResultUtils.view("article", "blogModel", model);
     }
@@ -88,19 +122,26 @@ public class BlogController {
     public ModelAndView showBlogByCatalog(@PathVariable("catalog") String catalog,
                                           Model model) {
 
+        List<SiteInfo> siteInfo = siteInfoService.findAll();
         List<Blog> blogList = blogService.findBlogByCatalog(catalog);
         List<Tag> tags = tagService.findAllTags();
+
+        //标签
         Set<String> tagsList = new HashSet<>();
         for (Tag tag : tags) {
             tagsList.add(tag.getTagName());
         }
 
+        //分类
+        List<String> catalogs = blogService.findCatalog();
+        Set<String> catalogList = new HashSet<>(catalogs);
+
         model.addAttribute("tags", tagsList);
-        model.addAttribute("blogNum", blogService.blogNum());
-        model.addAttribute("tagsSize", tagsList.size());
+        model.addAttribute("info", siteInfo.get(0));
         model.addAttribute("type", "博客分类");
         model.addAttribute("blogList", blogList);
         model.addAttribute("name", catalog);
+        model.addAttribute("catalogs", catalogList);
 
         return ResultUtils.view("show-catalog-type", "blogModel", model);
     }
@@ -116,6 +157,7 @@ public class BlogController {
     public ModelAndView showBlogByTag(@PathVariable("tag") String tagName,
                                       Model model) {
 
+        List<SiteInfo> siteInfo = siteInfoService.findAll();
         Tag tag = tagService.findTagByTagName(tagName);
         List<Blog> blogList = blogService.findBlogsByTag(tag);
 
@@ -127,12 +169,16 @@ public class BlogController {
             tagsList.add(tag2.getTagName());
         }
 
+        //分类
+        List<String> catalogs = blogService.findCatalog();
+        Set<String> catalogList = new HashSet<>(catalogs);
+
         model.addAttribute("tags", tagsList);
-        model.addAttribute("blogNum", blogService.blogNum());
-        model.addAttribute("tagsSize", tagsList.size());
+        model.addAttribute("info", siteInfo.get(0));
         model.addAttribute("type", "博客标签");
         model.addAttribute("blogList", blogList);
         model.addAttribute("name", tagName);
+        model.addAttribute("catalogs", catalogList);
 
         return ResultUtils.view("show-catalog-type", "blogModel", model);
     }
@@ -192,7 +238,11 @@ public class BlogController {
         List<Tag> tagList = new ArrayList<>();
         User user = (User) userDetailsService.loadUserByUsername(SecurityUtils.getCurrentUsername());
         request.getSession().removeAttribute("blog");
+
+        //博客判断，存在更新，不存在删除
         if (blog.getId() == null) {
+
+            //进行标签的判断，已存在同名标签，标签表不变，不存在更新标签表
             Tag tag;
             for (String s : tags.split(",")) {
                 Tag tags1 = tagService.findTagByTagName(s);
@@ -247,6 +297,49 @@ public class BlogController {
                 }
             }
         }
+
         return ResultUtils.redirect("/");
+    }
+
+    /**
+     * 响应js的ajax点赞请求，返回点赞后的点赞量
+     *
+     * @param username
+     * @param id
+     * @param model
+     * @return
+     */
+    @GetMapping("/{username}/submitVote/{id}")
+    @ResponseBody
+    public Integer submitVote(@PathVariable("username") String username,
+                              @PathVariable("id") Long id,
+                              HttpServletRequest request,
+                              Model model) {
+
+
+        //通过session统计博客点赞量，在session存在期间重复刷新界面访问量不增加，可扩展通过ip统计
+        String sessionId = "voteSize" + String.valueOf(id);
+        LocalDateTime time = (LocalDateTime) request.getSession().getAttribute(sessionId);
+        if (time == null) {
+            //配置session
+            HttpSession session = request.getSession();
+            session.setMaxInactiveInterval(10 * 60);
+            session.setAttribute(sessionId, LocalDateTime.now());
+            blogService.voteSizeInIncrease(id);
+        }
+
+        return blogService.getVoteSize(id);
+    }
+
+    /**
+     * 响应js的ajax点赞数量请求，在页面加载时请求一次
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/vote/{id}")
+    @ResponseBody
+    public Integer getVoteSize(@PathVariable("id") Long id) {
+        return blogService.getVoteSize(id);
     }
 }

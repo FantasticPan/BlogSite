@@ -19,7 +19,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 启用方法安全设置
-public class SecurityConfig  extends WebSecurityConfigurerAdapter {
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String KEY = "pan";
 
@@ -57,21 +57,12 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("**/blog/edit/**").hasRole("ADMIN")
+                .antMatchers("/**/blog/edit/**", "/admin/**").hasRole("ADMIN")
                 .and()
                 .formLogin().loginPage("/login").failureUrl("/login-error")
+                .and().rememberMe().key(KEY).tokenValiditySeconds(86400)
+                .and().logout().logoutSuccessUrl("/")
                 .and().exceptionHandling().accessDeniedPage("/403");
-
-        //.antMatchers("/assets/**", "/index").permitAll() // 都可以访问
-        //        .antMatchers("/h2-console/**").permitAll() // 都可以访问
-        //        .antMatchers("/admin/**").hasRole("ADMIN"); // 需要相应的角色才能访问
-        //        .and()
-        //        .formLogin()
-        //        .loginPage("/login").failureUrl("/login-error") // 自定义登录界面
-        //        .and().rememberMe().key(KEY).tokenValiditySeconds(86400) // 启用 remember me
-        //        .and().exceptionHandling().accessDeniedPage("/403");  // 处理异常，拒绝访问就重定向到 403 页面
-        //http.csrf().ignoringAntMatchers("/h2-console/**");
         http.csrf().disable();
     }
 }

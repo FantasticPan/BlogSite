@@ -8,11 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>Li Pan's 博客</title>
-    <meta name="author" content="张亚东(yadong.zhang0415#gmail.com)">
+    <meta name="author" content="李攀(18380321869@163.com)">
     <meta name="keywords" content="博客,程序猿,程序员,后端开发,软件开发,WEB开发,Java攻城狮,全栈工程师,原创博客,个人原创网站,个人技术博客">
     <meta name="description" content="这是一个程序员的个人技术博客，旨在分享工作和学习中用到的技术、遇到的疑难知识点，也为了备战自己的人生。心之所向，无所不能。"
           id="meta_description">
-    <link rel="canonical" href="https://www.zhyd.me/">
+    <link rel="canonical" href="https://www.lipan.xyz/">
     <link href="/db/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
@@ -78,11 +78,11 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle menu_a" data-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-code"></i>编程相关</a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="" title="">1</a></li>
-                        <li><a href="" title="">1</a></li>
-                        <li><a href="" title="">1</a></li>
+                        <i class="fa fa-code"></i>博客分类</a>
+                    <ul class="dropdown-menu" role="menu" th:each="s : ${blogModel.catalogs}">
+                        <li><a th:href="'/catalog/' + ${s}"  title="点击查看该分类文章">[[${s}]]</a></li>
+                        <!--<li><a href="" title="">1</a></li>-->
+                        <!--<li><a href="" title="">1</a></li>-->
                     </ul>
                 </li>
                 <!--<li>-->
@@ -111,7 +111,7 @@
                     <header class="entry-header">
                         <h2 class="entry-title">
                             <a th:href="'/blog/' + ${blog.id}" th:text="${blog.title}" rel="bookmark" title=""
-                               data-toggle="tooltip" data-placement="bottom" data-original-title="点击查看文章详情">Cordova入门（一）创建android项目</a>
+                               data-toggle="tooltip" data-placement="bottom" data-original-title="点击查看">Cordova入门（一）创建android项目</a>
                         </h2>
                     </header>
                     <div class="entry-content">
@@ -121,20 +121,17 @@
                         <span class="title-l"></span>
                         <span class="entry-meta">
 								<span class="date" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="文章发表日期" th:text="${blog.createTime}"><i class="fa fa-calendar-o fa-fw"></i>2018-12-01</span>
-								<span class="views" title="" data-toggle="tooltip" data-placement="bottom"
-                                      data-original-title="文章阅读次数"><i class="fa fa-eye fa-fw"></i>浏览(88)</span>
-								<span class="comment" title="" data-toggle="tooltip" data-placement="bottom"
-                                      data-original-title="文章评论次数">
-									<a href="detail.html#comment-box" rel="external nofollow">
-										<i class="fa fa-comments-o fa-fw"></i>评论(0)
-									</a>
-								</span>
+								<span class="views" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="文章阅读次数"><i class="fa fa-eye fa-fw"></i>浏览([[${blog.readSize}]])</span>
+								<!--<span class="comment" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="文章评论次数">-->
+									<!--<a href="detail.html#comment-box" rel="external nofollow">-->
+										<!--<i class="fa fa-comments-o fa-fw"></i>评论([[${blog.commentSize}]])-->
+									<!--</a>-->
+								<!--</span>-->
 							</span>
                         <div class="clear"></div>
                         <span class="entry-more">
-								<a href="detail.html" rel="bookmark" title="" data-toggle="tooltip"
-                                   data-placement="bottom" data-original-title="点击查看文章详情">阅读全文</a>
-							</span>
+								<a href="detail.html" rel="bookmark" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="点击查看文章详情">阅读全文</a>
+                        </span>
                     </div>
                 </article>
             </div>
@@ -147,10 +144,11 @@
                         <div class="feed-about">
                             <div class="about-main">
                                 <div class="about-img">
-                                    <a href="/db/img/wx_300px.png" class="showImage" title="微信公众号"><img src="/images/me.jpg" alt="微信公众号"></a>
+                                    <a href="/images/qq.png" class="showImage" title="通过QQ联系我"><img src="/images/me.jpg" alt="我的头像"></a>
                                 </div>
                                 <div class="about-name">李攀</div>
-                                <div class="about-the" align="center">西南石油大学</div>
+                                <div class="about-the" align="center">西南石油大学在读学生</div>
+                                <div class="about-the" align="center">热衷于后端的学习</div>
                             </div>
                             <div class="clear"></div>
                             <!-- 方案一：图标展示 -->
@@ -159,22 +157,34 @@
                                     <a class="tag-icon" href="https://github.com/FantasticPan" title="点击查看我的github"
                                        target="_blank" rel="external nofollow"><i class="fa fa-github"></i></a>
                                 </li>
+                                <li class="tqq auto-shake" data-container="body" data-toggle="popover"
+                                    data-trigger="hover" data-placement="bottom" data-html="true"
+                                    data-content="&lt;img src='/images/qq.png' style='width: 130px;' alt='QR Code'&gt;"
+                                    data-original-title="" title="">
+                                    <a class="tag-icon" title="QQ" rel="external nofollow"><i class="fa fa-qq"></i></a>
+                                </li>
                                 <li class="weixin auto-shake" data-container="body" data-toggle="popover"
                                     data-trigger="hover" data-placement="bottom" data-html="true"
-                                    data-content="&lt;img src='https://static.zhyd.me/static/img/wx_300px.png' style='width: 130px;' alt='QR Code'&gt;"
+                                    data-content="&lt;img src='/images/wechat.png' style='width: 130px;' alt='QR Code'&gt;"
                                     data-original-title="" title="">
                                     <a class="tag-icon" title="微信" rel="external nofollow"><i class="fa fa-weixin"></i></a>
                                 </li>
-                                <li class="tqq auto-shake">
-                                    <a class="tag-icon"
-                                       href="javascript:window.open('tencent://message/?uin=843977358&amp;Site=www.zhyd.me&amp;Menu=yes')"
-                                       title="点击QQ联系我" target="blank" rel="external nofollow"><i
-                                            class="fa fa-qq"></i></a>
-                                </li>
+                                <!--<li class="tqq auto-shake">-->
+                                    <!--<a class="tag-icon"-->
+                                       <!--href="javascript:window.open('tencent://message/?uin=843977358&amp;Site=www.zhyd.me&amp;Menu=yes')"-->
+                                       <!--title="点击QQ联系我" target="blank" rel="external nofollow"><i-->
+                                            <!--class="fa fa-qq"></i></a>-->
+                                <!--</li>-->
                                 <li class="tsina auto-shake">
                                     <a class="tag-icon" href="http://weibo.com/211230415" title="点击查看我的微博"
                                        target="_blank" rel="external nofollow"><i class="fa fa-weibo"></i></a>
                                 </li>
+                            </ul>
+                            <ul class="list-unstyled" style="padding-left: 44px">
+                                <li><i class="fa fa-info-circle fa-fw"></i>博主：<small>李攀</small></li>
+                                <li><i class="fa fa-user-circle fa-fw"></i>职业：<small>码农</small></li>
+                                <li><i class="fa fa-home fa-fw"></i>住地：<small>四川成都</small></li>
+                                <li><i class="fa fa-envelope-square fa-fw"></i>邮箱：<small>18380321869@163.com</small></li>
                             </ul>
                         </div>
                     </div>
@@ -195,12 +205,12 @@
             <div class="sidebar-module">
                 <h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>
                 <ul class="ul-default">
-                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.blogNum}]] 篇</li>
-                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.tagsSize}]] 个</li>
-                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>
+                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.info.articleNum}]] 篇</li>
+                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.info.tagNum}]] 个</li>
+                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：[[${blogModel.info.catalogNum}]] 个</li>
                     <!--<li><i class="fa fa-comments fa-fw"></i> 留言数量：50 条</li>-->
                     <!--<li><i class="fa fa-users fa-fw"></i> 在线人数：<span class="online">11</span>人</li>-->
-                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>
+                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：[[${blogModel.info.runDays}]] 天</li>
                     <li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>
                 </ul>
             </div>
@@ -218,19 +228,14 @@
 </div>
 <footer class="footer">
     <div class="clear">
-        <p>托管于
-            <a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=wylo59db"
-               target="_blank" title="" data-toggle="tooltip" data-placement="bottom" rel="external nofollow"
-               data-original-title="阿里云-为了无法计算的价值">阿里云</a> &amp;
-            <a href="https://www.qiniu.com/" target="_blank" title="" data-toggle="tooltip" data-placement="bottom"
-               rel="external nofollow" data-original-title="七牛云-国内领先的企业级云服务商">七牛云</a> ·
+        <p>
             <a href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank" title=""
                data-toggle="tooltip" data-placement="bottom" rel="external nofollow" data-original-title="查看备案信息">鲁ICP备17054970号-1</a>
         </p>
         <p>Copyright©2016-2018 张亚东博客 保留所有权利 ·
-            <a href="http://tongji.baidu.com" target="_blank" title="" data-toggle="tooltip" data-placement="right"
-               rel="external nofollow" data-original-title="点击查看张亚东博客网站统计详情"><i
-                    class="fa fa-bar-chart-o fa-fw fa-spin"></i>网站统计</a>
+            <a href="http://tongji.baidu.com/web/welcome/ico?s=590226d2f4ffbf051442eb75f37333c9" target="_blank"
+               title="" data-toggle="tooltip" data-placement="right" rel="external nofollow"
+               data-original-title="点击查看Li Pan's 博客网站统计详情"><i class="fa fa-bar-chart-o fa-fw fa-spin"></i>网站统计</a>
         </p>
     </div>
 </footer>
@@ -241,8 +246,7 @@
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/jquery-confirm/2.5.1/jquery-confirm.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js"></script>
-<script type="text/javascript"
-        src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/js/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/js/bootstrapValidator.min.js"></script>
 <script type="text/javascript" src="https://cdn.bootcss.com/js-xss/0.3.3/xss.min.js"></script>
 <script type="text/javascript">
     var appConfig = {

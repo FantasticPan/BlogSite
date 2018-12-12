@@ -10,16 +10,14 @@
     <title>Li Pan's 博客</title>
     <meta name="author" content="张亚东(yadong.zhang0415#gmail.com)">
     <meta name="keywords" content="博客,程序猿,程序员,后端开发,软件开发,WEB开发,Java攻城狮,全栈工程师,原创博客,个人原创网站,个人技术博客">
-    <meta name="description" content="这是一个程序员的个人技术博客，旨在分享工作和学习中用到的技术、遇到的疑难知识点，也为了备战自己的人生。心之所向，无所不能。"
-          id="meta_description">
-    <link rel="canonical" href="https://www.zhyd.me/">
+    <meta name="description" content="这是一个程序员的个人技术博客，旨在分享工作和学习中用到的技术、遇到的疑难知识点，也为了备战自己的人生。心之所向，无所不能。" id="meta_description">
+    <link rel="canonical" href="https://www.lipan.xyz/">
     <link href="/db/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="https://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/jquery-confirm/2.5.1/jquery-confirm.min.css" rel="stylesheet">
     <link href="https://cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/css/bootstrapValidator.min.css"
-          rel="stylesheet">
+    <link href="https://cdn.bootcss.com/jquery.bootstrapvalidator/0.5.1/css/bootstrapValidator.min.css" rel="stylesheet">
     <link href="/db/css/zhyd.core.css" rel="stylesheet" type="text/css">
     <link href="/db/css/zhyd.comment.css" rel="stylesheet" type="text/css">
 </head>
@@ -36,13 +34,12 @@
         <div class="menu-topmenu-container pull-right">
             <ul class="list-unstyled list-inline pull-left">
                 <li sec:authorize="isAnonymous()">
-                    <a href="/login" class="menu_a" data-toggle="tooltip" data-placement="bottom" data-original-title="登录">
-                        <i class="fa fa-sign-in"></i>登录</a>
+                    <a href="/login" class="menu_a" data-toggle="tooltip" data-placement="bottom" data-original-title="登录"><i class="fa fa-sign-in"></i>登录</a>
                 </li>
                 <li sec:authorize="isAuthenticated()">
                     <a th:href="@{/}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-link fa-fw"></i><span sec:authentication="name">李攀</span></a>
                     <a th:href="@{'/' + ${#authentication.name} + '/blog/edit'}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-gg fa-fw"></i>写博客</a>
-                    <a th:href="@{'/admin/' + ${#authentication.name} + '/manager'}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-fire fa-fw"></i>后台管理</a>
+                    <a th:href="@{/admin}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-fire fa-fw"></i>后台管理</a>
                     <a th:href="@{/logout}" class="menu_a" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="李攀"><i class="fa fa-sign-in"></i>退出</a>
                 </li>
             </ul>
@@ -65,11 +62,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <div class="pull-left" style="line-height: 0.9;">
-                <h1 style="font-size: 20px;font-weight: 700;" class="auto-shake"><a href="/"
-                                                                                    data-original-title="写博客、记日志、闲聊扯淡鼓捣技术"
-                                                                                    data-toggle="tooltip"
-                                                                                    data-placement="bottom">Li Pan's 博客</a>
-                </h1>
+                <h1 style="font-size: 20px;font-weight: 700;" class="auto-shake"><a href="/" data-original-title="写博客、记日志、闲聊扯淡鼓捣技术" data-toggle="tooltip" data-placement="bottom">Li Pan's 博客</a></h1>
                 <p class="site-description">写博客、记日志、闲聊扯淡鼓捣技术</p>
             </div>
             <ul class="nav navbar-nav ">
@@ -78,11 +71,11 @@
                 </li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle menu_a" data-toggle="dropdown" aria-expanded="false">
-                        <i class="fa fa-code"></i>编程相关</a>
-                    <ul class="dropdown-menu" role="menu">
-                        <li><a href="" title="">1</a></li>
-                        <li><a href="" title="">1</a></li>
-                        <li><a href="" title="">1</a></li>
+                        <i class="fa fa-code"></i>博客分类</a>
+                    <ul class="dropdown-menu" role="menu" th:each="s : ${blogModel.catalogs}">
+                        <li><a th:href="'/catalog/' + ${s}"  title="点击查看该分类文章">[[${s}]]</a></li>
+                        <!--<li><a href="" title="">1</a></li>-->
+                        <!--<li><a href="" title="">1</a></li>-->
                     </ul>
                 </li>
                 <!--<li>-->
@@ -103,19 +96,22 @@
             <div class="scrolltext">
                 <ul class="list-unstyled" style="margin-top: 0px;">
 
-                    <!--<li class="scrolltext-title">-->
-                        <!--<a href="javascript:void(0)" rel="bookmark">本站正式启用新域名:</a>-->
-                        <!--<a href="https://www.zhyd.me/www.zhyd.me"-->
-                           <!--target="_blank"><strong>https:/www.zhyd.me</strong></a>-->
-                    <!--</li>-->
                     <li class="scrolltext-title">
-                        <a href="javascript:void(0)" rel="bookmark">博客正在搭建中...</a>
+                        <a href="javascript:void(0)" rel="bookmark">本站启用新域名:</a>
+                        <a href="http://www.lipan.xyz"
+                           target="_blank"><strong>www.lipan.xyz</strong></a>
                     </li>
                     <li class="scrolltext-title">
-                        <a href="javascript:void(0)" rel="bookmark">活了二十多年，没能为祖国、为人民做点什么，每思及此，伤心欲绝。</a>
+                        <a href="javascript:void(0)" rel="bookmark">博客功能正在完善中...</a>
                     </li>
                     <li class="scrolltext-title">
-                        <a href="javascript:void(0)" rel="bookmark">其实我们可以将所有的问题归结为两种：一种是没饭吃饿出来的；一种是吃饱了撑出来的。</a>
+                        <a href="javascript:void(0)" rel="bookmark">为了19年的春招而准备</a>
+                    </li>
+                    <li class="scrolltext-title">
+                        <a href="javascript:void(0)" rel="bookmark">大学生活马上就要结束了</a>
+                    </li>
+                    <li class="scrolltext-title">
+                        <a href="javascript:void(0)" rel="bookmark">前路任重而道远，还需砥砺前行</a>
                     </li>
                 </ul>
             </div>
@@ -151,17 +147,17 @@
 								<span class="date" title="" data-toggle="tooltip" data-placement="bottom" data-original-title="文章发表日期" th:text="${blog.createTime}"><i class="fa fa-calendar-o fa-fw"></i>2018-12-01</span>
 								<span class="views" title="" data-toggle="tooltip" data-placement="bottom"
                                       data-original-title="文章阅读次数"><i class="fa fa-eye fa-fw"></i>浏览([[${blog.readSize}]])</span>
-								<span class="comment" title="" data-toggle="tooltip" data-placement="bottom"
-                                      data-original-title="文章评论次数">
-									<a href="detail.html#comment-box" rel="external nofollow">
-										<i class="fa fa-comments-o fa-fw"></i>评论([[${blog.commentSize}]])
-									</a>
-								</span>
+								<!--<span class="comment" title="" data-toggle="tooltip" data-placement="bottom"-->
+                                      <!--data-original-title="文章评论次数">-->
+									<!--<a href="detail.html#comment-box" rel="external nofollow">-->
+										<!--<i class="fa fa-comments-o fa-fw"></i>评论([[${blog.commentSize}]])-->
+									<!--</a>-->
+								<!--</span>-->
 							</span>
                         <div class="clear"></div>
                         <span class="entry-more">
 								<a href="detail.html" rel="bookmark" title="" data-toggle="tooltip"
-                                   data-placement="bottom" data-original-title="点击查看文章详情">阅读全文</a>
+                                   data-placement="bottom" data-original-title="点击查看">阅读全文</a>
 							</span>
                     </div>
                 </article>
@@ -213,10 +209,11 @@
                         <div class="feed-about">
                             <div class="about-main">
                                 <div class="about-img">
-                                    <a href="/db/img/wx_300px.png" class="showImage" title="微信公众号"><img src="/images/me.jpg" alt="微信公众号"></a>
+                                    <a href="/images/qq.png" class="showImage" title="通过QQ联系我"><img src="/images/me.jpg" alt="微信公众号"></a>
                                 </div>
                                 <div class="about-name">李攀</div>
-                                <div class="about-the" align="center">西南石油大学</div>
+                                <div class="about-the" align="center">西南石油大学在读学生</div>
+                                <div class="about-the" align="center">热衷于后端的学习</div>
                             </div>
                             <div class="clear"></div>
                             <!-- 方案一：图标展示 -->
@@ -225,30 +222,36 @@
                                     <a class="tag-icon" href="https://github.com/FantasticPan" title="点击查看我的github"
                                        target="_blank" rel="external nofollow"><i class="fa fa-github"></i></a>
                                 </li>
+                                <li class="tqq auto-shake" data-container="body" data-toggle="popover"
+                                    data-trigger="hover" data-placement="bottom" data-html="true"
+                                    data-content="&lt;img src='/images/qq.png' style='width: 130px;' alt='QR Code'&gt;"
+                                    data-original-title="" title="">
+                                    <a class="tag-icon" title="QQ" rel="external nofollow"><i class="fa fa-qq"></i></a>
+                                </li>
                                 <li class="weixin auto-shake" data-container="body" data-toggle="popover"
                                     data-trigger="hover" data-placement="bottom" data-html="true"
-                                    data-content="&lt;img src='https://static.zhyd.me/static/img/wx_300px.png' style='width: 130px;' alt='QR Code'&gt;"
+                                    data-content="&lt;img src='/images/wechat.png' style='width: 130px;' alt='QR Code'&gt;"
                                     data-original-title="" title="">
                                     <a class="tag-icon" title="微信" rel="external nofollow"><i class="fa fa-weixin"></i></a>
                                 </li>
-                                <li class="tqq auto-shake">
-                                    <a class="tag-icon"
-                                       href="javascript:window.open('tencent://message/?uin=843977358&amp;Site=www.zhyd.me&amp;Menu=yes')"
-                                       title="点击QQ联系我" target="blank" rel="external nofollow"><i
-                                            class="fa fa-qq"></i></a>
-                                </li>
+                                <!--<li class="tqq auto-shake">-->
+                                    <!--<a class="tag-icon"-->
+                                       <!--href="javascript:window.open('tencent://message/?uin=843977358&amp;Site=www.zhyd.me&amp;Menu=yes')"-->
+                                       <!--title="点击QQ联系我" target="blank" rel="external nofollow"><i-->
+                                            <!--class="fa fa-qq"></i></a>-->
+                                <!--</li>-->
                                 <li class="tsina auto-shake">
                                     <a class="tag-icon" href="http://weibo.com/211230415" title="点击查看我的微博"
                                        target="_blank" rel="external nofollow"><i class="fa fa-weibo"></i></a>
                                 </li>
                             </ul>
                             <!-- 方案二：列表展示 -->
-                            <!--<ul class="list-unstyled">
-                                <li><i class="fa fa-info-circle fa-fw"></i>博主：<small>张亚东</small></li>
+                            <ul class="list-unstyled" style="padding-left: 44px">
+                                <li><i class="fa fa-info-circle fa-fw"></i>博主：<small>李攀</small></li>
                                 <li><i class="fa fa-user-circle fa-fw"></i>职业：<small>码农</small></li>
-                                <li><i class="fa fa-home fa-fw"></i>籍贯：<small>长白山某棵树上</small></li>
-                                <li><i class="fa fa-envelope-square fa-fw"></i>邮箱：<small>10000@qq.com</small></li>
-                            </ul>-->
+                                <li><i class="fa fa-home fa-fw"></i>住地：<small>四川成都</small></li>
+                                <li><i class="fa fa-envelope-square fa-fw"></i>邮箱：<small>18380321869@163.com</small></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -274,12 +277,12 @@
             <div class="sidebar-module">
                 <h5 class="sidebar-title"><i class="fa fa-info icon"></i><strong>网站信息</strong></h5>
                 <ul class="ul-default">
-                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.blogNum}]] 篇</li>
-                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.tagsSize}]] 个</li>
-                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：6 个</li>
+                    <li><i class="fa fa-file fa-fw"></i> 文章总数：[[${blogModel.info.articleNum}]] 篇</li>
+                    <li><i class="fa fa-tags fa-fw"></i> 标签总数：[[${blogModel.info.tagNum}]] 个</li>
+                    <li><i class="fa fa-folder-open fa-fw"></i> 分类总数：[[${blogModel.info.catalogNum}]] 个</li>
                     <!--<li><i class="fa fa-comments fa-fw"></i> 留言数量：50 条</li>-->
                     <!--<li><i class="fa fa-users fa-fw"></i> 在线人数：<span class="online">11</span>人</li>-->
-                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：201天</li>
+                    <li><i class="fa fa-calendar fa-fw"></i> 运行天数：[[${blogModel.info.runDays}]] 天</li>
                     <li><i class="fa fa-pencil-square fa-fw"></i> 最后更新：2018年04月02日22点</li>
                 </ul>
             </div>
@@ -442,18 +445,10 @@
 </div>
 <footer class="footer">
     <div class="clear">
-        <p>托管于
-            <a href="https://promotion.aliyun.com/ntms/act/ambassador/sharetouser.html?userCode=wylo59db"
-               target="_blank" title="" data-toggle="tooltip" data-placement="bottom" rel="external nofollow"
-               data-original-title="阿里云-为了无法计算的价值">阿里云</a> &amp;
-            <a href="https://www.qiniu.com/" target="_blank" title="" data-toggle="tooltip" data-placement="bottom"
-               rel="external nofollow" data-original-title="七牛云-国内领先的企业级云服务商">七牛云</a> ·
-            <a href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank" title=""
-               data-toggle="tooltip" data-placement="bottom" rel="external nofollow" data-original-title="查看备案信息">鲁ICP备17054970号-1</a>
-        </p>
-        <p>Copyright©2016-2018 张亚东博客 保留所有权利 ·
+        <p><a href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank" title="" data-toggle="tooltip" data-placement="bottom" rel="external nofollow" data-original-title="查看备案信息">鲁ICP备17054970号-1</a></p>
+        <p>Copyright©2018 Li Pan's 博客 保留所有权利 ·
             <a href="http://tongji.baidu.com" target="_blank" title="" data-toggle="tooltip" data-placement="right"
-               rel="external nofollow" data-original-title="点击查看张亚东博客网站统计详情"><i
+               rel="external nofollow" data-original-title="点击查看Li Pan's 博客网站统计详情"><i
                     class="fa fa-bar-chart-o fa-fw fa-spin"></i>网站统计</a>
         </p>
     </div>
