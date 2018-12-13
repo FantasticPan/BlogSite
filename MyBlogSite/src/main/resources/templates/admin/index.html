@@ -187,52 +187,7 @@
                                         <th style="width: 20%">操作</th>
                                     </tr>
                                     </thead>
-                                    <tbody th:each="blog : ${blogModel.blogList}">
-                                    <tr>
-                                        <td>[[${blog.id}]]</td>
-                                        <td>
-                                            <a>[[${blog.title}]]</a>
-                                            <br/>
-                                            <small>发布于[[${blog.createTime}]]</small>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-xs">[[${blog.user.username}]]</button>
-                                        </td>
-                                        <!--<td>-->
-                                            <!--<ul class="list-inline">-->
-                                                <!--<li>-->
-                                                    <!--<img src="/images/user.png" class="avatar" alt="Avatar">-->
-                                                <!--</li>-->
-                                                <!--<li>-->
-                                                    <!--<img src="/images/user.png" class="avatar" alt="Avatar">-->
-                                                <!--</li>-->
-                                                <!--<li>-->
-                                                    <!--<img src="/images/user.png" class="avatar" alt="Avatar">-->
-                                                <!--</li>-->
-                                                <!--<li>-->
-                                                    <!--<img src="/images/user.png" class="avatar" alt="Avatar">-->
-                                                <!--</li>-->
-                                            <!--</ul>-->
-                                        <!--</td>-->
-                                        <!--<td class="project_progress">-->
-                                            <!--<div class="progress progress_sm">-->
-                                                <!--<div class="progress-bar bg-green" role="progressbar"-->
-                                                     <!--data-transitiongoal="57"></div>-->
-                                            <!--</div>-->
-                                            <!--<small>57% Complete</small>-->
-                                        <!--</td>-->
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-xs">[[${blog.readSize}]]</button>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-success btn-xs">[[${blog.voteSize}]]</button>
-                                        </td>
-                                        <td>
-                                            <a th:href="'/blog/' + ${blog.id}" class="btn btn-primary btn-xs" target="_blank"><i class="fa fa-folder"></i> View</a>
-                                            <a th:href="@{'/' + ${#authentication.name} + '/blog/edit/' + ${blog.id}}" class="btn btn-info btn-xs" target="_blank"><i class="fa fa-pencil"></i> Edit</a>
-                                            <a th:href="'/delete/' + ${blog.id}" class="btn btn-danger btn-xs" target="_blank"><i class="fa fa-trash-o"></i>Delete </a>
-                                        </td>
-                                    </tr>
+                                    <tbody id="articles">
                                     </tbody>
                                 </table>
                                 <!-- end project list -->
@@ -419,6 +374,8 @@
 <!-- Custom Theme Scripts -->
 <script src="/build/js/custom.min.js"></script>
 <script src="/js/pan/admin.js"></script>
-
+<script th:inline="javascript">
+    authenticationName = [[${#authentication.name}]];
+</script>
 </body>
 </html>

@@ -6,7 +6,9 @@ import com.pan.blog.util.ResultUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -24,9 +26,14 @@ public class AdminController {
 
     @RequestMapping("")
     public ModelAndView index(Model model) {
-
         List<Blog> blogList = blogService.getAllBlog();
         model.addAttribute("blogList", blogList);
         return ResultUtils.view("admin/index", "blogModel", model);
+    }
+
+    @GetMapping("/getAllArticle")
+    @ResponseBody
+    public List<Blog> getAllArticle() {
+        return blogService.getAllBlog();
     }
 }

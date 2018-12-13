@@ -23,7 +23,7 @@ $(function () {
             url: submitVoteUrl,
             dataType: "json",
             success: function (data) {
-                console.log('数据请求成功：' + data);
+                // console.log('数据请求成功：' + data);
                 $(".count").html(data);
             },
             error: function (error) {

@@ -183,10 +183,17 @@ public class BlogController {
         return ResultUtils.view("show-catalog-type", "blogModel", model);
     }
 
-    @RequestMapping("/delete/{id}")
-    public ModelAndView deleteBlog(@PathVariable("id") Long id) {
+    /**
+     * 删除博客
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/delete/{id}")
+    @ResponseBody
+    public void deleteBlog(@PathVariable("id") Long id) {
         blogService.deleteBlog(id);
-        return ResultUtils.redirect("/");
+        //return ResultUtils.redirect("/");
     }
 
     @PostMapping("/publishBlog")
@@ -239,7 +246,7 @@ public class BlogController {
         User user = (User) userDetailsService.loadUserByUsername(SecurityUtils.getCurrentUsername());
         request.getSession().removeAttribute("blog");
 
-        //博客判断，存在更新，不存在删除
+        //博客判断，存在更新，不存在保存
         if (blog.getId() == null) {
 
             //进行标签的判断，已存在同名标签，标签表不变，不存在更新标签表
